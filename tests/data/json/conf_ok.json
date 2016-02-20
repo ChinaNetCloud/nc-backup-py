@@ -1,0 +1,30 @@
+{
+  "general": {
+    "HOSTNAME": "srv-nc-test1",
+    "WORK_FOLDER": "/opt/backup",
+    "LOCAL_BACKUP": "/opt/backup/local"
+    },
+  "fileset":{
+    "FILESET_INCLUDE": ["/etc", "/var/www/py/nc-backup-py"],
+    "FILESET_EXCLUDE": [""],
+    "MODULE": "filesbackup",
+    "PATH":"",
+    "EXECUTABLE": "",
+    "PARAMETERS": ""
+  },
+  "databases":{
+    "DB_BACKUP_METHOD": "None"
+  },
+  "compression":{
+    "COMPRESSION_PROGRAM": "tar.gz",
+    "_options": "tar.gz none"
+  },
+  "encryption": {
+    "ENCRYPTION_PROGRAM": "GPG2",
+    "_options": "gpg gpg2 none",
+    "KEY_FILE": "/var/www/py/nc-backup-py/key/key_file"
+  },
+  "storage":{
+    "STORAGE": "LOCAL"
+  }
+}
