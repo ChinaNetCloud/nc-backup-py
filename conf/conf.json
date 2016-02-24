@@ -9,7 +9,6 @@
     "ACTION": "execute",
     "NAME": "filesbackup",
     "EXECUTABLE": "",
-    "PARAMETERS": "",
     "EXECUTE_WITH": "python",
     "PARAMETERS": {
       "FILESET_INCLUDE": "/etc /var/www/py/nc-backup-py /var/spool/cron",
