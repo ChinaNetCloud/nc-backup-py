@@ -71,8 +71,10 @@ class BackupExecutionLogic:
             for parameter in dict_parameters['PARAMETERS']:
                 if dict_parameters['PARAMETERS'].get(parameter) != None \
                         and dict_parameters['PARAMETERS'].get(parameter) != '':
-                    parameters_str += '--' + parameter + ' "' + dict_parameters['PARAMETERS'][parameter] +'" '
-
+                    if dict_parameters.get('PARAMETERS_MODE') != 'flat':
+                        parameters_str += '--' + parameter + ' "' + dict_parameters['PARAMETERS'][parameter] +'" '
+                    else:
+                        parameters_str += '"' + dict_parameters['PARAMETERS'][parameter] +'" '
             for general_parameters in dict_general:
                 if dict_general.get(general_parameters)!= None \
                         and general_parameters  != '':

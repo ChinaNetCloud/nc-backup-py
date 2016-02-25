@@ -5,11 +5,23 @@
     "LOCAL_BACKUP": "/opt/backup/local",
     "HOME_FOLDER": "/var/www/py/nc-backup-py"
     },
+  "LEGACY_FILES":{
+    "ACTION": "execute",
+    "NAME": "legacy-filesbackup",
+    "EXECUTE_WITH": "bash",
+    "EXECUTABLE": "file_script_backup.sh",
+    "PARAMETERS": {
+      "FILESET_INCLUDE": "/etc /var/www/py/nc-backup-py /var/spool/cron",
+      "FILESET_EXCLUDE": ""
+    },
+    "PARAMETERS_MODE": "flat"
+  },
   "FILESET":{
     "ACTION": "execute",
     "NAME": "filesbackup",
     "EXECUTABLE": "",
     "EXECUTE_WITH": "python",
+    "EXECUTABLE": "",
     "PARAMETERS": {
       "FILESET_INCLUDE": "/etc /var/www/py/nc-backup-py /var/spool/cron",
       "FILESET_EXCLUDE": ""
