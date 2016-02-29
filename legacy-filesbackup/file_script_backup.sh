@@ -114,8 +114,8 @@ if [ ! -w "$BACKUP_FOLDER" ]; then
    ls -la "$BACKUP_FOLDER" >&2
   exit 2
 fi
- 
-#
+
+
 ## check if the final archive exists already
 if [ -f "$BACKUP_FILE" ]; then
   echo "$BACKUP_FILE already exists - Backup job Cancelled" >&2

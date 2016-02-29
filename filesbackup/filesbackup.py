@@ -1,4 +1,10 @@
 import argparse
+import os
+import time
+import commands
+import sys
+
+from tools.date_str_utils import DatePolicy
 
 class FileBackups:
 
@@ -10,13 +16,71 @@ class FileBackups:
         parser_object = argparse.ArgumentParser()
         parser_object.add_argument('-i', '--FILESET_INCLUDE', type=str
                                    , help='Included fileset to backup', required=True)
-        # args_list = parser_object.parse_args()
+        parser_object.add_argument('-w', '--WORK_FOLDER', type=str
+                                   , help='This is the folder to use for temporary files works', required=True)
+        parser_object.add_argument('-e', '--FILESET_EXCLUDE', type=str
+                                   , help='files not to be included', required=False)
         args_list, unknown = parser_object.parse_known_args()
         return args_list
 
+    def file_backup_execution(self,filesets,destination='', excluded_filesets=''):
+        """Execute the files tar and compression"""
+        # #Files and folders checkups
+        # Included filesets
+        print 'Making temporary copy of the local files to backup in: ' + destination
+        if filesets != '' and filesets is not None:
+            filesets = filesets.replace(' /', ' ')
+            # filesets = filesets.replace('/ ', ' ')
+            filesets = filesets[1:]
+        else:
+            print
+            sys.stderr.write('ERROR: The --FILESET_INCLUDE can not be empty; execution')
+            sys.exit(1)
+
+        print 'Backup objective(s): ' + filesets + '. Excluded files: ' + excluded_filesets
+        #Excluded filesets
+        if excluded_filesets != '' and excluded_filesets is not None:
+            excluded_files = ' --exclude=' + excluded_filesets[1:]
+            excluded_files = excluded_files.replace('/ ', ' ')
+            excluded_files = excluded_files.replace(' /', ' --exclude=')
+
+
+        datetime_string = time.strftime("%Y%m%d_%H%M%S")
+        if os.geteuid() == 0:
+            sys.stderr.write('Execution as root is not allowed the GID for this user can not be 0')
+            exit(1)
+        else:
+            a = 'sudo /bin/tar czCf / ' + destination + '/filesbackup_' + datetime_string + 'tar.gz ' \
+                + filesets + excluded_files
+            print 'Command to execute: ' + a
+            try:
+                tar_result = commands.getstatusoutput(a)
+                return tar_result
+            except Exception as e:
+                e.args += (tar_result,)
+                raise
+
+
+    def check_paths (self, path_list):
+        for one_path in path_list:
+            if os.path.isfile(one_path) is None or False:
+                return False
+
+        return True
+
+    def is_root_user(self):
+        try:
+            os.rename('/etc/foo', '/etc/bar')
+            return True
+        except Exception as e:
+            return e.args
 
 if __name__ == "__main__":
     FileBackups.files_backup()
     command_object = FileBackups.file_backup_commands(FileBackups())
     if command_object.FILESET_INCLUDE:
-        print "Parameters in use: " + command_object.FILESET_INCLUDE
+        print "Parameters in use, Fileset: " + command_object.FILESET_INCLUDE \
+              + ', Work Folder: ' + command_object.WORK_FOLDER
+        tar_execution = FileBackups.file_backup_execution(FileBackups(), command_object.FILESET_INCLUDE
+                                          , command_object.WORK_FOLDER, command_object.FILESET_EXCLUDE)
+        print tar_execution

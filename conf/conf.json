@@ -5,17 +5,6 @@
     "LOCAL_BACKUP": "/opt/backup/local",
     "HOME_FOLDER": "/var/www/py/nc-backup-py"
     },
-  "LEGACY_FILES":{
-    "ACTION": "execute",
-    "NAME": "legacy-filesbackup",
-    "EXECUTE_WITH": "bash",
-    "EXECUTABLE": "file_script_backup.sh",
-    "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc /var/www/py/nc-backup-py /var/spool/cron",
-      "FILESET_EXCLUDE": ""
-    },
-    "PARAMETERS_MODE": "flat"
-  },
   "FILESET":{
     "ACTION": "execute",
     "NAME": "filesbackup",
@@ -23,34 +12,8 @@
     "EXECUTE_WITH": "python",
     "EXECUTABLE": "",
     "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc /var/www/py/nc-backup-py /var/spool/cron",
-      "FILESET_EXCLUDE": ""
+      "FILESET_INCLUDE": "/etc /var/www/py/nc-backup-py/ /var/spool/cron",
+      "FILESET_EXCLUDE": "/etc/yum.d/ /etc/yum.conf /etc/yum.repos.d/ /etc/grub.d"
     }
-  },
-  "DATABASES":{
-    "DB_BACKUP_METHOD": "None"
-  },
-  "COMPRESSION":{
-    "ACTION": "execute",
-    "COMPRESSION_PROGRAM": "tar.gz",
-    "_options": "tar.gz none",
-    "NAME": "compression",
-    "EXECUTABLE": "compress.sh",
-    "EXECUTE_WITH": "bash",
-    "PARAMETERS": {
-      "PPP": "AAAAAAAAAA"
-    }
-  },
-  "ENCRYPTION": {
-    "ENCRYPTION_PROGRAM": "GPG2",
-    "_options": "gpg gpg2 none",
-    "KEY_FILE": "/var/www/py/nc-backup-py/key/key_file"
-  },
-  "STORAGE":{
-    "STORAGE": "LOCAL"
-  },
-  "CLEANUP":{
-
   }
-
 }
