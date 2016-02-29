@@ -30,7 +30,6 @@ class FileBackups:
         print 'Making temporary copy of the local files to backup in: ' + destination
         if filesets != '' and filesets is not None:
             filesets = filesets.replace(' /', ' ')
-            # filesets = filesets.replace('/ ', ' ')
             filesets = filesets[1:]
         else:
             print
@@ -56,29 +55,10 @@ class FileBackups:
                 # tar_result = commands.getstatusoutput(a)
                 tar_result = subprocess.Popen(tar_command, shell=True, stdout=subprocess.PIPE,
                                               stderr=subprocess.PIPE)
-                # tar_result = SubprocessExecution.main_execution_function(SubprocessExecution(), tar_command)
-                # print tar_result
-                # if tar_result is not None:
-                #     for line in tar_result:
-                #         print '|_' + line
                 return tar_result
             except Exception as e:
                 e.args += (tar_result,)
                 raise
-
-    def check_paths(self, path_list):
-        for one_path in path_list:
-            if os.path.isfile(one_path) is None or False:
-                return False
-
-        return True
-
-    def is_root_user(self):
-        try:
-            os.rename('/etc/foo', '/etc/bar')
-            return True
-        except Exception as e:
-            return e.args
 
 
 if __name__ == "__main__":
