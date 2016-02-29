@@ -15,5 +15,15 @@
       "FILESET_INCLUDE": "/etc /var/www/py/nc-backup-py/ /var/spool/cron",
       "FILESET_EXCLUDE": "/etc/yum.d/ /etc/yum.conf /etc/yum.repos.d/ /etc/grub.d"
     }
+  },
+  "COMPRESSION": {
+    "ACTION": "execute",
+    "NAME": "compression",
+    "EXECUTABLE": "",
+    "EXECUTE_WITH": "",
+    "PARAMETERS": {
+      "OBJECTIVES": "/opt/backup/compressed",
+      "DESTINATION": "/opt/backup/compressed"
+    }
   }
 }

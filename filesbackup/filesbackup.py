@@ -48,16 +48,23 @@ class FileBackups:
             sys.stderr.write('Execution as root is not allowed the GID for this user can not be 0')
             exit(1)
         else:
-            tar_command = '/usr/bin/sudo /bin/tar czCf / ' + destination + '/filesbackup_' + datetime_string + 'tar.gz ' \
-                          + filesets + excluded_files
-            print 'Command to execute: ' + tar_command
+            tar_command = '/usr/bin/sudo /bin/tar czCf / ' + destination + '/files/filesbackup_' \
+                          + datetime_string + 'tar.gz ' + filesets + excluded_files
+            # print 'Command to execute: ' + tar_command
             try:
-                # tar_result = commands.getstatusoutput(a)
-                tar_result = subprocess.Popen(tar_command, shell=True, stdout=subprocess.PIPE,
-                                              stderr=subprocess.PIPE)
-                return tar_result
+                execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), 'mkdir ' + destination + '/files')
+                SubprocessExecution.print_output(SubprocessExecution(), execution_mkdir)
+                # SubprocessExecution.without_none(execution_mkdir)
+                # print type(execution_message)
             except Exception as e:
-                e.args += (tar_result,)
+                e.args += (execution_mkdir,)
+                raise
+            try:
+                execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), tar_command)
+                SubprocessExecution.print_output(SubprocessExecution(), execution_message)
+                # SubprocessExecution.without_none(execution_message)
+            except Exception as e:
+                e.args += (execution_message,)
                 raise
 
 
@@ -69,4 +76,3 @@ if __name__ == "__main__":
               + ', Work Folder: ' + command_object.WORK_FOLDER
         tar_execution = FileBackups.file_backup_execution(FileBackups(), command_object.FILESET_INCLUDE
                                                           , command_object.WORK_FOLDER, command_object.FILESET_EXCLUDE)
-        print tar_execution

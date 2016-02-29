@@ -37,10 +37,9 @@ class BackupExecutionLogic:
                 print "List of parameters passed to script: " + module_to_call
                 # Execute command
                 try:
-                    execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), module_to_call)
-                    if execution_message is not None:
-                        for line in execution_message:
-                            print line
+                    execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(),
+                                                                                    module_to_call)
+                    SubprocessExecution.print_output(SubprocessExecution(), execution_message)
                     loaded_scripts.append(execution_message)
                 except Exception as e:
                     e.args += (execution_message,)
