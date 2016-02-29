@@ -1,7 +1,11 @@
 import commands
+import subprocess
 
 
 from os import path
+
+from subprocess_execution import SubprocessExecution
+
 
 class BackupExecutionLogic:
 
@@ -33,8 +37,10 @@ class BackupExecutionLogic:
                 print "List of parameters passed to script: " + module_to_call
                 # Execute command
                 try:
-                    execution_message = commands.getoutput(module_to_call)
-                    print execution_message
+                    execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), module_to_call)
+                    if execution_message is not None:
+                        for line in execution_message:
+                            print line
                     loaded_scripts.append(execution_message)
                 except Exception as e:
                     e.args += (execution_message,)

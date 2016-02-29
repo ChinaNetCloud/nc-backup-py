@@ -1,13 +1,13 @@
 import argparse
 import os
 import time
-import commands
+import subprocess
 import sys
 
-from tools.date_str_utils import DatePolicy
+from execution.subprocess_execution import SubprocessExecution
+
 
 class FileBackups:
-
     @staticmethod
     def files_backup():
         print "Executing files backup"
@@ -23,7 +23,7 @@ class FileBackups:
         args_list, unknown = parser_object.parse_known_args()
         return args_list
 
-    def file_backup_execution(self,filesets,destination='', excluded_filesets=''):
+    def file_backup_execution(self, filesets, destination='', excluded_filesets=''):
         """Execute the files tar and compression"""
         # #Files and folders checkups
         # Included filesets
@@ -38,30 +38,35 @@ class FileBackups:
             sys.exit(1)
 
         print 'Backup objective(s): ' + filesets + '. Excluded files: ' + excluded_filesets
-        #Excluded filesets
+        # Excluded filesets
         if excluded_filesets != '' and excluded_filesets is not None:
             excluded_files = ' --exclude=' + excluded_filesets[1:]
             excluded_files = excluded_files.replace('/ ', ' ')
             excluded_files = excluded_files.replace(' /', ' --exclude=')
-
 
         datetime_string = time.strftime("%Y%m%d_%H%M%S")
         if os.geteuid() == 0:
             sys.stderr.write('Execution as root is not allowed the GID for this user can not be 0')
             exit(1)
         else:
-            a = 'sudo /bin/tar czCf / ' + destination + '/filesbackup_' + datetime_string + 'tar.gz ' \
-                + filesets + excluded_files
-            print 'Command to execute: ' + a
+            tar_command = '/usr/bin/sudo /bin/tar czCf / ' + destination + '/filesbackup_' + datetime_string + 'tar.gz ' \
+                          + filesets + excluded_files
+            print 'Command to execute: ' + tar_command
             try:
-                tar_result = commands.getstatusoutput(a)
+                # tar_result = commands.getstatusoutput(a)
+                tar_result = subprocess.Popen(tar_command, shell=True, stdout=subprocess.PIPE,
+                                              stderr=subprocess.PIPE)
+                # tar_result = SubprocessExecution.main_execution_function(SubprocessExecution(), tar_command)
+                # print tar_result
+                # if tar_result is not None:
+                #     for line in tar_result:
+                #         print '|_' + line
                 return tar_result
             except Exception as e:
                 e.args += (tar_result,)
                 raise
 
-
-    def check_paths (self, path_list):
+    def check_paths(self, path_list):
         for one_path in path_list:
             if os.path.isfile(one_path) is None or False:
                 return False
@@ -75,6 +80,7 @@ class FileBackups:
         except Exception as e:
             return e.args
 
+
 if __name__ == "__main__":
     FileBackups.files_backup()
     command_object = FileBackups.file_backup_commands(FileBackups())
@@ -82,5 +88,5 @@ if __name__ == "__main__":
         print "Parameters in use, Fileset: " + command_object.FILESET_INCLUDE \
               + ', Work Folder: ' + command_object.WORK_FOLDER
         tar_execution = FileBackups.file_backup_execution(FileBackups(), command_object.FILESET_INCLUDE
-                                          , command_object.WORK_FOLDER, command_object.FILESET_EXCLUDE)
+                                                          , command_object.WORK_FOLDER, command_object.FILESET_EXCLUDE)
         print tar_execution
