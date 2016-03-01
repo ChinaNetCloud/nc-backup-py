@@ -31,7 +31,6 @@
     "ACTION": "execute",
     "NAME": "encryption",
     "PARAMETERS": {
-      "ENCRYPTION_PROGRAM": "GPG2",
       "KEY_FILE": "/var/www/py/nc-backup-py/conf/key_file",
       "FILE_SIZE": "100",
       "OBJECTIVES": "/opt/backup/compressed",
