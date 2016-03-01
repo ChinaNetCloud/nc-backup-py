@@ -4,7 +4,7 @@ import os
 
 
 from execution.subprocess_execution import SubprocessExecution
-
+from cleanup.deletions import DeleteFiles
 
 class CompressionWorks:
     # def __init__(self):
@@ -17,7 +17,7 @@ class CompressionWorks:
         parser_object.add_argument('-d', '--DESTINATION', type=str
                                    , help='Compress files to folder', required=True)
         parser_object.add_argument('-r', '--REMOVE_OBJECTIVES', type=str
-                                   , help='Rremove/Delete objective folders', required=False)
+                                   , help='Remove/Delete objective folders', required=False)
         args_list, unknown = parser_object.parse_known_args()
         return args_list
 
@@ -28,7 +28,7 @@ class CompressionWorks:
             objectives = objectives[1:]
         datetime_string = time.strftime("%Y%m%d_%H%M%S")
         tar_command = '/usr/bin/sudo /bin/tar czCf / ' + destination + '/filesbackup_' \
-                          + datetime_string + 'tar.gz ' + objectives
+                          + datetime_string + '.tar.gz ' + objectives
         if not os.path.isdir(destination):
             execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), 'mkdir ' + destination)
             SubprocessExecution.print_output(SubprocessExecution(), execution_mkdir)
@@ -39,14 +39,7 @@ class CompressionWorks:
             e.args += (execution_message,)
             raise
 
-    def remove_files(self, remove_objectives):
-        try:
-            delete_command = 'rm -rf ' + remove_objectives
-            execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), delete_command)
-            SubprocessExecution.print_output(SubprocessExecution(), execution_message)
-        except Exception as e:
-            e.args += (execution_message,)
-            raise
+
 
 if __name__ == "__main__":
     command_compression = CompressionWorks.compression_commands(CompressionWorks())
@@ -58,5 +51,5 @@ if __name__ == "__main__":
     if command_compression.REMOVE_OBJECTIVES:
         print 'Deleting files after objective files as per config option --REMOVE_OBJECTIVES: ' \
               + command_compression.OBJECTIVES
-        CompressionWorks.remove_files(CompressionWorks(),command_compression.OBJECTIVES)
+        DeleteFiles.remove_files(DeleteFiles(),command_compression.OBJECTIVES)
 

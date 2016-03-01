@@ -34,7 +34,8 @@
       "KEY_FILE": "/var/www/py/nc-backup-py/conf/key_file",
       "FILE_SIZE": "100",
       "OBJECTIVES": "/opt/backup/compressed",
-      "DESTINATION":"/opt/backup/encrypted"
+      "DESTINATION":"/opt/backup/encrypted",
+      "REMOVE_OBJECTIVES": "True"
     }
   }
 }
