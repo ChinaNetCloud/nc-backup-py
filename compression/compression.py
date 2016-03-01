@@ -42,7 +42,7 @@ class CompressionWorks:
     def remove_files(self, remove_objectives):
         try:
             delete_command = 'rm -rf ' + remove_objectives
-            execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), remove_objectives)
+            execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), delete_command)
             SubprocessExecution.print_output(SubprocessExecution(), execution_message)
         except Exception as e:
             e.args += (execution_message,)
@@ -58,5 +58,5 @@ if __name__ == "__main__":
     if command_compression.REMOVE_OBJECTIVES:
         print 'Deleting files after objective files as per config option --REMOVE_OBJECTIVES: ' \
               + command_compression.OBJECTIVES
-        CompressionWorks.remove_files(command_compression.OBJECTIVES)
+        CompressionWorks.remove_files(CompressionWorks(),command_compression.OBJECTIVES)
 
