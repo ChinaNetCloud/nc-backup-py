@@ -22,8 +22,9 @@
     "EXECUTABLE": "",
     "EXECUTE_WITH": "",
     "PARAMETERS": {
-      "OBJECTIVES": "/opt/backup/compressed",
-      "DESTINATION": "/opt/backup/compressed"
+      "OBJECTIVES": "/opt/backup/files",
+      "DESTINATION": "/opt/backup/compressed",
+      "REMOVE_OBJECTIVES": "True"
     }
   }
 }

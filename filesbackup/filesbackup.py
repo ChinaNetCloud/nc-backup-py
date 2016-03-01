@@ -1,7 +1,6 @@
 import argparse
 import os
 import time
-import subprocess
 import sys
 
 from execution.subprocess_execution import SubprocessExecution
@@ -27,7 +26,7 @@ class FileBackups:
         """Execute the files tar and compression"""
         # #Files and folders checkups
         # Included filesets
-        print 'Making temporary copy of the local files to backup in: ' + destination
+        print 'Making a compressed copy of the local files to: ' + destination
         if filesets != '' and filesets is not None:
             filesets = filesets.replace(' /', ' ')
             filesets = filesets[1:]
@@ -51,14 +50,10 @@ class FileBackups:
             tar_command = '/usr/bin/sudo /bin/tar czCf / ' + destination + '/files/filesbackup_' \
                           + datetime_string + 'tar.gz ' + filesets + excluded_files
             # print 'Command to execute: ' + tar_command
-            try:
+            if not os.path.isdir(destination + '/files'):
                 execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), 'mkdir ' + destination + '/files')
                 SubprocessExecution.print_output(SubprocessExecution(), execution_mkdir)
-                # SubprocessExecution.without_none(execution_mkdir)
-                # print type(execution_message)
-            except Exception as e:
-                e.args += (execution_mkdir,)
-                raise
+
             try:
                 execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), tar_command)
                 SubprocessExecution.print_output(SubprocessExecution(), execution_message)
