@@ -32,7 +32,7 @@
     "NAME": "encryption",
     "PARAMETERS": {
       "KEY_FILE": "/var/www/py/nc-backup-py/conf/key_file",
-      "FILE_SIZE": "100",
+      "FILE_SIZE": "5M",
       "OBJECTIVES": "/opt/backup/compressed",
       "DESTINATION":"/opt/backup/encrypted",
       "REMOVE_OBJECTIVES": "True"

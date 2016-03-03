@@ -8,14 +8,18 @@ class SubprocessExecution:
     __io_q = Queue()
     __process = None
 
-    def main_execution_function(self, shell_command):
+    def main_execution_function(self, shell_command, wait_cmd=False):
+        """
+
+        :rtype: stdout, stderr
+        """
         print 'Executing system the system external command: ' + shell_command
         self.__process = Popen(shell_command, shell=True, stdout=PIPE, stderr=PIPE)
+        if wait_cmd == True:
+            self.__process.wait()
+        stdout, stderr = self.__process.communicate()
+        return stdout, stderr
 
-        return self.__process.communicate()
-
-    def print_output(self,communicates_message):
+    def print_output(self, communicates_message):
         for message in communicates_message:
             print message
-
-
