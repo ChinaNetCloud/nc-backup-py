@@ -37,5 +37,14 @@
       "DESTINATION":"/opt/backup/encrypted",
       "REMOVE_OBJECTIVES": "True"
     }
+  },
+  "STORAGE": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "DESTINATION":"local",
+      "__options": "local,s3,ssh,oss"
+    }
   }
 }

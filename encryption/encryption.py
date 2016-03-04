@@ -112,9 +112,7 @@ if __name__ == "__main__":
                     with open(objective + '/' + file_to_add, 'rb') as in_file, \
                             open(out_file_str, 'wb') as out_file, \
                             open(encryption_command.KEY_FILE, 'r') as key_file:
-                        # print key_file
                         key_from_file =key_file.read().replace('\n', '')
-                        # print key_from_file
                         EncryptionWorks.encrypt(EncryptionWorks(), in_file, out_file,key_from_file)
                     EncryptionWorks.split_file(EncryptionWorks(),out_file_str,encryption_command.FILE_SIZE)
                     DeleteFiles.remove_files(DeleteFiles(),out_file_str)
