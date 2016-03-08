@@ -1,56 +1,30 @@
 import argparse
 
-class Storage:
+
+from tools.filesystem_handling import FilesystemHandling
+from execution.subprocess_execution import SubprocessExecution
+
+class StorageExecution:
+
     def storage_commands(self):
         parser_object = argparse.ArgumentParser()
         parser_object.add_argument('-o', '--OBJECTIVES', type=str
                                    , help='Objectives to encrypt', required=True)
+        parser_object.add_argument('-l', '--LOCAL_BACKUP', type=str
+                                   , help='Objectives to encrypt', required=True)
+        parser_object.add_argument('-D', '--DESTINATION', type=str
+                                   , help='Backup destination', required=True)
         args_list, unknown = parser_object.parse_known_args()
         return args_list
-    def list_content(self):
-        print "Listing directory content"
-
-    def upload_content(self):
-        print 'Uploading to storage'
-
-    def remove_content(self):
-        print 'General: removing files from storage'
-
-    def check_size_content(self):
-        print 'checking the files size'
 
 
-class StorageLocal (Storage):
-    def list_content(self):
-        print "Listing directory content"
+if __name__ == "__main__":
+    storage_cmd = StorageExecution.storage_commands(StorageExecution())
+    if storage_cmd.DESTINATION == 'local':
+        print 'Executing backup files type: ' + storage_cmd.DESTINATION
+        command_move = 'mv ' + storage_cmd.OBJECTIVES + '/* ' + storage_cmd.LOCAL_BACKUP
+        FilesystemHandling.create_directory(storage_cmd.LOCAL_BACKUP)
+        ExecuteBackup = SubprocessExecution.main_execution_function(SubprocessExecution(), command_move, True)
+        SubprocessExecution.print_output(SubprocessExecution(), ExecuteBackup)
+        FilesystemHandling.remove_files(storage_cmd.OBJECTIVES)
 
-    def upload_content(self):
-        print 'Uploading to storage'
-
-    def remove_content(self):
-        print 'Local: removing files from storage'
-
-    def check_size_content(self):
-        print 'Localchecking the files size'
-
-
-class AWSS3(Storage):
-    def list_content(self):
-        print "Listing directory content"
-
-    def upload_content(self):
-        print 'Uploading to storage'
-
-    def remove_content(self):
-        print 'S3: removing files from storage'
-
-    def check_size_content(self):
-        print 'checking the files size'
-
-
-my_list = [Storage(), StorageLocal(), AWSS3()]
-
-
-
-for x in my_list:
-    x.remove_content()

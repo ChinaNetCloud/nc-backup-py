@@ -44,7 +44,9 @@
     "PARAMETERS":{
       "OBJECTIVES": "/opt/backup/encrypted",
       "DESTINATION":"local",
-      "__options": "local,s3,ssh,oss"
+      "__options": "local,s3,ssh,oss",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "REMOVE_OBJECTIVES": "True"
     }
   }
 }

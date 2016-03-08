@@ -4,7 +4,7 @@ import os
 
 
 from execution.subprocess_execution import SubprocessExecution
-from cleanup.deletions import DeleteFiles
+from tools.filesystem_handling import FilesystemHandling
 
 class CompressionWorks:
     # def __init__(self):
@@ -51,5 +51,5 @@ if __name__ == "__main__":
     if command_compression.REMOVE_OBJECTIVES:
         print 'Deleting files after objective files as per config option --REMOVE_OBJECTIVES: ' \
               + command_compression.OBJECTIVES
-        DeleteFiles.remove_files(DeleteFiles(),command_compression.OBJECTIVES)
+        FilesystemHandling.remove_files(command_compression.OBJECTIVES)
 
