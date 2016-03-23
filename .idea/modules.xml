@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/nc-backup-py.iml" filepath="$PROJECT_DIR$/.idea/nc-backup-py.iml" />
+      <module fileurl="file:///var/www/py/nc-backup-py/.idea/nc-backup-py.iml" filepath="/var/www/py/nc-backup-py/.idea/nc-backup-py.iml" />
     </modules>
   </component>
 </project>

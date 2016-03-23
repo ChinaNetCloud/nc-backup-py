@@ -74,6 +74,7 @@ class EncryptionWorks:
             out_file.write(chunk)
 
     # def create_preconditions(self, destination):
+
     #     if not isdir(destination):
     #         execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), 'mkdir ' + destination)
     #         SubprocessExecution.print_output(SubprocessExecution(), execution_mkdir)
