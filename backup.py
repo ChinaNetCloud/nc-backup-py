@@ -8,8 +8,9 @@ from execution.backup_execution import BackupExecutionLogic
 from communications.communications import Communications
 
 
+json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig())
 logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', 10,
-                                      '/var/www/py/nc-backup-py/log/ncbackup.log',
+                                      json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 successful_execution = False
 try:
@@ -20,13 +21,13 @@ except Exception as exceptio_reading_commands:
 
     successful_execution = False
 
-if command_object.run:
-    try:
-        json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig())
-        successful_execution = True
-    except Exception as exception_loading_config:
-        logger.critical('The main script did not Execute the backups scripts trying to load configs exited with: %s', exception_loading_config)
-        successful_execution = False
+#if command_object.run:
+#    try:
+#        json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig())
+#        successful_execution = True
+#    except Exception as exception_loading_config:
+#        logger.critical('The main script did not Execute the backups scripts trying to load configs exited with: %s', exception_loading_config)
+#        successful_execution = False
 
 if successful_execution and type(json_dict) is not str:
     if json_dict is not None or type(json_dict) is not str:
