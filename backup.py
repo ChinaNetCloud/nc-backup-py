@@ -8,8 +8,9 @@ from execution.backup_execution import BackupExecutionLogic
 from communications.communications import Communications
 
 
+json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig())
 logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', 10,
-                                      '/var/www/py/nc-backup-py/log/ncbackup.log',
+                                      json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 successful_execution = False
 try:
@@ -17,24 +18,24 @@ try:
 
 except Exception as exceptio_reading_commands:
     logger.critical('The main script did not manage to read the parameters passed by user Exited with: ')
-
     successful_execution = False
 
-if command_object.run:
-    try:
-        json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig())
-        successful_execution = True
-    except Exception as exception_loading_config:
-        logger.critical('The main script did not Execute the backups scripts trying to load configs exited with: %s', exception_loading_config)
-        successful_execution = False
+#if command_object.run:
+#    try:
+#        json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig())
+#        successful_execution = True
+#    except Exception as exception_loading_config:
+#        logger.critical('The main script did not Execute the backups scripts trying to load configs exited with: %s', exception_loading_config)
+#        successful_execution = False
 
-if successful_execution and type(json_dict) is not str:
+if type(json_dict) is not str:
     if json_dict is not None or type(json_dict) is not str:
         nc_backup_py_home = json_dict['GENERAL']['HOME_FOLDER']
         logger.info('Backups execution...')
         logger.info('Loading and executing modules from configuration sections')
         try:
             execution_script = BackupExecutionLogic.iterate_config_script(BackupExecutionLogic(), json_dict, nc_backup_py_home)
+            successful_execution = True
         except Exception as exception_executing_external_script:
             logger.critical('The main script did not Execute the backups scripts after loading configs: ')
             successful_execution = False
