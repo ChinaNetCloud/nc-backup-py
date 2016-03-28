@@ -6,6 +6,15 @@ from backupcmd.commands import backupCommands
 from configs.load_json_configs import LoadJsonConfig
 from execution.backup_execution import BackupExecutionLogic
 from communications.communications import Communications
+from tools.os_works import OSInformation
+
+
+
+os_name = OSInformation.isWindows()
+if (os_name):
+    config_file_location = 'c:\backup\nc-backup-py\conf\conf.json'
+else:
+    config_file_location = False
 
 
 json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig())
