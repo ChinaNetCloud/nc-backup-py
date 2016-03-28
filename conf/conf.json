@@ -1,10 +1,10 @@
 {
   "GENERAL": {
     "HOSTNAME": "srv-nc-test1",
-    "WORK_FOLDER": "c:\backup",
-    "LOCAL_BACKUP": "c:\backup\local",
-    "HOME_FOLDER": "c:\backup\nc-backup-py",
-    "LOG_FOLDER": "c:\backup\nc-backup-py\log\ncbackup.log"
+    "WORK_FOLDER": "c:\\backup",
+    "LOCAL_BACKUP": "c:\\backup\\local",
+    "HOME_FOLDER": "c:\\backup\\nc-backup-py",
+    "LOG_FOLDER": "c:\\backup\\nc-backup-py\\log\\ncbackup.log"
     },
   "FILESET":{
     "ACTION": "execute",
