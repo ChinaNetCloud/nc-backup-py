@@ -3,12 +3,12 @@
     "HOSTNAME": "srv-nc-test1",
     "WORK_FOLDER": "/opt/backup",
     "LOCAL_BACKUP": "/opt/backup/local",
-    "HOME_FOLDER": "/var/www/py/nc-backup-py"
+    "HOME_FOLDER": "/var/www/py/nc-backup-py",
+    "LOG_FOLDER": "/var/www/py/nc-backup-py/log/ncbackup.log"
     },
   "FILESET":{
     "ACTION": "execute",
     "NAME": "filesbackup",
-    "EXECUTABLE": "",
     "EXECUTE_WITH": "python",
     "EXECUTABLE": "",
     "PARAMETERS": {

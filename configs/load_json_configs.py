@@ -14,6 +14,7 @@ class LoadJsonConfig:
         if os.path.isfile(self.__config_file):
             try:
                 with open(self.__config_file, 'r') as stream_doc:
+		    print self.__config_file
                     doc_dict = json.load(stream_doc, object_pairs_hook=OrderedDict)
                     return doc_dict
             except EnvironmentError as e:

@@ -1,0 +1,20 @@
+{
+  "GENERAL": {
+    "HOSTNAME": "WIN-G5AKB09AALD",
+    "WORK_FOLDER": "c:\\backup",
+    "LOCAL_BACKUP": "c:\\backup\\local",
+    "HOME_FOLDER": "c:\\backup\\nc-backup-py",
+    "LOG_FOLDER": "c:\\backup\\nc-backup-py\\log\\ncbackup.log"
+    },
+  "FILESET":{
+    "ACTION": "execute",
+    "NAME": "filesbackup",
+    "EXECUTABLE": "",
+    "EXECUTE_WITH": "python",
+    "EXECUTABLE": "",
+    "PARAMETERS": {
+      "FILESET_INCLUDE": "c:\\backup\\backup_test_a C:\\Zabbix\\Log C:\\backup_test_b\\backup_test_1",
+      "FILESET_EXCLUDE": "C:\\backup_test_b\\backup_test_1\\test_2.txt"
+    }
+  }
+}

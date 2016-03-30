@@ -4,9 +4,9 @@ import time
 import sys
 
 
-
-
-
+#from execution.subprocess_execution import SubprocessExecution
+sys.path.append('c:\\backup\\nc-backup-py')
+from execution.subprocess_execution import SubprocessExecution
 
 class FileBackups:
     @staticmethod
@@ -17,8 +17,6 @@ class FileBackups:
         parser_object = argparse.ArgumentParser()
         parser_object.add_argument('-i', '--FILESET_INCLUDE', type=str
                                    , help='Included fileset to backup', required=True)
-        parser_object.add_argument('-H', '--HOME_FOLDER', type=str
-                                   , help='Script home folder required(from where the master script runs)', required=True)
         parser_object.add_argument('-w', '--WORK_FOLDER', type=str
                                    , help='This is the folder to use for temporary files works', required=True)
         parser_object.add_argument('-e', '--FILESET_EXCLUDE', type=str
@@ -71,11 +69,7 @@ if __name__ == "__main__":
     FileBackups.files_backup()
     command_object = FileBackups.file_backup_commands(FileBackups())
     if command_object.FILESET_INCLUDE:
-        sys.path.append(command_object.HOME_FOLDER)
-        from execution.subprocess_execution import SubprocessExecution
-
         print "Parameters in use, Fileset: " + command_object.FILESET_INCLUDE \
               + ', Work Folder: ' + command_object.WORK_FOLDER
         tar_execution = FileBackups.file_backup_execution(FileBackups(), command_object.FILESET_INCLUDE
                                                           , command_object.WORK_FOLDER, command_object.FILESET_EXCLUDE)
-														  
