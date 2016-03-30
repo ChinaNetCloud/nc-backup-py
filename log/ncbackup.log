@@ -58,3 +58,6 @@
 2016-03-28 08:39:35,206 - ncbackup - INFO - Backups execution...
 2016-03-28 08:39:35,206 - ncbackup - INFO - Loading and executing modules from configuration sections
 2016-03-28 08:39:35,658 - ncbackup - INFO - Execution ends here.
+2016-03-30 08:27:38,918 - ncbackup - INFO - Backups execution...
+2016-03-30 08:27:38,918 - ncbackup - INFO - Loading and executing modules from configuration sections
+2016-03-30 08:27:39,355 - ncbackup - INFO - Execution ends here.

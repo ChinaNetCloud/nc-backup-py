@@ -12,7 +12,7 @@ from tools.os_works import OSInformation
 
 os_name = OSInformation.isWindows()
 if (os_name):
-    config_file_location = 'conf\\conf.json'
+    config_file_location = 'conf\\confw.json'
 else:
     config_file_location = 'conf/conf.json'
 
