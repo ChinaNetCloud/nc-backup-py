@@ -12,11 +12,20 @@ from tools.os_works import OSInformation
 
 os_name = OSInformation.isWindows()
 if (os_name):
+<<<<<<< HEAD
     config_file_location = 'conf\\confw.json'
 else:
     config_file_location = 'conf/conf.json'
 
 json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig(), config_file_location) 
+=======
+    config_file_location = 'c:\backup\nc-backup-py\conf\conf.json'
+else:
+    config_file_location = False
+
+
+json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig())
+>>>>>>> origin/abel-dev
 logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', 10,
                                       json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')

@@ -55,6 +55,7 @@
 2016-03-15 04:01:45,075 - ncbackup - INFO - Backups execution...
 2016-03-15 04:01:45,076 - ncbackup - INFO - Loading and executing modules from configuration sections
 2016-03-15 04:02:11,457 - ncbackup - INFO - Execution ends here.
+<<<<<<< HEAD
 2016-03-28 08:39:35,206 - ncbackup - INFO - Backups execution...
 2016-03-28 08:39:35,206 - ncbackup - INFO - Loading and executing modules from configuration sections
 2016-03-28 08:39:35,658 - ncbackup - INFO - Execution ends here.
@@ -160,3 +161,20 @@
 2016-04-14 17:10:46,277 - ncbackup - INFO - Backups execution...
 2016-04-14 17:10:46,287 - ncbackup - INFO - Loading and executing modules from configuration sections
 2016-04-14 17:11:04,767 - ncbackup - INFO - Execution ends here.
+=======
+2016-03-23 18:14:29,504 - ncbackup - INFO - Backups execution...
+2016-03-23 18:14:29,505 - ncbackup - INFO - Loading and executing modules from configuration sections
+2016-03-23 18:15:17,799 - ncbackup - INFO - Execution ends here.
+2016-03-23 18:23:37,822 - ncbackup - INFO - Backups execution...
+2016-03-23 18:23:37,823 - ncbackup - INFO - Loading and executing modules from configuration sections
+2016-03-23 18:23:41,971 - ncbackup - INFO - Execution ends here.
+2016-03-28 14:58:30,718 - ncbackup - CRITICAL - Execution Error with: /var/www/py/nc-backup-py/conf/conf.json
+2016-03-28 14:58:30,744 - ncbackup - INFO - Execution ends here.
+2016-03-28 14:59:59,919 - ncbackup - INFO - Backups execution...
+2016-03-28 14:59:59,920 - ncbackup - INFO - Loading and executing modules from configuration sections
+2016-03-28 15:00:18,980 - ncbackup - CRITICAL - Execution Error before sending report.
+2016-03-28 15:00:18,980 - ncbackup - INFO - Execution ends here.
+2016-03-28 15:02:08,119 - ncbackup - INFO - Backups execution...
+2016-03-28 15:02:08,119 - ncbackup - INFO - Loading and executing modules from configuration sections
+2016-03-28 15:02:10,251 - ncbackup - INFO - Execution ends here.
+>>>>>>> origin/abel-dev
