@@ -12,20 +12,11 @@ from tools.os_works import OSInformation
 
 os_name = OSInformation.isWindows()
 if (os_name):
-<<<<<<< HEAD
     config_file_location = 'conf\\confw.json'
 else:
     config_file_location = 'conf/conf.json'
 
-json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig(), config_file_location) 
-=======
-    config_file_location = 'c:\backup\nc-backup-py\conf\conf.json'
-else:
-    config_file_location = False
-
-
-json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig())
->>>>>>> origin/abel-dev
+json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig(), config_file_location)
 logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', 10,
                                       json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -36,14 +27,6 @@ try:
 except Exception as exceptio_reading_commands:
     logger.critical('The main script did not manage to read the parameters passed by user Exited with: ')
     successful_execution = False
-
-#if command_object.run:
-#    try:
-#        json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig())
-#        successful_execution = True
-#    except Exception as exception_loading_config:
-#        logger.critical('The main script did not Execute the backups scripts trying to load configs exited with: %s', exception_loading_config)
-#        successful_execution = False
 
 if type(json_dict) is not str:
     if json_dict is not None or type(json_dict) is not str:
