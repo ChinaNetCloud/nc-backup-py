@@ -1,5 +1,6 @@
 import argparse
 import time
+import sys
 
 
 from os import listdir
@@ -7,9 +8,6 @@ from os.path import isfile, join, isdir
 from hashlib import md5
 from Crypto.Cipher import AES
 from Crypto import Random
-
-from execution.subprocess_execution import SubprocessExecution
-from tools.filesystem_handling import FilesystemHandling
 
 
 class EncryptionWorks:
@@ -22,6 +20,9 @@ class EncryptionWorks:
                                    , help='Destination folder of the output', required=True)
         parser_object.add_argument('-k','--KEY_FILE', type=str
                                    , help='Compression key file', required=True)
+        parser_object.add_argument('-H','--HOME_FOLDER', type=str
+                                   , help='Include the main forder to syspath so we '
+                                          'can include other libraries', required=True)
         parser_object.add_argument('-s', '--FILE_SIZE', type=str
                                    , help='Output File size', required=False)
         parser_object.add_argument('-r', '--REMOVE_OBJECTIVES', type=str
@@ -73,13 +74,6 @@ class EncryptionWorks:
                 finished = True
             out_file.write(chunk)
 
-    # def create_preconditions(self, destination):
-
-    #     if not isdir(destination):
-    #         execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), 'mkdir ' + destination)
-    #         SubprocessExecution.print_output(SubprocessExecution(), execution_mkdir)
-
-    # to recover the origical file we can do cat prefixFiles* > newimage.jpg
     def split_file(self,path_to_file, chunk_size):
         print path_to_file
         command_split = 'split --bytes=' + chunk_size + ' ' + path_to_file + ' ' + path_to_file
@@ -99,6 +93,9 @@ if __name__ == "__main__":
     if encryption_command.DECRYPT is None \
             or encryption_command.DECRYPT == '-e' \
             or encryption_command.DECRYPT == False:
+        sys.path.append(encryption_command.HOME_FOLDER)
+        from execution.subprocess_execution import SubprocessExecution
+        from tools.filesystem_handling import FilesystemHandling
         if encryption_command.OBJECTIVES and encryption_command.DESTINATION:
             FilesystemHandling.create_directory(encryption_command.DESTINATION)
             objectives_to_encrypt = encryption_command.OBJECTIVES.split(' ')

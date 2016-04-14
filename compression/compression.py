@@ -1,15 +1,9 @@
 import argparse
 import time
 import os
-
-
-from execution.subprocess_execution import SubprocessExecution
-from tools.filesystem_handling import FilesystemHandling
+import sys
 
 class CompressionWorks:
-    # def __init__(self):
-    #     print 'Executing compression of files'
-
     def compression_commands(self):
         parser_object = argparse.ArgumentParser()
         parser_object.add_argument('-o', '--OBJECTIVES', type=str
@@ -18,6 +12,8 @@ class CompressionWorks:
                                    , help='Compress files to folder', required=True)
         parser_object.add_argument('-r', '--REMOVE_OBJECTIVES', type=str
                                    , help='Remove/Delete objective folders', required=False)
+        parser_object.add_argument('-H', '--HOME_FOLDER', type=str
+                                   , help='home folder for the modules to include', required=True)
         args_list, unknown = parser_object.parse_known_args()
         return args_list
 
@@ -44,6 +40,11 @@ class CompressionWorks:
 if __name__ == "__main__":
     command_compression = CompressionWorks.compression_commands(CompressionWorks())
     if command_compression.OBJECTIVES and command_compression.DESTINATION:
+        sys.path.append(command_compression.HOME_FOLDER)
+        from execution.subprocess_execution import SubprocessExecution
+        from tools.os_works import OSInformation
+        from tools.filesystem_handling import FilesystemHandling
+
         print 'Files to compress: ' + command_compression.OBJECTIVES + '. This files will be compressed to: '\
               + command_compression.DESTINATION
         tar_execution = CompressionWorks.compression_execution(CompressionWorks(), command_compression.OBJECTIVES
