@@ -4,10 +4,6 @@ import time
 import sys
 
 
-
-
-
-
 class FileBackups:
     @staticmethod
     def files_backup():
@@ -47,16 +43,20 @@ class FileBackups:
             excluded_files = excluded_files.replace(' /', ' --exclude=')
 
         datetime_string = time.strftime("%Y%m%d_%H%M%S")
-        if os.geteuid() == 0:
-            sys.stderr.write('Execution as root is not allowed the GID for this user can not be 0')
-            exit(1)
+        os_name = OSInformation.isWindows()
+        if (os_name):
+            print 'Windows compression command here'
         else:
-            tar_command = '/usr/bin/sudo /bin/tar czCf / ' + destination + '/files/filesbackup_' \
-                          + datetime_string + 'tar.gz ' + filesets + excluded_files
-            # print 'Command to execute: ' + tar_command
-            if not os.path.isdir(destination + '/files'):
-                execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), 'mkdir ' + destination + '/files')
-                SubprocessExecution.print_output(SubprocessExecution(), execution_mkdir)
+            if os.geteuid() == 0:
+                sys.stderr.write('Execution as root is not allowed the GID for this user can not be 0')
+                exit(1)
+            else:
+                tar_command = '/usr/bin/sudo /bin/tar czCf / ' + destination + '/files/filesbackup_' \
+                              + datetime_string + 'tar.gz ' + filesets + excluded_files
+                # print 'Command to execute: ' + tar_command
+                if not os.path.isdir(destination + '/files'):
+                    execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), 'mkdir ' + destination + '/files')
+                    SubprocessExecution.print_output(SubprocessExecution(), execution_mkdir)
 
             try:
                 execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), tar_command)
@@ -73,9 +73,8 @@ if __name__ == "__main__":
     if command_object.FILESET_INCLUDE:
         sys.path.append(command_object.HOME_FOLDER)
         from execution.subprocess_execution import SubprocessExecution
-
+        from tools.os_works import OSInformation
         print "Parameters in use, Fileset: " + command_object.FILESET_INCLUDE \
               + ', Work Folder: ' + command_object.WORK_FOLDER
         tar_execution = FileBackups.file_backup_execution(FileBackups(), command_object.FILESET_INCLUDE
                                                           , command_object.WORK_FOLDER, command_object.FILESET_EXCLUDE)
-														  

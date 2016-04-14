@@ -3,52 +3,50 @@
     "HOSTNAME": "srv-nc-test1",
     "WORK_FOLDER": "/opt/backup",
     "LOCAL_BACKUP": "/opt/backup/local",
-    "HOME_FOLDER": "/var/www/py/nc-backup-py"
+    "HOME_FOLDER": "/var/www/py/nc-backup-py",
+    "LOG_FOLDER": "/var/www/py/nc-backup-py/log/ncbackup.log"
     },
   "FILESET":{
     "ACTION": "execute",
     "NAME": "filesbackup",
-    "EXECUTABLE": "",
     "EXECUTE_WITH": "python",
     "EXECUTABLE": "",
     "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc /var/www/py/nc-backup-py /var/spool/cron",
-      "FILESET_EXCLUDE": "/etc/yum.d /etc/grub.d"
+      "FILESET_INCLUDE": "/etc /var/www/py/nc-backup-py/ /var/spool/cron",
+      "FILESET_EXCLUDE": "/etc/yum.d/ /etc/yum.conf /etc/yum.repos.d/ /etc/grub.d"
     }
   },
-  "DATABASES":{
-    "DB_BACKUP_METHOD": "None"
-  },
-  "COMPRESSION":{
+  "COMPRESSION": {
     "ACTION": "execute",
-    "COMPRESSION_PROGRAM": "tar.gz",
-    "_options": "tar.gz none",
     "NAME": "compression",
-    "EXECUTABLE": "compress.sh",
-    "EXECUTE_WITH": "bash",
+    "EXECUTABLE": "",
+    "EXECUTE_WITH": "",
     "PARAMETERS": {
-      "PPP": "AAAAAAAAAA"
+      "OBJECTIVES": "/opt/backup/files",
+      "DESTINATION": "/opt/backup/compressed",
+      "REMOVE_OBJECTIVES": "True"
     }
   },
   "ENCRYPTION": {
-    "ENCRYPTION_PROGRAM": "GPG2",
-    "_options": "gpg gpg2 none",
-    "KEY_FILE": "/var/www/py/nc-backup-py/key/key_file"
-  },
-  "STORAGE":{
-    "STORAGE": "LOCAL"
-  },
-  "CLEANUP":{
-
-  },
-  "LEGACY_FILES":{
     "ACTION": "execute",
-    "NAME": "legacy-filesbackup",
-    "EXECUTE_WITH": "bash",
-    "EXECUTABLE": "file_script_backup.sh",
+    "NAME": "encryption",
     "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc /var/www/py/nc-backup-py /var/spool/cron",
-      "FILESET_EXCLUDE": ""
+      "KEY_FILE": "/var/www/py/nc-backup-py/conf/key_file",
+      "FILE_SIZE": "5M",
+      "OBJECTIVES": "/opt/backup/compressed",
+      "DESTINATION":"/opt/backup/encrypted",
+      "REMOVE_OBJECTIVES": "True"
+    }
+  },
+  "STORAGE": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "DESTINATION":"local",
+      "__options": "local,s3,ssh,oss",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "REMOVE_OBJECTIVES": "True"
     }
   }
 }

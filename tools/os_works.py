@@ -8,3 +8,5 @@ class OSInformation:
             return sys.getwindowsversion()[0] == 6
         else:
             return False
+
+
