@@ -8,12 +8,13 @@ class SubprocessExecution:
     __io_q = Queue()
     __process = None
 
-    def main_execution_function(self, shell_command, wait_cmd=False):
+    def main_execution_function(self, shell_command, logger,wait_cmd=False):
         """
-
         :rtype: stdout, stderr
         """
-        print 'Executing system the system external command: ' + shell_command
+        log_string = 'Executing system the system external command: ' + shell_command
+        print log_string
+        # logger.info(log_string)
         self.__process = Popen(shell_command, shell=True, stdout=PIPE, stderr=PIPE)
         if wait_cmd == True:
             self.__process.wait()

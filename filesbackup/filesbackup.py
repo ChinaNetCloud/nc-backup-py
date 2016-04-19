@@ -53,7 +53,6 @@ class FileBackups:
             else:
                 tar_command = '/usr/bin/sudo /bin/tar czCf / ' + destination + '/files/filesbackup_' \
                               + datetime_string + 'tar.gz ' + filesets + excluded_files
-                # print 'Command to execute: ' + tar_command
                 if not os.path.isdir(destination + '/files'):
                     execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), 'mkdir ' + destination + '/files')
                     SubprocessExecution.print_output(SubprocessExecution(), execution_mkdir)
@@ -61,7 +60,6 @@ class FileBackups:
             try:
                 execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), tar_command)
                 SubprocessExecution.print_output(SubprocessExecution(), execution_message)
-                # SubprocessExecution.without_none(execution_message)
             except Exception as e:
                 e.args += (execution_message,)
                 raise

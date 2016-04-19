@@ -20,6 +20,7 @@ json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig(), config_file_locati
 logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', 10,
                                       json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
 successful_execution = False
 try:
     command_object = backupCommands.feature_commands(backupCommands())
@@ -34,11 +35,12 @@ if type(json_dict) is not str:
         logger.info('Backups execution...')
         logger.info('Loading and executing modules from configuration sections')
         try:
-            execution_script = BackupExecutionLogic.iterate_config_script(BackupExecutionLogic(), json_dict, nc_backup_py_home)
+            execution_script = BackupExecutionLogic.iterate_config_script(BackupExecutionLogic(), json_dict, nc_backup_py_home, logger)
             successful_execution = True
         except Exception as exception_executing_external_script:
             logger.critical('The main script did not Execute the backups scripts after loading configs: ')
             successful_execution = False
+
     if successful_execution:
         data_post = {'@srvname':'srv-nc-abel-laptop1', '@result':'OK', '@bckmethod': 'ncscript', '@size': '10MB', '@log': 'Not in use', '@error': ''}
         a = Communications.send_post(Communications(), data_post)
@@ -49,6 +51,7 @@ elif type(json_dict) is str:
     logger.critical('Execution Error with: ' + json_dict + command_object.config)
 else:
     logger.critical('Execution Error with: ' + command_object.config)
+
 
 logger.info('Execution ends here.')
 logger = logging.getLogger('ncbackup')
