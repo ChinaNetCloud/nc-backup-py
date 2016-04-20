@@ -8,7 +8,7 @@ class SubprocessExecution:
     __io_q = Queue()
     __process = None
 
-    def main_execution_function(self, shell_command, logger,wait_cmd=False):
+    def main_execution_function(self, shell_command,wait_cmd=False):
         """
         :rtype: stdout, stderr
         """
