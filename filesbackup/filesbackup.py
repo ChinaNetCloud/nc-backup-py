@@ -5,6 +5,10 @@ import sys
 
 
 class FileBackups:
+
+    def __init__(self, tar_program='/usr/bin/tar  czCf /'):
+        self.__tar_program = tar_program
+
     @staticmethod
     def files_backup():
         print "Executing files backup"
@@ -17,6 +21,8 @@ class FileBackups:
                                    , help='Script home folder required(from where the master script runs)', required=True)
         parser_object.add_argument('-w', '--WORK_FOLDER', type=str
                                    , help='This is the folder to use for temporary files works', required=True)
+        parser_object.add_argument('-C', '--COMPRESSION_CMD_CHAIN', type=str
+                                   , help='This is the compression command software and it''s parameters', required=False)
         parser_object.add_argument('-e', '--FILESET_EXCLUDE', type=str
                                    , help='files not to be included', required=False)
         args_list, unknown = parser_object.parse_known_args()
@@ -51,7 +57,7 @@ class FileBackups:
                 sys.stderr.write('Execution as root is not allowed the GID for this user can not be 0')
                 exit(1)
             else:
-                tar_command = '/usr/bin/sudo /bin/tar czCf / ' + destination + '/files/filesbackup_' \
+                tar_command = '/usr/bin/sudo '+ self.__tar_program + ' ' +destination + '/files/filesbackup_' \
                               + datetime_string + 'tar.gz ' + filesets + excluded_files
                 if not os.path.isdir(destination + '/files'):
                     execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), 'mkdir ' + destination + '/files')
@@ -74,5 +80,6 @@ if __name__ == "__main__":
         from tools.os_works import OSInformation
         print "Parameters in use, Fileset: " + command_object.FILESET_INCLUDE \
               + ', Work Folder: ' + command_object.WORK_FOLDER
-        tar_execution = FileBackups.file_backup_execution(FileBackups(), command_object.FILESET_INCLUDE
+        tar_execution = FileBackups.file_backup_execution(FileBackups(command_object.COMPRESSION_CMD_CHAIN)
+                                                          , command_object.FILESET_INCLUDE
                                                           , command_object.WORK_FOLDER, command_object.FILESET_EXCLUDE)

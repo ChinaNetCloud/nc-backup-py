@@ -1,8 +1,28 @@
+Requirements:
+-
+python 2.7
+
+Python modules
+--
+
+-requests
+
+-Crypto (Actually Crypto.Cipher)
+
+python 2.6 also requires:
+--
+-argparse
+
 ROAD MAP:
+-
 -Storage (local DONE)
+
 -Communications (reports basic DONE)
+
 -clean ups
+
 -DBS
+
 -logs
 
 Bug:
