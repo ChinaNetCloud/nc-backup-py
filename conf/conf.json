@@ -1,7 +1,7 @@
 {
   "GENERAL": {
     "HOSTNAME": "srv-nc-test1",
-    "WORK_FOLDER": "/Users/cncuser/Documents/backup",
+    "WORK_FOLDER": "/Users/cncuser/Downloads/backup",
     "LOCAL_BACKUP": "/Users/cncuser/Documents/backup/local",
     "HOME_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py",
     "LOG_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log"
@@ -12,9 +12,10 @@
     "EXECUTE_WITH": "python",
     "EXECUTABLE": "",
     "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc /Users/cncuser/Documents/backup",
+      "FILESET_INCLUDE": "/etc /Users/cncuser/Documents/",
       "FILESET_EXCLUDE": "/Users/cncuser/Documents/Trabajo /Users/cncuser/Documents/Install/ /Users/cncuser/Documents/Personal",
-      "COMPRESSION_CMD_CHAIN": "/usr/bin/tar  czCf /"
+      "COMPRESSION_CMD_CHAIN": "/usr/bin/tar  czCf /",
+      "SUDO_COMMAND": "/usr/bin/sudo"
     }
   }
 }
