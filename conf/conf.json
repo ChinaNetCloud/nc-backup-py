@@ -37,5 +37,15 @@
       "DESTINATION":"/Users/cncuser/Downloads/backup/encrypted",
       "REMOVE_OBJECTIVES": "True"
     }
+  },
+  "STORAGE": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
+      "DESTINATION":"local",
+      "__options": "local,s3,ssh,oss",
+      "REMOVE_OBJECTIVES": "True"
+    }
   }
 }
