@@ -75,11 +75,35 @@ class EncryptionWorks:
             out_file.write(chunk)
 
     def split_file(self,path_to_file, chunk_size):
+        # To be deprecated in favor of split_binary_file
         print path_to_file
         command_split = 'split --bytes=' + chunk_size + ' ' + path_to_file + ' ' + path_to_file
         print command_split
         execution_split = SubprocessExecution.main_execution_function(SubprocessExecution(), command_split, True)
         SubprocessExecution.print_output(SubprocessExecution(), execution_split)
+
+    def split_binary_file(self, path_to_file, chunk_size):
+
+        chunk_size =  int(chunk_size) * 1024 * 1024  # 500Mb  - max chapter size
+        BUF = 50 * 1024 * 1024  # 50GB   - memory buffer size
+
+        chapters = 0
+        uglybuf = ''
+        with open(path_to_file, 'rb') as src:
+            while True:
+                tgt = open(path_to_file + '.%03d' % chapters, 'wb')
+                written = 0
+                while written < chunk_size:
+                    tgt.write(uglybuf)
+                    tgt.write(src.read(min(BUF, chunk_size - written)))
+                    written += min(BUF, chunk_size - written)
+                    uglybuf = src.read(1)
+                    if len(uglybuf) == 0:
+                        break
+                tgt.close()
+                if len(uglybuf) == 0:
+                    break
+                chapters += 1
 
     def cat_files (self,path_to_file):
         command_cat = 'cat ' + path_to_file + '* > ' + path_to_file
@@ -90,12 +114,12 @@ class EncryptionWorks:
 if __name__ == "__main__":
     print "Encrypting/Decrypting files"
     encryption_command = EncryptionWorks.encryption_commands(EncryptionWorks())
+    sys.path.append(encryption_command.HOME_FOLDER)
+    from execution.subprocess_execution import SubprocessExecution
+    from tools.filesystem_handling import FilesystemHandling
     if encryption_command.DECRYPT is None \
             or encryption_command.DECRYPT == '-e' \
             or encryption_command.DECRYPT == False:
-        sys.path.append(encryption_command.HOME_FOLDER)
-        from execution.subprocess_execution import SubprocessExecution
-        from tools.filesystem_handling import FilesystemHandling
         if encryption_command.OBJECTIVES and encryption_command.DESTINATION:
             FilesystemHandling.create_directory(encryption_command.DESTINATION)
             objectives_to_encrypt = encryption_command.OBJECTIVES.split(' ')
@@ -112,8 +136,10 @@ if __name__ == "__main__":
                             open(encryption_command.KEY_FILE, 'r') as key_file:
                         key_from_file =key_file.read().replace('\n', '')
                         EncryptionWorks.encrypt(EncryptionWorks(), in_file, out_file,key_from_file)
-                    EncryptionWorks.split_file(EncryptionWorks(),out_file_str,encryption_command.FILE_SIZE)
-                    FilesystemHandling.remove_files(out_file_str)
+                    # Split only if requested
+                    if encryption_command.FILE_SIZE is not None and int(encryption_command.FILE_SIZE) >= 1:
+                        EncryptionWorks.split_binary_file(EncryptionWorks(),out_file_str,encryption_command.FILE_SIZE)
+                        FilesystemHandling.remove_files(out_file_str)
                         # Compressed file is not a directory.
         if encryption_command.REMOVE_OBJECTIVES:
             print 'Deleting files after objective files as per config option --REMOVE_OBJECTIVES: ' \
@@ -130,7 +156,7 @@ if __name__ == "__main__":
                     open(encryption_command.DESTINATION, 'wb') as out_file, \
                     open(encryption_command.KEY_FILE, 'r') as key_file:
                 key_from_file =key_file.read().replace('\n', '')
-                print key_from_file
+                # print key_from_file
                 EncryptionWorks.decrypt(EncryptionWorks(), in_file, out_file, key_from_file)
                 # Compressed file is not a directory.
 
