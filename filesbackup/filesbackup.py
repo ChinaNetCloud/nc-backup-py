@@ -6,7 +6,11 @@ import sys
 
 class FileBackups:
 
-    def __init__(self, tar_program='/usr/bin/tar  czCf /', sudo_command='/usr/bin/sudo'):
+    def __init__(self, tar_program='/usr/local/Cellar/gnu-tar/1.28/bin/tar czCf /', sudo_command='/usr/bin/sudo'):
+        if tar_program=='' or tar_program is None:
+            tar_program='/usr/local/Cellar/gnu-tar/1.28/bin/tar czCf /'
+        if sudo_command=='' or sudo_command is None:
+            sudo_command='/usr/bin/sudo'
         self.__tar_program = tar_program
         self.__sudo_command = sudo_command
 
@@ -60,27 +64,24 @@ class FileBackups:
         if (os_name):
             print 'Windows compression command here'
 
-        elif OSInformation.isLinux() :
+        else:
             if os.geteuid() == 0:
                 sys.stderr.write('Execution as root is not allowed the GID for this user can not be 0')
                 exit(1)
             else:
                 tar_command = self.__sudo_command + ' ' + self.__tar_program + ' ' + destination + '/files/filesbackup_' \
                               + datetime_string + '.tar.gz ' + filesets + excluded_files
-                print tar_command
+                # print tar_command
                 if not os.path.isdir(destination + '/files'):
                     execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), 'mkdir ' + destination + '/files')
                     SubprocessExecution.print_output(SubprocessExecution(), execution_mkdir)
-
             try:
                 execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), tar_command)
                 SubprocessExecution.print_output(SubprocessExecution(), execution_message)
             except Exception as e:
                 e.args += (execution_message,)
                 raise
-        else:
-            print 'Files backup can not compress with this OS'
-            exit(1)
+
 
 if __name__ == "__main__":
     FileBackups.files_backup()
@@ -92,6 +93,7 @@ if __name__ == "__main__":
         print "Parameters in use, Fileset: " + command_object.FILESET_INCLUDE
         print 'Work Folder: ' + command_object.WORK_FOLDER
         print 'Files and folders to exclude:' + command_object.FILESET_EXCLUDE
+
         tar_execution = FileBackups.file_backup_execution(FileBackups(command_object.COMPRESSION_CMD_CHAIN
                                                                       , command_object.SUDO_COMMAND)
                                                           , command_object.FILESET_INCLUDE

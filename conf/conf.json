@@ -2,7 +2,7 @@
   "GENERAL": {
     "HOSTNAME": "srv-nc-test1",
     "WORK_FOLDER": "/Users/cncuser/Downloads/backup",
-    "LOCAL_BACKUP": "/Users/cncuser/Documents/backup/local",
+    "LOCAL_BACKUP": "/Users/cncuser/Downloads/backup/local",
     "HOME_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py",
     "LOG_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log"
     },
@@ -13,9 +13,29 @@
     "EXECUTABLE": "",
     "PARAMETERS": {
       "FILESET_INCLUDE": "/etc /Users/cncuser/Documents/",
-      "FILESET_EXCLUDE": "/Users/cncuser/Documents/Trabajo /Users/cncuser/Documents/Install/ /Users/cncuser/Documents/Personal",
-      "COMPRESSION_CMD_CHAIN": "/usr/bin/tar  czCf /",
-      "SUDO_COMMAND": "/usr/bin/sudo"
+      "FILESET_EXCLUDE": "/Users/cncuser/Documents/Trabajo /Users/cncuser/Documents/Install/ /Users/cncuser/Documents/Personal"
+    }
+  },
+  "COMPRESSION": {
+    "ACTION": "execute",
+    "NAME": "compression",
+    "EXECUTABLE": "",
+    "EXECUTE_WITH": "",
+    "PARAMETERS": {
+      "OBJECTIVES": "/Users/cncuser/Downloads/backup/files",
+      "DESTINATION": "/Users/cncuser/Downloads/backup/compressed",
+      "REMOVE_OBJECTIVES": "True"
+    }
+  },
+  "ENCRYPTION": {
+    "ACTION": "execute",
+    "NAME": "encryption",
+    "PARAMETERS": {
+      "KEY_FILE": "/Users/cncuser/Documents/py/nc-backup-py/conf/key_file",
+      "FILE_SIZE": "1",
+      "OBJECTIVES": "/Users/cncuser/Downloads/backup/compressed",
+      "DESTINATION":"/Users/cncuser/Downloads/backup/encrypted",
+      "REMOVE_OBJECTIVES": "True"
     }
   }
 }
