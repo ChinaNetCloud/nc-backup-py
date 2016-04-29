@@ -23,6 +23,8 @@ class StorageExecution:
                                    , help='Server name (client Host Name) e.g: nc-backup-kr', required=True)
         parser_object.add_argument('-u', '--UPLOAD_COMMAND', type=str
                                    , help='AWS upload command', required=False)
+        parser_object.add_argument('-R', '--REMOVE_OBJECTIVES', type=str
+                                   , help='Remove Encrypted files and folder', required=False)
         args_list, unknown = parser_object.parse_known_args()
         return args_list
 
@@ -42,7 +44,8 @@ if __name__ == "__main__":
     elif storage_cmd.DESTINATION == 's3':
         print "calling S3 storage upload functions"
         upload_to_s3 = AWSS3.upload_content(AWSS3(storage_cmd.HOME_FOLDER),storage_cmd.OBJECTIVES,
-                                            storage_cmd.BUCKET_NAME, storage_cmd.HOSTNAME, storage_cmd.UPLOAD_COMMAND)
+                                            storage_cmd.BUCKET_NAME, storage_cmd.HOSTNAME,
+                                            storage_cmd.UPLOAD_COMMAND, storage_cmd.REMOVE_OBJECTIVES)
     elif storage_cmd.DESTINATION == 'oss':
         print "calling OSS storage upload functions"
     elif storage_cmd.DESTINATION == 'ssh':
