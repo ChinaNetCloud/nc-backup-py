@@ -46,7 +46,7 @@
       "DESTINATION":"s3",
       "__options": "local,s3,ssh,oss",
       "REMOVE_OBJECTIVES": "True",
-      "BUCKET_NAME": "Test",
+      "BUCKET_NAME": "cncbackup",
       "UPLOAD_COMMAND": "aws s3 cp"
     }
   }

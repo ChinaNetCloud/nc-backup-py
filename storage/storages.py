@@ -36,10 +36,10 @@ class AWSS3(Storage):
         for file_to_upload in files_to_upload:
             aws_command = upload_command + ' '+ mypath_to_dir + '/' + file_to_upload + ' s3://'+ bucket + '/' + client_host_name + '/'
             execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), aws_command, True)
-            SubprocessExecution.print_output(SubprocessExecution(), execution_message)
+            # SubprocessExecution.print_output(SubprocessExecution(), execution_message)
         if remove_objective:
             execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), 'rm -rf ' + mypath_to_dir, True)
-            SubprocessExecution.print_output(SubprocessExecution(), execution_message)
+            # SubprocessExecution.print_output(SubprocessExecution(), execution_message)
 
     def remove_content(self):
         print 'S3: removing files from storage'

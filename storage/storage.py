@@ -39,7 +39,7 @@ if __name__ == "__main__":
         command_move = 'mv ' + storage_cmd.OBJECTIVES + '/* ' + storage_cmd.LOCAL_BACKUP
         FilesystemHandling.create_directory(storage_cmd.LOCAL_BACKUP)
         ExecuteBackup = SubprocessExecution.main_execution_function(SubprocessExecution(), command_move, True)
-        SubprocessExecution.print_output(SubprocessExecution(), ExecuteBackup)
+        # SubprocessExecution.print_output(SubprocessExecution(), ExecuteBackup)
         FilesystemHandling.remove_files(storage_cmd.OBJECTIVES)
     elif storage_cmd.DESTINATION == 's3':
         print "calling S3 storage upload functions"

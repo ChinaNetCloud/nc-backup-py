@@ -49,7 +49,8 @@ class BackupExecutionLogic:
                 try:
                     execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(),
                                                                                     module_to_call)
-                    SubprocessExecution.print_output(SubprocessExecution(), execution_message)
+                    # print execution_message
+                    # SubprocessExecution.print_output(SubprocessExecution(), execution_message)
                     loaded_scripts.append(execution_message)
                 except Exception as e:
                     e.args += (execution_message,)

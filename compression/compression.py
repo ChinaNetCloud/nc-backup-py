@@ -44,10 +44,10 @@ class CompressionWorks:
                           + datetime_string + '.tar.gz ' + objectives
         if not os.path.isdir(destination):
             execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), 'mkdir ' + destination)
-            SubprocessExecution.print_output(SubprocessExecution(), execution_mkdir)
+            # SubprocessExecution.print_output(SubprocessExecution(), execution_mkdir)
         try:
             execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), tar_command)
-            SubprocessExecution.print_output(SubprocessExecution(), execution_message)
+            # SubprocessExecution.print_output(SubprocessExecution(), execution_message)
         except Exception as e:
             e.args += (execution_message,)
             raise

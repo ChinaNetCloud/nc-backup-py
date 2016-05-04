@@ -61,6 +61,7 @@ class FileBackups:
             excluded_files = ''
         datetime_string = time.strftime("%Y%m%d_%H%M%S")
         os_name = OSInformation.isWindows()
+        execution_message = 'Error'
         if (os_name):
             print 'Windows compression command here'
 
@@ -73,14 +74,20 @@ class FileBackups:
                               + datetime_string + '.tar.gz ' + filesets + excluded_files
                 # print tar_command
                 if not os.path.isdir(destination + '/files'):
-                    execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), 'mkdir ' + destination + '/files')
-                    SubprocessExecution.print_output(SubprocessExecution(), execution_mkdir)
+                    create_dir_cmd = 'mkdir ' + destination + '/files'
+                    execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), create_dir_cmd)
+                    if execution_mkdir != 0:
+                        print 'Could Not create directory with command: ' + create_dir_cmd
+                        print 'Error code: ' + str(execution_mkdir)
             try:
-                execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), tar_command)
-                SubprocessExecution.print_output(SubprocessExecution(), execution_message)
+                execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), tar_command, True)
+                # SubprocessExecution.print_output(SubprocessExecution(), execution_message)
             except Exception as e:
                 e.args += (execution_message,)
                 raise
+            if execution_message != 0:
+                print 'Executing the tar command: ' + tar_command
+                print 'Returned nor zero exit code: ' + str(execution_message)
 
 
 if __name__ == "__main__":

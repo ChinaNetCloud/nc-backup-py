@@ -80,7 +80,7 @@ class EncryptionWorks:
         command_split = 'split --bytes=' + chunk_size + ' ' + path_to_file + ' ' + path_to_file
         print command_split
         execution_split = SubprocessExecution.main_execution_function(SubprocessExecution(), command_split, True)
-        SubprocessExecution.print_output(SubprocessExecution(), execution_split)
+        # SubprocessExecution.print_output(SubprocessExecution(), execution_split)
 
     def split_binary_file(self, path_to_file, chunk_size):
 
@@ -109,7 +109,7 @@ class EncryptionWorks:
         command_cat = 'cat ' + path_to_file + '* > ' + path_to_file
         print command_cat
         cat_execution = SubprocessExecution.main_execution_function(SubprocessExecution(), command_cat)
-        SubprocessExecution.print_output(SubprocessExecution(), cat_execution)
+        # SubprocessExecution.print_output(SubprocessExecution(), cat_execution)
 
 if __name__ == "__main__":
     print "Encrypting/Decrypting files"
