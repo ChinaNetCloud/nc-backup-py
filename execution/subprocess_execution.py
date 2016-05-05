@@ -28,9 +28,9 @@ class SubprocessExecution:
 
         return_code = self.__process.poll()
         stdout, stderr = self.__process.communicate()
-        print stdout
-        print stderr
-        return return_code
+        # print stdout
+        # print stderr
+        return return_code, stdout, stderr
         # stdout, stderr = self.__process.communicate()
         # # print 'Error: ' + stderr
         # return stdout, stderr
