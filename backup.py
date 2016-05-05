@@ -38,14 +38,7 @@ if type(json_dict) is not str:
             logger.info('Iterating configs')
             execution_script = BackupExecutionLogic.iterate_config_script(BackupExecutionLogic(), json_dict,
                                                                           nc_backup_py_home)
-            # print type(execution_script[0][0])
-            # std_out,std_error = execution_script[0][0]
-            # print str(execution_script) + ' -HEREHEREHERE'
-            # if std_error is not None or std_error != '':
-            #     print 'There might be an issue the return code was: ' + str(execution_script[1]) + '.'
-            #     print str(execution_script[0])
-            #     raise
-
+            print execution_script
             logger.info('Config itaration done')
             successful_execution = True
         except Exception as exception_executing_external_script:
@@ -53,7 +46,7 @@ if type(json_dict) is not str:
             successful_execution = False
     if successful_execution:
         logger.info('Sending report...')
-        data_post = {'@srvname':'srv-nc-bacdir1', '@result':'OK', '@bckmethod': 'ncscript', '@size': '10MB', '@log': 'Not in use', '@error': ''}
+        data_post = {'srvname': json_dict['GENERAL']['HOSTNAME'], 'result':'OK', 'bckmethod': 'ncscript', 'size': '10MB', 'log': 'Not in use', 'error': ''}
         a = Communications.send_post(Communications(), data_post)
         logger.info('Report sent status: ' + str(a.status_code) + ' <===> ' + a.reason)
         print (a.status_code, a.reason)

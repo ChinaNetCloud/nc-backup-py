@@ -38,14 +38,25 @@ if __name__ == "__main__":
     if storage_cmd.DESTINATION == 'local':
         command_move = 'mv ' + storage_cmd.OBJECTIVES + '/* ' + storage_cmd.LOCAL_BACKUP
         FilesystemHandling.create_directory(storage_cmd.LOCAL_BACKUP)
-        ExecuteBackup = SubprocessExecution.main_execution_function(SubprocessExecution(), command_move, True)
+        ExecuteBackup = SubprocessExecution.main_execution_function(SubprocessExecution(), command_move)
         # SubprocessExecution.print_output(SubprocessExecution(), ExecuteBackup)
         FilesystemHandling.remove_files(storage_cmd.OBJECTIVES)
     elif storage_cmd.DESTINATION == 's3':
         print "calling S3 storage upload functions"
-        upload_to_s3 = AWSS3.upload_content(AWSS3(storage_cmd.HOME_FOLDER),storage_cmd.OBJECTIVES,
+        uploads_to_s3 = AWSS3.upload_content(AWSS3(storage_cmd.HOME_FOLDER),storage_cmd.OBJECTIVES,
                                             storage_cmd.BUCKET_NAME, storage_cmd.HOSTNAME,
                                             storage_cmd.UPLOAD_COMMAND, storage_cmd.REMOVE_OBJECTIVES)
+        print uploads_to_s3
+        succesful = 0
+        count_file = 1
+        for upload_to_s3, key_value in uploads_to_s3:
+            if upload_to_s3 is not 0:
+                print 'upload failed for one of the files'
+                exit(1)
+            count_file = count_file + 1
+
+
+
     elif storage_cmd.DESTINATION == 'oss':
         print "calling OSS storage upload functions"
     elif storage_cmd.DESTINATION == 'ssh':

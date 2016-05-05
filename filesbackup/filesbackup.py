@@ -101,7 +101,7 @@ if __name__ == "__main__":
         print 'Work Folder: ' + command_object.WORK_FOLDER
         print 'Files and folders to exclude:' + command_object.FILESET_EXCLUDE
 
-        tar_execution = FileBackups.file_backup_execution(FileBackups(command_object.COMPRESSION_CMD_CHAIN
+        FileBackups.file_backup_execution(FileBackups(command_object.COMPRESSION_CMD_CHAIN
                                                                       , command_object.SUDO_COMMAND)
                                                           , command_object.FILESET_INCLUDE
                                                           , command_object.WORK_FOLDER, command_object.FILESET_EXCLUDE)
