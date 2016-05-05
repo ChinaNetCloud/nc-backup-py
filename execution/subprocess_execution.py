@@ -20,15 +20,16 @@ class SubprocessExecution:
         # logger.info(log_string)
         # self.__process = Popen(shell_command, shell=True, stdout=PIPE, stderr=PIPE)
         try:
-            # self.__process = call(shell_command, shell=True)
             self.__process = Popen(shell_command, shell=True, stdout=PIPE, stderr=PIPE)
         except CalledProcessError as e:
-            # self.__process = Popen(shell_command, shell=True, stdout=PIPE, stderr=PIPE)
             return 1
         if wait_cmd is True:
             self.__process.wait()
 
         return_code = self.__process.poll()
+        stdout, stderr = self.__process.communicate()
+        print stdout
+        print stderr
         return return_code
         # stdout, stderr = self.__process.communicate()
         # # print 'Error: ' + stderr

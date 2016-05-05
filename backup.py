@@ -9,7 +9,6 @@ from communications.communications import Communications
 from tools.os_works import OSInformation
 
 
-
 os_name = OSInformation.isWindows()
 if (os_name):
     config_file_location = 'conf\\confw.json'
@@ -57,9 +56,15 @@ if type(json_dict) is not str:
         status_backup = 'OK'
     else:
         status_backup = 'FAIL'
-    data_post = {'srvname': json_dict['GENERAL']['HOSTNAME'], 'result': status_backup,
-                 'bckmethod': 'ncscript-py', 'size': 'test', 'log': 'Not in use',
-                 'error': '', 'destination': json_dict['STORAGE']['PARAMETERS']['DESTINATION']}
+    data_post = {
+        'srvname': json_dict['GENERAL']['HOSTNAME'],
+        'result': status_backup,
+         'bckmethod': 'ncscript-py',
+         'size': 'test',
+         'log': 'Not in use',
+         'error': '',
+         'destination': json_dict['STORAGE']['PARAMETERS']['DESTINATION']
+                 }
     a = Communications.send_post(Communications(), data_post)
     logger.info('Report sent status: ' + str(a.status_code) + ' <===> ' + a.reason)
     print (a.status_code, a.reason)
