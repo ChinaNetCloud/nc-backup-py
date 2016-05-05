@@ -48,6 +48,7 @@ We have a .json config file as the sole config for all modules and scripts used.
 Maybe at some point in the future I would implement being able to have more than one .json config file that can be included from a central file. Something like and include feature.
 
 Then about include and exclude, every module receives a group of parameters. From a special optional section that looks like this in the case of exclude and include.
+
 "FILESET":{
 (...)
 "PARAMETERS": {
@@ -56,8 +57,10 @@ Then about include and exclude, every module receives a group of parameters. Fro
 }
 (...)
 }
+
 Notice: FILESET, in this case is the name of a custom module.
 Aside from that the config file has a compulsory section called GENERAL, where the user is supposed to specify general parameters that are used by most modules and passed to all of them. It looks like this:
+
 
 {
   "GENERAL": {

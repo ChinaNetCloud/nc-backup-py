@@ -39,7 +39,7 @@ class AWSS3(Storage):
             # print aws_command
             execution_message.append(SubprocessExecution.main_execution_function(SubprocessExecution(), aws_command))
             # SubprocessExecution.print_output(SubprocessExecution(), execution_message)
-        if remove_objective:
+        if remove_objective == 'True':
             execution_message.append(SubprocessExecution.main_execution_function(SubprocessExecution(), 'rm -rf ' + mypath_to_dir))
             # SubprocessExecution.print_output(SubprocessExecution(), execution_message)
         # print execution_message

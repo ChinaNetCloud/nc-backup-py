@@ -141,7 +141,7 @@ if __name__ == "__main__":
                         EncryptionWorks.split_binary_file(EncryptionWorks(),out_file_str,encryption_command.FILE_SIZE)
                         FilesystemHandling.remove_files(out_file_str)
                         # Compressed file is not a directory.
-        if encryption_command.REMOVE_OBJECTIVES:
+        if encryption_command.REMOVE_OBJECTIVES == 'True':
             print 'Deleting files after objective files as per config option --REMOVE_OBJECTIVES: ' \
                   + encryption_command.OBJECTIVES
             FilesystemHandling.remove_files(encryption_command.OBJECTIVES)
