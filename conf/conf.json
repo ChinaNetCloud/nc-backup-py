@@ -34,8 +34,7 @@
       "KEY_FILE": "/Users/cncuser/Documents/py/nc-backup-py/conf/key_file",
       "FILE_SIZE": "1",
       "OBJECTIVES": "/Users/cncuser/Downloads/backup/compressed",
-      "DESTINATION":"/Users/cncuser/Downloads/backup/encrypted",
-      "REMOVE_OBJECTIVES": "False"
+      "DESTINATION":"/Users/cncuser/Downloads/backup/encrypted"
     }
   },
   "STORAGE": {
@@ -45,7 +44,6 @@
       "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
       "DESTINATION":"s3",
       "__options": "local,s3,ssh,oss",
-      "REMOVE_OBJECTIVES": "False",
       "BUCKET_NAME": "cncbackup",
       "UPLOAD_COMMAND": "aws s3 cp"
     }

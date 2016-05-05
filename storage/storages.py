@@ -35,7 +35,7 @@ class AWSS3(Storage):
         from execution.subprocess_execution import SubprocessExecution
         execution_message = []
         for file_to_upload in files_to_upload:
-            aws_command = upload_command + ' '+ mypath_to_dir + '/' + file_to_upload + ' s3://'+ bucket + '/' + client_host_name + '/'
+            aws_command = upload_command + ' '+ mypath_to_dir + '/' + file_to_upload + ' s3://'+ bucket + '/' + client_host_name + '/' + file_to_upload
             # print aws_command
             execution_message.append(SubprocessExecution.main_execution_function(SubprocessExecution(), aws_command))
             # SubprocessExecution.print_output(SubprocessExecution(), execution_message)

@@ -49,9 +49,10 @@ if __name__ == "__main__":
         print uploads_to_s3
         succesful = 0
         count_file = 1
-        for upload_to_s3, key_value in uploads_to_s3:
+        print type(uploads_to_s3)
+        for upload_to_s3 in uploads_to_s3:
             if upload_to_s3 is not 0:
-                print 'upload failed for one of the files'
+                print 'upload of file number ' + count_file + ' failed, please run the upload command manually for debug pusposes'
                 exit(1)
             count_file = count_file + 1
 
