@@ -50,18 +50,3 @@
     }
   }
 }
-
-
-,
-  "STORAGE": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
-      "DESTINATION":"s3",
-      "__options": "local,s3,ssh,oss",
-      "REMOVE_OBJECTIVES": "True",
-      "BUCKET_NAME": "cncbackup",
-      "UPLOAD_COMMAND": "aws s3 cp"
-    }
-  }

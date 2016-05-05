@@ -1,10 +1,10 @@
 {
   "GENERAL": {
-    "HOSTNAME": "srv-nc-test1",
-    "WORK_FOLDER": "/opt/backup",
-    "LOCAL_BACKUP": "/opt/backup/local",
-    "HOME_FOLDER": "/var/www/py/nc-backup-py",
-    "LOG_FOLDER": "/var/www/py/nc-backup-py/log/ncbackup.log"
+    "HOSTNAME": "srv-nc-backup-py-test1",
+    "WORK_FOLDER": "/Users/cncuser/Downloads/backup",
+    "LOCAL_BACKUP": "/Users/cncuser/Downloads/backup/local",
+    "HOME_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py",
+    "LOG_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log"
     },
   "FILESET":{
     "ACTION": "execute",
@@ -12,8 +12,8 @@
     "EXECUTE_WITH": "python",
     "EXECUTABLE": "",
     "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc /var/www/py/nc-backup-py/ /var/spool/cron",
-      "FILESET_EXCLUDE": "/etc/yum.d/ /etc/yum.conf /etc/yum.repos.d/ /etc/grub.d"
+      "FILESET_INCLUDE": "/etc /Users/cncuser/Documents/",
+      "FILESET_EXCLUDE": "/Users/cncuser/Documents/Trabajo /Users/cncuser/Documents/Install/ /Users/cncuser/Documents/Personal"
     }
   },
   "COMPRESSION": {
@@ -22,8 +22,8 @@
     "EXECUTABLE": "",
     "EXECUTE_WITH": "",
     "PARAMETERS": {
-      "OBJECTIVES": "/opt/backup/files",
-      "DESTINATION": "/opt/backup/compressed",
+      "OBJECTIVES": "/Users/cncuser/Downloads/backup/files",
+      "DESTINATION": "/Users/cncuser/Downloads/backup/compressed",
       "REMOVE_OBJECTIVES": "True"
     }
   },
@@ -31,10 +31,10 @@
     "ACTION": "execute",
     "NAME": "encryption",
     "PARAMETERS": {
-      "KEY_FILE": "/var/www/py/nc-backup-py/conf/key_file",
-      "FILE_SIZE": "5M",
-      "OBJECTIVES": "/opt/backup/compressed",
-      "DESTINATION":"/opt/backup/encrypted",
+      "KEY_FILE": "/Users/cncuser/Documents/py/nc-backup-py/conf/key_file",
+      "FILE_SIZE": "1",
+      "OBJECTIVES": "/Users/cncuser/Downloads/backup/compressed",
+      "DESTINATION":"/Users/cncuser/Downloads/backup/encrypted",
       "REMOVE_OBJECTIVES": "True"
     }
   },
@@ -42,10 +42,11 @@
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
-      "OBJECTIVES": "/opt/backup/encrypted",
-      "DESTINATION":"local",
+      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
+      "DESTINATION":"s3",
       "__options": "local,s3,ssh,oss",
-      "OBJECTIVES": "/opt/backup/encrypted",
+      "BUCKET_NAME": "cncbackup",
+      "UPLOAD_COMMAND": "aws s3 cp",
       "REMOVE_OBJECTIVES": "True"
     }
   }

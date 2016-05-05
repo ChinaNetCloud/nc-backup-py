@@ -1,13 +1,6 @@
 import logging
-# import socket
-
-# create logger
-# module_logger = logging.getLogger('ncbackup.auxiliary')
 
 class LoggerHandlers:
-    # def __init__(self, a_hostname='localhost'):
-    #     self.hostname = a_hostname
-    #
 
     def rotating_logs(self):
         print 'to be DONE'
@@ -20,18 +13,15 @@ class LoggerHandlers:
         fh.setLevel(logging.DEBUG)
         ch = logging.StreamHandler()
         ch.setLevel(logging.ERROR)
-        # logger.__setattr__('hostname','')
         formatter = logging.Formatter(format_string)
-        # logging.Formatter()
         fh.setFormatter(formatter)
         ch.setFormatter(formatter)
-        # add the handlers to the logger
         logger.addHandler(fh)
         logger.addHandler(ch)
         return logger
 
 
-if __name__ == "__main__":
-    print 'testing code'
-    x= LoggerHandlers.login_to_file(LoggerHandlers(),'test',10,'/var/www/py/nc-backup-py/log/ncbackup.log')
-    x.critical('TEST')
+# if __name__ == "__main__":
+#     print 'testing code'
+#     x= LoggerHandlers.login_to_file(LoggerHandlers(),'test',10,'/var/www/py/nc-backup-py/log/ncbackup.log')
+#     x.critical('TEST')
