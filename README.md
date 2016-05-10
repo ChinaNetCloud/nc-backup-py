@@ -1,3 +1,22 @@
+Project name: nc-backup-py
+Executable Modules:
+-backup.py: Main script that can execute and control other scripts execution (needs arguments)
+-compression.py: compression script (needs arguments)
+-encryption.py Encryption and decryption script. (needs arguments)
+-filesbackup.py does backups of filesets with exclusions (needs arguments)
+-storage.py connects and saves files to different storages (done local and AWS S3). (needs arguments)
+
+Pending modules:
+-mysql
+-mongo
+-reporting
+-OSS storage
+-snapshots for different storages.
+-clean up scripts for local and remote files.
+-Windows compatibility:
+-Active directory backup
+-ms-sql backup.
+
 Requirements:
 -
 python 2.7
@@ -80,3 +99,7 @@ The only module with a compulsory name is GENERAL, because it has parameters tha
 The config file is the same for windows and Linux, what changes is the OS specific parameters.
 
 The size should be a number integer that represents the MB size of one split part.
+
+Execution of the main script:
+e.g.:
+python backup.py -r -c conf/conf.json
