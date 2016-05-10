@@ -39,7 +39,7 @@ if type(json_dict) is not str:
             execution_scripts_result = BackupExecutionLogic.iterate_config_script(BackupExecutionLogic(), json_dict,
                                                                           nc_backup_py_home, logger)
 
-            print execution_scripts_result
+            # print execution_scripts_result
             logger.info('Config itaration done')
             successful_execution = True
         except Exception as exception_executing_external_script:
