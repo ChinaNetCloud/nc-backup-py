@@ -38,6 +38,15 @@
       "REMOVE_OBJECTIVES": "True"
     }
   },
+  "SIZE":{
+    "ACTION": "load",
+    "FROM": "tools",
+    "FILENAME": "size_calculation",
+    "CLASS": "SizeCalculation",
+    "PARAMETERS": {
+      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted"
+    }
+  },
   "STORAGE": {
     "ACTION": "execute",
     "NAME": "storage",

@@ -103,3 +103,11 @@ The size should be a number integer that represents the MB size of one split par
 Execution of the main script:
 e.g.:
 python backup.py -r -c conf/conf.json
+
+LICENSE
+
+Authors:
+Abel Guzman
+
+Report bugs at:
+abel.guzman@chinanetcloud.com

@@ -1,3 +1,7 @@
+import imp
+import sys
+
+
 from os import path
 
 from subprocess_execution import SubprocessExecution
@@ -27,6 +31,7 @@ class BackupExecutionLogic:
     def __execute_selection_of_external_script(self,json_dict, scripts_modules, home_folder, logger=None):
         loaded_scripts = []
         for section in json_dict[scripts_modules]:
+            # Load independent executable
             if section == 'ACTION' and json_dict[scripts_modules][section] == "execute":
                 log_string = "Loading executable module: " + json_dict[scripts_modules]['NAME']
                 print log_string
@@ -65,6 +70,16 @@ class BackupExecutionLogic:
                     e.args += (execution_message,)
                     loaded_scripts.append(e)
                     raise
+            # Load plugins dynamically
+            elif section == 'ACTION' and json_dict[scripts_modules][section] == "load":
+                path_to_import = json_dict[scripts_modules]['FROM'] + '.' + json_dict[scripts_modules]['FILENAME']
+                loading_plugin = 'This is a loadable module (plugin): ' + path_to_import
+                print loading_plugin
+                logger.info(loading_plugin)
+                # parameters_list =
+                plugin_object = DynamicImporter(path_to_import, json_dict[scripts_modules]['CLASS'], )
+                plugin_object.create_object(json_dict[scripts_modules]['PARAMETERS'])
+
         return loaded_scripts
 
     def __prepare_configs_for_execution(self, json_dict,scripts_modules,home_folder, logger=None):
@@ -110,3 +125,21 @@ class BackupExecutionLogic:
                     parameters_str += '--' + general_parameters + ' "' + dict_general[general_parameters] +'" '
             logger.info('General parameters iteration: ' + parameters_str)
             return parameters_str
+
+
+class DynamicImporter:
+    def __init__(self, module_name, class_name):
+        """Constructor"""
+        self.__module = __import__(module_name,globals(),locals(), [class_name])
+        self.__class_name = class_name
+
+    def create_object(self, parameters=None):
+        my_class = getattr(self.__module, self.__class_name)
+        if parameters:
+            instance = my_class(parameters)
+        else:
+            instance = my_class()
+        return instance
+
+
+# class
