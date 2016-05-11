@@ -46,13 +46,13 @@ if __name__ == "__main__":
         uploads_to_s3 = AWSS3.upload_content(AWSS3(storage_cmd.HOME_FOLDER),storage_cmd.OBJECTIVES,
                                             storage_cmd.BUCKET_NAME, storage_cmd.HOSTNAME,
                                             storage_cmd.UPLOAD_COMMAND, storage_cmd.REMOVE_OBJECTIVES)
-        print uploads_to_s3
+        # print uploads_to_s3
         succesful = 0
         count_file = 1
-        print type(uploads_to_s3)
+        # print type(uploads_to_s3)
         for upload_to_s3 in uploads_to_s3:
             if upload_to_s3 is not 0:
-                print 'upload of file number ' + count_file + ' failed, please run the upload command manually for debug pusposes'
+                print 'upload of file number ' + str(count_file) + ' failed, please run the upload command manually for debug pusposes'
                 exit(1)
             count_file = count_file + 1
 

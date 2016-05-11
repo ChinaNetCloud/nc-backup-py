@@ -11,14 +11,15 @@ class SubprocessExecution:
     __io_q = Queue()
     __process = None
 
-    def main_execution_function(self, shell_command, wait_cmd=True):
+    def main_execution_function(self, shell_command, wait_cmd=True, logger=None):
         """
         :rtype: stdout, stderr
         """
         log_string = 'Executing system the system external command: ' + shell_command
-        print log_string
-        # logger.info(log_string)
-        # self.__process = Popen(shell_command, shell=True, stdout=PIPE, stderr=PIPE)
+        if logger is not None:
+            logger.info(log_string)
+        else:
+            print log_string
         try:
             self.__process = Popen(shell_command, shell=True, stdout=PIPE, stderr=PIPE)
         except CalledProcessError as e:
@@ -28,9 +29,9 @@ class SubprocessExecution:
 
         return_code = self.__process.poll()
         stdout, stderr = self.__process.communicate()
-        print stdout
-        print stderr
-        return return_code
+        # print stdout
+        # print stderr
+        return return_code, stdout, 'stderr: ' + stderr
         # stdout, stderr = self.__process.communicate()
         # # print 'Error: ' + stderr
         # return stdout, stderr
