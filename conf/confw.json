@@ -1,6 +1,6 @@
 {
   "GENERAL": {
-    "HOSTNAME": "WIN-G5AKB09AALD",
+    "HOSTNAME": "srv-cnc-wintest",
     "WORK_FOLDER": "c:\\backup",
     "LOCAL_BACKUP": "c:\\backup\\local",
     "HOME_FOLDER": "c:\\backup\\nc-backup-py",
@@ -13,8 +13,8 @@
     "EXECUTE_WITH": "python",
     "EXECUTABLE": "",
     "PARAMETERS": {
-      "FILESET_INCLUDE": "c:\\backup\\backup_test_a C:\\Zabbix\\Log C:\\backup_test_b\\backup_test_1",
-      "FILESET_EXCLUDE": "C:\\backup_test_b\\backup_test_1\\test_2.txt"
+      "FILESET_INCLUDE": "c:\\TestSite c:\\Zabbix\\Log",
+      "FILESET_EXCLUDE": "c:\\Zabbix\\Log\\testexclude"
     }
   }
 }
