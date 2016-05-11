@@ -16,5 +16,12 @@
       "FILESET_INCLUDE": "c:\\TestSite c:\\Zabbix\\Log",
       "FILESET_EXCLUDE": "c:\\Zabbix\\Log\\testexclude"
     }
+  },
+  "STORAGE": {
+    "ACTION": "",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION":""
+    }
   }
 }
