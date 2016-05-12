@@ -10,9 +10,10 @@ class ZipCompression:
 
     def __zipdir(self,objective_files, ziph):
         # ziph is zipfile handle
-        for root, dirs, files in os.walk(objective_files):
-            for file in files:
-                ziph.write(os.path.join(root, file))
+        for objective in objective_files:
+            for root, dirs, files in os.walk(objective):
+                for file in files:
+                    ziph.write(os.path.join(root, file))
 
 
 # x = ZipCompression('/opt/backup/local/test.zip','/home/abel/Documents')

@@ -41,13 +41,7 @@ class FileBackups:
         # #Files and folders checkups
         # Included filesets
         print 'Making a compressed copy of the local files to: ' + destination
-        if filesets != '' and filesets is not None:
-            filesets = filesets.replace(' /', ' ')
-            filesets = filesets[1:]
-        else:
-            print
-            sys.stderr.write('ERROR: The --FILESET_INCLUDE can not be empty; execution')
-            sys.exit(1)
+
         if excluded_filesets:
             print 'Backup objective(s): ' + filesets + '. Excluded files: ' + excluded_filesets
         else:
@@ -63,9 +57,21 @@ class FileBackups:
         os_name = OSInformation.isWindows()
         execution_message = 'Error'
         if (os_name):
-            print 'Windows compression command here'
+            if not os.path.isdir(destination + '\\files'):
+                create_dir_cmd = 'mkdir ' + destination + '\\files'
+                execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), create_dir_cmd)
+            result_file_name = destination + '\\files\\compressed\\filebackup_' + datetime_string
+            filesets = filesets.split()
+            ZipCompression(result_file_name + '.zip', filesets)
 
         else:
+            if filesets != '' and filesets is not None:
+                filesets = filesets.replace(' /', ' ')
+                filesets = filesets[1:]
+            else:
+                print
+                sys.stderr.write('ERROR: The --FILESET_INCLUDE can not be empty; execution')
+                sys.exit(1)
             if os.geteuid() == 0:
                 sys.stderr.write('Execution as root is not allowed the GID for this user can not be 0')
                 exit(1)
@@ -95,6 +101,7 @@ if __name__ == "__main__":
     command_object = FileBackups.file_backup_commands(FileBackups())
     if command_object.FILESET_INCLUDE:
         sys.path.append(command_object.HOME_FOLDER)
+        from compression.zip_compression import ZipCompression
         from execution.subprocess_execution import SubprocessExecution
         from tools.os_works import OSInformation
         print "Parameters in use, Fileset: " + command_object.FILESET_INCLUDE

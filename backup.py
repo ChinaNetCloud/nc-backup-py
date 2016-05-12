@@ -1,4 +1,9 @@
 import logging
+# import time
+import fcntl
+import sys
+
+from logging.handlers import RotatingFileHandler
 
 
 from logs_script.log_handler import LoggerHandlers
@@ -7,6 +12,7 @@ from configs.load_json_configs import LoadJsonConfig
 from execution.backup_execution import BackupExecutionLogic
 from communications.communications import Communications
 from tools.os_works import OSInformation
+
 
 
 os_name = OSInformation.isWindows()
@@ -29,6 +35,20 @@ except Exception as exceptio_reading_commands:
     successful_execution = False
     execution_scripts_result = []
 
+
+# Allow only one process to run at the time
+pid_file = 'backup.pid'
+fp = open(pid_file, 'w')
+try:
+    fcntl.lockf(fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
+except IOError:
+    # another instance is running
+    not_multi_thread = 'There is already and instance of this process being executed.'
+    logger.critical(not_multi_thread)
+    print not_multi_thread
+    sys.exit(0)
+
+
 if type(json_dict) is not str:
     if json_dict is not None or type(json_dict) is not str:
         nc_backup_py_home = json_dict['GENERAL']['HOME_FOLDER']
@@ -38,32 +58,41 @@ if type(json_dict) is not str:
             logger.info('Iterating configs')
             execution_scripts_result = BackupExecutionLogic.iterate_config_script(BackupExecutionLogic(), json_dict,
                                                                           nc_backup_py_home, logger)
-
             # print execution_scripts_result
             logger.info('Config itaration done')
             successful_execution = True
         except Exception as exception_executing_external_script:
             logger.critical('The main script did not Execute the backups scripts after loading configs: ')
-            # print type(exception_executing_external_script)
+            # exception_executing_external_script
             successful_execution = False
-        count_section = 1
-        for execution_script_result in execution_scripts_result:
-            if execution_script_result is not 0:
-                successful_execution = False
-                string_message = 'Section number: ' + str(count_section) + ' returned a non 0 value after execution'
-            count_section = count_section + 1
+    # FIX This code as last check up of all the OUTPUT
+    for script_result in execution_scripts_result:
+        # print script_result
+        if type(script_result[0]) is dict:
+            if 'plugin' in script_result[0] and 'size' in script_result[0]['plugin']:
+                size_final = script_result[0]['plugin']['size']
+        else:
+            size_final = 'Empty'
+        # count_section = 1
+        # for execution_script_result in execution_scripts_result:
+        #     if execution_script_result is not 0:
+        #         successful_execution = False
+        #         string_message = 'Section number: ' + str(count_section) + ' returned a non 0 value after execution'
+        #     count_section = count_section + 1
     # if successful_execution:
     logger.info('Sending report...')
-    if successful_execution:
-        status_backup = 'OK'
+    # print successful_execution
+    if successful_execution == True :
+        status_backup = '0'
     else:
-        status_backup = 'FAIL'
+        status_backup = '1'
+    # Send report.
     data_post = {
         'srvname': json_dict['GENERAL']['HOSTNAME'],
         'result': status_backup,
          'bckmethod': 'ncscript-py',
-         'size': 'test',
-         'log': 'Not in use',
+         'size': size_final,
+         'log': open(json_dict['GENERAL']['LOG_FOLDER'], 'rb').read(),
          'error': '',
          'destination': json_dict['STORAGE']['PARAMETERS']['DESTINATION']
                  }
@@ -80,3 +109,14 @@ else:
 
 logger.info('Execution ends here.')
 logger = logging.getLogger('ncbackup')
+
+
+def create_timed_rotating_log(path, logger):
+    """"""
+    logger = logging.getLogger('Rotating Logs')
+    logger.setLevel(logging.INFO)
+    handler = RotatingFileHandler(path, maxBytes=2048, backupCount=5)
+    logger.addHandler(handler)
+    logger.info('Logs rotated')
+
+create_timed_rotating_log(json_dict['GENERAL']['LOG_FOLDER'], logger)

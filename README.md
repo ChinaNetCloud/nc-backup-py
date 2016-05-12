@@ -1,21 +1,24 @@
-Project name: nc-backup-py
-Executable Modules:
--backup.py: Main script that can execute and control other scripts execution (needs arguments)
--compression.py: compression script (needs arguments)
--encryption.py Encryption and decryption script. (needs arguments)
--filesbackup.py does backups of filesets with exclusions (needs arguments)
--storage.py connects and saves files to different storages (done local and AWS S3). (needs arguments)
+-Project name: nc-backup-py.
 
-Pending modules:
--mysql
--mongo
--reporting
--OSS storage
--snapshots for different storages.
--clean up scripts for local and remote files.
--Windows compatibility:
--Active directory backup
--ms-sql backup.
+-Executable Modules:
+
++backup.py: Main script that can execute and control other scripts execution (needs arguments)
++compression.py: compression script (needs arguments)
++encryption.py Encryption and decryption script. (needs arguments)
++filesbackup.py does backups of filesets with exclusions (needs arguments)
++storage.py connects and saves files to different storages (done local and AWS S3). (needs arguments)
+
+-Pending modules:
+
++mysql
++mongo
++reporting
++OSS storage
++snapshots for different storages.
++clean up scripts for local and remote files.
++Windows compatibility:
++Active directory backup
++ms-sql backup.
 
 Requirements:
 -
@@ -104,6 +107,38 @@ Execution of the main script:
 e.g.:
 python backup.py -r -c conf/conf.json
 
+
+Plugins:
+-Should have 3 callable functions:
++ config_plugin: Need to implement a way to pass arguments with something like *args
++ works_execution: can only print stuff.
+You need to use the login features to work with it.
++ output: output final result.
+
+Keep present that all the parameters from configuration section of the
+plugins are passed to the class as a python dictionary when  pass parameter to
+the class when costructed. So ot's your duty to parse this dictionary if you
+need config parameters.
+
+The plugins also need a config section similar to this:
+  "SIZE":{
+    "ACTION": "load",
+    "FROM": "tools",
+    "FILENAME": "size_calculation",
+    "CLASS": "SizeCalculation",
+    "PARAMETERS": {
+      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted"
+    }
+  }
+
+
+AWS CLI integration
+Q: Does the AWS CLI validate checksums?¶
+The AWS CLI will perform checksum validation for uploading and downloading files in specific scenarios.
+
+Upload
+
+The AWS CLI will calculate and auto-populate the Content-MD5 header for both standard and multipart uploads. If the checksum that S3 calculates does not match the Content-MD5 provided, S3 will not store the object and instead will return an error message back the AWS CLI. The AWS CLI will retry this error up to 5 times before giving up. On the case that any files fail to transfer successfully to S3, the AWS CLI will exit with a non zero RC. See aws help returncodes for more information.
 LICENSE
 
 Authors:

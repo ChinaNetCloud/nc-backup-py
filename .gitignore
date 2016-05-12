@@ -1,3 +1,5 @@
 .idea*
 *.pyc
 log/*
+backup.pid
+.DS_Store
