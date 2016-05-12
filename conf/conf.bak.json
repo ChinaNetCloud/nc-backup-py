@@ -75,5 +75,10 @@
       "MY_INSTANCES": "3306",
       "LOG": "/var/log/mysql.log"
     }
-  }
+  },
+    "SCHEDULE": {
+      "RUN1": "mon-sat",
+      "RUN2": "2nd-5th sun",
+      "RUN3": "1st sun"
+    }
 }

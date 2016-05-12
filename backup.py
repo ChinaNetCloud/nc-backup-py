@@ -43,7 +43,7 @@ if type(json_dict) is not str:
             successful_execution = True
         except Exception as exception_executing_external_script:
             logger.critical('The main script did not Execute the backups scripts after loading configs: ')
-            # print type(exception_executing_external_script)
+            # exception_executing_external_script
             successful_execution = False
     # FIX This code as last check up of all the OUTPUT
     for script_result in execution_scripts_result:
