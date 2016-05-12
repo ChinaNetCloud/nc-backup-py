@@ -132,7 +132,13 @@ The plugins also need a config section similar to this:
   }
 
 
+AWS CLI integration
+Q: Does the AWS CLI validate checksums?¶
+The AWS CLI will perform checksum validation for uploading and downloading files in specific scenarios.
 
+Upload
+
+The AWS CLI will calculate and auto-populate the Content-MD5 header for both standard and multipart uploads. If the checksum that S3 calculates does not match the Content-MD5 provided, S3 will not store the object and instead will return an error message back the AWS CLI. The AWS CLI will retry this error up to 5 times before giving up. On the case that any files fail to transfer successfully to S3, the AWS CLI will exit with a non zero RC. See aws help returncodes for more information.
 LICENSE
 
 Authors:

@@ -1,4 +1,9 @@
 import logging
+# import time
+import fcntl
+import sys
+
+from logging.handlers import RotatingFileHandler
 
 
 from logs_script.log_handler import LoggerHandlers
@@ -7,6 +12,7 @@ from configs.load_json_configs import LoadJsonConfig
 from execution.backup_execution import BackupExecutionLogic
 from communications.communications import Communications
 from tools.os_works import OSInformation
+
 
 
 os_name = OSInformation.isWindows()
@@ -28,6 +34,20 @@ except Exception as exceptio_reading_commands:
     logger.critical('The main script did not manage to read the parameters passed by user Exited with: ')
     successful_execution = False
     execution_scripts_result = []
+
+
+# Allow only one process to run at the time
+pid_file = 'backup.pid'
+fp = open(pid_file, 'w')
+try:
+    fcntl.lockf(fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
+except IOError:
+    # another instance is running
+    not_multi_thread = 'There is already and instance of this process being executed.'
+    logger.critical(not_multi_thread)
+    print not_multi_thread
+    sys.exit(0)
+
 
 if type(json_dict) is not str:
     if json_dict is not None or type(json_dict) is not str:
@@ -72,7 +92,7 @@ if type(json_dict) is not str:
         'result': status_backup,
          'bckmethod': 'ncscript-py',
          'size': size_final,
-         'log': 'Not in use',
+         'log': open(json_dict['GENERAL']['LOG_FOLDER'], 'rb').read(),
          'error': '',
          'destination': json_dict['STORAGE']['PARAMETERS']['DESTINATION']
                  }
@@ -89,3 +109,14 @@ else:
 
 logger.info('Execution ends here.')
 logger = logging.getLogger('ncbackup')
+
+
+def create_timed_rotating_log(path, logger):
+    """"""
+    logger = logging.getLogger('Rotating Logs')
+    logger.setLevel(logging.INFO)
+    handler = RotatingFileHandler(path, maxBytes=2048, backupCount=5)
+    logger.addHandler(handler)
+    logger.info('Logs rotated')
+
+create_timed_rotating_log(json_dict['GENERAL']['LOG_FOLDER'], logger)
