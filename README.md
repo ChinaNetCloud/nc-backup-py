@@ -1,21 +1,24 @@
-Project name: nc-backup-py
-Executable Modules:
--backup.py: Main script that can execute and control other scripts execution (needs arguments)
--compression.py: compression script (needs arguments)
--encryption.py Encryption and decryption script. (needs arguments)
--filesbackup.py does backups of filesets with exclusions (needs arguments)
--storage.py connects and saves files to different storages (done local and AWS S3). (needs arguments)
+-Project name: nc-backup-py.
 
-Pending modules:
--mysql
--mongo
--reporting
--OSS storage
--snapshots for different storages.
--clean up scripts for local and remote files.
--Windows compatibility:
--Active directory backup
--ms-sql backup.
+-Executable Modules:
+
++backup.py: Main script that can execute and control other scripts execution (needs arguments)
++compression.py: compression script (needs arguments)
++encryption.py Encryption and decryption script. (needs arguments)
++filesbackup.py does backups of filesets with exclusions (needs arguments)
++storage.py connects and saves files to different storages (done local and AWS S3). (needs arguments)
+
+-Pending modules:
+
++mysql
++mongo
++reporting
++OSS storage
++snapshots for different storages.
++clean up scripts for local and remote files.
++Windows compatibility:
++Active directory backup
++ms-sql backup.
 
 Requirements:
 -
@@ -103,6 +106,32 @@ The size should be a number integer that represents the MB size of one split par
 Execution of the main script:
 e.g.:
 python backup.py -r -c conf/conf.json
+
+
+Plugins:
+-Should have 3 callable functions:
++ config_plugin: Need to implement a way to pass arguments with something like *args
++ works_execution: can only print stuff.
+You need to use the login features to work with it.
++ output: output final result.
+
+Keep present that all the parameters from configuration section of the
+plugins are passed to the class as a python dictionary when  pass parameter to
+the class when costructed. So ot's your duty to parse this dictionary if you
+need config parameters.
+
+The plugins also need a config section similar to this:
+  "SIZE":{
+    "ACTION": "load",
+    "FROM": "tools",
+    "FILENAME": "size_calculation",
+    "CLASS": "SizeCalculation",
+    "PARAMETERS": {
+      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted"
+    }
+  }
+
+
 
 LICENSE
 

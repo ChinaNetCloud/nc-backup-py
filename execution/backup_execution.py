@@ -22,7 +22,7 @@ class BackupExecutionLogic:
             logger.info(log_sring)
             #select the script to execute
             external_execution = self.__execute_selection_of_external_script(json_dict,scripts_modules,home, logger)
-            print external_execution
+            # print external_execution
             if external_execution:
                 result.append(external_execution)
             c += 1
@@ -55,7 +55,7 @@ class BackupExecutionLogic:
                 logger.info(log_string)
                 # Execute command
                 execution_message = []
-                execution_message.append(module_to_call)
+                # execution_message.append(module_to_call)
                 try:
                     out_put_exec = SubprocessExecution.main_execution_function(SubprocessExecution(),
                                                                                     module_to_call, logger)
@@ -65,7 +65,7 @@ class BackupExecutionLogic:
                             logger.info('No output to show or error reported.')
                         else:
                             logger.info('Output:' + str(this_part))
-                    loaded_scripts.append(execution_message)
+                    loaded_scripts.append({'external':{'message': execution_message}})
                 except Exception as e:
                     e.args += (execution_message,)
                     loaded_scripts.append(e)
@@ -76,10 +76,18 @@ class BackupExecutionLogic:
                 loading_plugin = 'This is a loadable module (plugin): ' + path_to_import
                 print loading_plugin
                 logger.info(loading_plugin)
-                # parameters_list =
                 plugin_object = DynamicImporter(path_to_import, json_dict[scripts_modules]['CLASS'], )
-                plugin_object.create_object(json_dict[scripts_modules]['PARAMETERS'])
-
+                instanciated_plugin = plugin_object.create_object(json_dict[scripts_modules]['PARAMETERS'])
+                # if hasattr(plugin_object, 'config_plugin') and callable(getattr(plugin_object, 'config_plugin')):
+                instanciated_plugin.config_plugin()
+                # if hasattr(plugin_object, 'works_execution') and callable(getattr(plugin_object, 'config_plugin')):
+                works_execution = instanciated_plugin.works_execution()
+                logger.info('Works: ' + works_execution)
+                # if hasattr(plugin_object, 'output') and callable(getattr(plugin_object, 'output')):
+                output = instanciated_plugin.output()
+                print output
+                logger.info('Output: ' + output)
+                loaded_scripts.append({'plugin':{'size': output}})
         return loaded_scripts
 
     def __prepare_configs_for_execution(self, json_dict,scripts_modules,home_folder, logger=None):
@@ -109,7 +117,6 @@ class BackupExecutionLogic:
             logger.info('No specific parameters found for this module')
             return None
         else:
-            # print dict_parameters['PARAMETERS']
             parameters_str = ''
             for parameter in dict_parameters['PARAMETERS']:
                 if dict_parameters['PARAMETERS'].get(parameter) != None \
@@ -140,6 +147,3 @@ class DynamicImporter:
         else:
             instance = my_class()
         return instance
-
-
-# class

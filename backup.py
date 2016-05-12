@@ -38,31 +38,41 @@ if type(json_dict) is not str:
             logger.info('Iterating configs')
             execution_scripts_result = BackupExecutionLogic.iterate_config_script(BackupExecutionLogic(), json_dict,
                                                                           nc_backup_py_home, logger)
-
-            # print execution_scripts_result
+            print execution_scripts_result
             logger.info('Config itaration done')
             successful_execution = True
         except Exception as exception_executing_external_script:
             logger.critical('The main script did not Execute the backups scripts after loading configs: ')
             # print type(exception_executing_external_script)
             successful_execution = False
-        count_section = 1
-        for execution_script_result in execution_scripts_result:
-            if execution_script_result is not 0:
-                successful_execution = False
-                string_message = 'Section number: ' + str(count_section) + ' returned a non 0 value after execution'
-            count_section = count_section + 1
+    # FIX This code as last check up of all the OUTPUT
+    for script_result in execution_scripts_result:
+        # print script_result
+        if type(script_result[0]) is dict:
+            if 'plugin' in script_result[0] and 'size' in script_result[0]['plugin']:
+                size_final = script_result[0]['plugin']['size']
+        else:
+            size_final = 'Empty'
+        # count_section = 1
+        # for execution_script_result in execution_scripts_result:
+        #     if execution_script_result is not 0:
+        #         successful_execution = False
+        #         string_message = 'Section number: ' + str(count_section) + ' returned a non 0 value after execution'
+        #     count_section = count_section + 1
     # if successful_execution:
     logger.info('Sending report...')
-    if successful_execution:
-        status_backup = 'OK'
+    # print successful_execution
+    if successful_execution == True :
+        status_backup = '0'
     else:
-        status_backup = 'FAIL'
+        status_backup = '1'
+    print status_backup
+
     data_post = {
         'srvname': json_dict['GENERAL']['HOSTNAME'],
         'result': status_backup,
          'bckmethod': 'ncscript-py',
-         'size': 'test',
+         'size': size_final,
          'log': 'Not in use',
          'error': '',
          'destination': json_dict['STORAGE']['PARAMETERS']['DESTINATION']
