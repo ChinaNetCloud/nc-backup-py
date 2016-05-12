@@ -4,7 +4,12 @@
     "WORK_FOLDER": "/Users/cncuser/Downloads/backup",
     "LOCAL_BACKUP": "/Users/cncuser/Downloads/backup/local",
     "HOME_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py",
-    "LOG_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log"
+    "LOG_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log",
+    "SCHEDULE": {
+      "RUN1": "mon-sat",
+      "RUN2": "2nd-5th sun",
+      "RUN3": "1st sun"
+    }
     },
   "FILESET":{
     "ACTION": "execute",

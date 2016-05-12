@@ -5,8 +5,8 @@
     "LOCAL_BACKUP": "/opt/backup/local",
     "HOME_FOLDER": "/var/www/py/nc-backup-py",
     "LOG_FOLDER": "/var/www/py/nc-backup-py/log/ncbackup.log"
-    },
-  "FILESET":{
+  },
+  "FILESET": {
     "ACTION": "execute",
     "NAME": "filesbackup",
     "EXECUTE_WITH": "python",
@@ -34,34 +34,46 @@
       "KEY_FILE": "/var/www/py/nc-backup-py/conf/key_file",
       "FILE_SIZE": "5M",
       "OBJECTIVES": "/opt/backup/compressed",
-      "DESTINATION":"/opt/backup/encrypted",
+      "DESTINATION": "/opt/backup/encrypted",
       "REMOVE_OBJECTIVES": "True"
     }
   },
   "STORAGE": {
     "ACTION": "execute",
     "NAME": "storage",
-    "PARAMETERS":{
+    "PARAMETERS": {
       "OBJECTIVES": "/opt/backup/encrypted",
-      "DESTINATION":"local",
+      "DESTINATION": "local",
       "__options": "local,s3,ssh,oss",
       "OBJECTIVES": "/opt/backup/encrypted",
       "REMOVE_OBJECTIVES": "True"
     }
-  }
-}
-
-
-,
+  },
   "STORAGE": {
     "ACTION": "execute",
     "NAME": "storage",
-    "PARAMETERS":{
+    "PARAMETERS": {
       "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
-      "DESTINATION":"s3",
+      "DESTINATION": "s3",
       "__options": "local,s3,ssh,oss",
       "REMOVE_OBJECTIVES": "True",
       "BUCKET_NAME": "cncbackup",
       "UPLOAD_COMMAND": "aws s3 cp"
     }
+  },
+  "DBSBACKUP": {
+    "ACTION": "execute",
+    "NAME": "mydump",
+    "EXECUTABLE": "",
+    "EXECUTE_WITH": "python",
+    "EXECUTABLE": "",
+    "PARAMETERS": {
+      "METHOD": "mydump",
+      "CONF_PATH": "/etc/my.cnf",
+      "CREDENTIAL_PATH": "/root/.mycrendential",
+      "DATA_DIR": "/var/lib/mysql/data",
+      "MY_INSTANCES": "3306",
+      "LOG": "/var/log/mysql.log"
+    }
   }
+}

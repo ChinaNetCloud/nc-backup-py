@@ -38,7 +38,7 @@ if type(json_dict) is not str:
             logger.info('Iterating configs')
             execution_scripts_result = BackupExecutionLogic.iterate_config_script(BackupExecutionLogic(), json_dict,
                                                                           nc_backup_py_home, logger)
-            print execution_scripts_result
+            # print execution_scripts_result
             logger.info('Config itaration done')
             successful_execution = True
         except Exception as exception_executing_external_script:
@@ -66,8 +66,7 @@ if type(json_dict) is not str:
         status_backup = '0'
     else:
         status_backup = '1'
-    print status_backup
-
+    # Send report.
     data_post = {
         'srvname': json_dict['GENERAL']['HOSTNAME'],
         'result': status_backup,
