@@ -1,10 +1,9 @@
 import logging
-# import time
-import fcntl
+
 import sys
 
-from logging.handlers import RotatingFileHandler
-
+# from logging.handlers import RotatingFileHandler
+from logging.handlers import TimedRotatingFileHandler
 
 from logs_script.log_handler import LoggerHandlers
 from backupcmd.commands import backupCommands
@@ -19,6 +18,7 @@ os_name = OSInformation.isWindows()
 if (os_name):
     config_file_location = 'conf\\confw.json'
 else:
+    import fcntl
     config_file_location = 'conf/conf.json'
 
 json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig(), config_file_location)
@@ -110,13 +110,14 @@ else:
 logger.info('Execution ends here.')
 logger = logging.getLogger('ncbackup')
 
-
 def create_timed_rotating_log(path, logger):
     """"""
     logger = logging.getLogger('Rotating Logs')
     logger.setLevel(logging.INFO)
-    handler = RotatingFileHandler(path, maxBytes=2048, backupCount=5)
+    # handler = RotatingFileHandler(path, maxBytes=9192, backupCount=5)
+    handler = TimedRotatingFileHandler(path, 'midnight', 1)
     logger.addHandler(handler)
+    # logger.handlers[0].doRollover()
     logger.info('Logs rotated')
-
+#
 create_timed_rotating_log(json_dict['GENERAL']['LOG_FOLDER'], logger)

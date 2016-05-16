@@ -66,10 +66,12 @@ class BackupExecutionLogic:
                         else:
                             logger.info('Output:' + str(this_part))
                     loaded_scripts.append({'external':{'message': execution_message}})
+
                 except Exception as e:
                     e.args += (execution_message,)
                     loaded_scripts.append(e)
-                    raise
+                    logger.critical('Execution error with subprocess' + e)
+                    exit(1)
             # Load plugins dynamically
             elif section == 'ACTION' and json_dict[scripts_modules][section] == "load":
                 path_to_import = json_dict[scripts_modules]['FROM'] + '.' + json_dict[scripts_modules]['FILENAME']
