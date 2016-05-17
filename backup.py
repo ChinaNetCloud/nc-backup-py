@@ -13,7 +13,6 @@ from communications.communications import Communications
 from tools.os_works import OSInformation
 
 
-
 os_name = OSInformation.isWindows()
 if (os_name):
     config_file_location = 'conf\\confw.json'
@@ -66,22 +65,30 @@ if type(json_dict) is not str:
             # exception_executing_external_script
             successful_execution = False
     # FIX This code as last check up of all the OUTPUT
+    # print execution_scripts_result
+    size_final = 'Empty'
+    # exit(1)
     for script_result in execution_scripts_result:
-        # print script_result
+        print type(script_result[0])
         if type(script_result[0]) is dict:
             if 'plugin' in script_result[0] and 'size' in script_result[0]['plugin']:
                 size_final = script_result[0]['plugin']['size']
+            elif 'external' in script_result[0] and \
+                            'message' in script_result[0]['external'] and \
+                            script_result[0]['external']['message'][0] is None:
+                successful_execution = True
+            else:
+                successful_execution = False
+                break
         else:
-            size_final = 'Empty'
-        # count_section = 1
-        # for execution_script_result in execution_scripts_result:
-        #     if execution_script_result is not 0:
-        #         successful_execution = False
-        #         string_message = 'Section number: ' + str(count_section) + ' returned a non 0 value after execution'
-        #     count_section = count_section + 1
-    # if successful_execution:
+            script_result_error = 'One of the scrits retuned a non zero result pease check the logs'
+            # print script_result[0]
+            print script_result_error
+            logger.warning(script_result_error)
+            successful_execution = False
+
     logger.info('Sending report...')
-    # print successful_execution
+
     if successful_execution == True :
         status_backup = '0'
     else:
@@ -90,11 +97,11 @@ if type(json_dict) is not str:
     data_post = {
         'srvname': json_dict['GENERAL']['HOSTNAME'],
         'result': status_backup,
-         'bckmethod': 'ncscript-py',
-         'size': size_final,
-         'log': open(json_dict['GENERAL']['LOG_FOLDER'], 'rb').read(),
-         'error': '',
-         'destination': json_dict['STORAGE']['PARAMETERS']['DESTINATION']
+        'bckmethod': 'ncscript-py',
+        'size': size_final,
+        'log': open(json_dict['GENERAL']['LOG_FOLDER'], 'rb').read(),
+        'error': '',
+        'destination': json_dict['STORAGE']['PARAMETERS']['DESTINATION']
                  }
     request_to_brt = Communications.send_post(Communications(), data_post)
     logger.info('Report sent status: ' + str(request_to_brt.status_code) + ' <===> ' + request_to_brt.reason)
@@ -117,7 +124,7 @@ def create_timed_rotating_log(path, logger):
     # handler = RotatingFileHandler(path, maxBytes=9192, backupCount=5)
     handler = TimedRotatingFileHandler(path, 'midnight', 1)
     logger.addHandler(handler)
-    # logger.handlers[0].doRollover()
     logger.info('Logs rotated')
-#
+
+
 create_timed_rotating_log(json_dict['GENERAL']['LOG_FOLDER'], logger)

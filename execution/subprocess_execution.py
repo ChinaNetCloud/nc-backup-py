@@ -23,7 +23,7 @@ class SubprocessExecution:
         try:
             self.__process = Popen(shell_command, shell=True, stdout=PIPE, stderr=PIPE)
         except CalledProcessError as e:
-            return 1
+            return 1, 'STDOUT: Unespected ERROR on execition', 'STRERR: Unespected ERROR on execition'
         if wait_cmd is True:
             self.__process.wait()
 

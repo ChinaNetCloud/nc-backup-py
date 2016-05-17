@@ -18,78 +18,91 @@ class BackupExecutionLogic:
         for scripts_modules in json_dict:
             log_sring = "Section " + str(c) + ": " + scripts_modules
             print log_sring
-
             logger.info(log_sring)
             #select the script to execute
-            external_execution = self.__execute_selection_of_external_script(json_dict,scripts_modules,home, logger)
+            result_message = []
+            if scripts_modules != 'GENERAL':
+                for section in json_dict[scripts_modules]:
+                    external_execution = self.__execute_selection_of_external_script(section,json_dict,scripts_modules,
+                                                                                     home, logger)
+                    if external_execution:
+                        result_message.append(external_execution)
             # print external_execution
-            if external_execution:
-                result.append(external_execution)
+            # if external_execution:
             c += 1
+            if result_message:
+                result.append(result_message)
+            # print 'AAAAA'
+            # print result
         return result
 
-    def __execute_selection_of_external_script(self,json_dict, scripts_modules, home_folder, logger=None):
+    def __execute_selection_of_external_script(self,section ,json_dict, scripts_modules, home_folder, logger=None):
         loaded_scripts = []
-        for section in json_dict[scripts_modules]:
+        # for section in json_dict[scripts_modules]:
             # Load independent executable
-            if section == 'ACTION' and json_dict[scripts_modules][section] == "execute":
-                log_string = "Loading executable module: " + json_dict[scripts_modules]['NAME']
+        if section == 'ACTION' and json_dict[scripts_modules][section] == "execute":
+            log_string = "Loading executable module: " + json_dict[scripts_modules]['NAME']
+            print log_string
+            logger.info(log_string)
+            module_to_call = self.__prepare_configs_for_execution(json_dict,scripts_modules,home_folder, logger)
+            logger.info('Prapare execution finised script. Now prepare parameters to pass is going to be executed')
+            pass_parameters = self.__organize_parameters_for_custom_script(json_dict[scripts_modules],
+                                                                           json_dict['GENERAL'], logger)
+            logger.info('Finished parameters preparation for section')
+            # check if file exists
+            if path.isfile(module_to_call):
+                log_string = "Loading from file: " + module_to_call
                 print log_string
                 logger.info(log_string)
-                module_to_call = self.__prepare_configs_for_execution(json_dict,scripts_modules,home_folder, logger)
-                logger.info('Prapare execution finised script. Now prepare parameters to pass is going to be executed')
-                pass_parameters = self.__organize_parameters_for_custom_script(json_dict[scripts_modules],
-                                                                               json_dict['GENERAL'], logger)
-                logger.info('Finished parameters preparation for section')
-                # check if file exists
-                if path.isfile(module_to_call):
-                    log_string = "Loading from file: " + module_to_call
-                    print log_string
-                    logger.info(log_string)
-                if pass_parameters is not None:
-                    module_to_call = module_to_call + ' ' + pass_parameters
-                    logger.info('Calling module: ' + module_to_call)
+            if pass_parameters is not None:
+                module_to_call = module_to_call + ' ' + pass_parameters
+                logger.info('Calling module: ' + module_to_call)
 
-                log_string = "List of parameters passed to script: " + module_to_call
-                # print log_string
-                logger.info(log_string)
-                # Execute command
-                execution_message = []
-                # execution_message.append(module_to_call)
-                try:
-                    out_put_exec = SubprocessExecution.main_execution_function(SubprocessExecution(),
-                                                                                    module_to_call, logger)
-                    execution_message.append(out_put_exec)
-                    for this_part in out_put_exec:
-                        if this_part is None or this_part == 'stderr: ':
-                            logger.info('No output to show or error reported.')
-                        else:
-                            logger.info('Output:' + str(this_part))
-                    loaded_scripts.append({'external':{'message': execution_message}})
-
-                except Exception as e:
-                    e.args += (execution_message,)
-                    loaded_scripts.append(e)
-                    logger.critical('Execution error with subprocess' + e)
-                    exit(1)
-            # Load plugins dynamically
-            elif section == 'ACTION' and json_dict[scripts_modules][section] == "load":
-                path_to_import = json_dict[scripts_modules]['FROM'] + '.' + json_dict[scripts_modules]['FILENAME']
-                loading_plugin = 'This is a loadable module (plugin): ' + path_to_import
-                print loading_plugin
-                logger.info(loading_plugin)
-                plugin_object = DynamicImporter(path_to_import, json_dict[scripts_modules]['CLASS'], )
-                instanciated_plugin = plugin_object.create_object(json_dict[scripts_modules]['PARAMETERS'])
-                # if hasattr(plugin_object, 'config_plugin') and callable(getattr(plugin_object, 'config_plugin')):
-                instanciated_plugin.config_plugin()
-                # if hasattr(plugin_object, 'works_execution') and callable(getattr(plugin_object, 'config_plugin')):
-                works_execution = instanciated_plugin.works_execution()
-                logger.info('Works: ' + works_execution)
-                # if hasattr(plugin_object, 'output') and callable(getattr(plugin_object, 'output')):
-                output = instanciated_plugin.output()
-                print output
-                logger.info('Output: ' + output)
-                loaded_scripts.append({'plugin':{'size': output}})
+            log_string = "List of parameters passed to script: " + module_to_call
+            # print log_string
+            logger.info(log_string)
+            # Execute command
+            execution_message = []
+            # execution_message.append(module_to_call)
+            # try:
+            out_put_exec = SubprocessExecution.main_execution_function(SubprocessExecution(),
+                                                                            module_to_call, logger)
+            # print 'AAAA'
+            # print out_put_exec
+            # execution_message.append(out_put_exec)
+            # for this_part in out_put_exec:
+            #     if this_part is None or this_part == 'stderr: ':
+            #         logger.info('No output to show or error reported.')
+            #     else:
+            #         logger.info('Output:' + str(this_part))
+            # loaded_scripts.append({'external':{'message': execution_message}})
+            loaded_scripts = {'external':{'message': out_put_exec}}
+            return loaded_scripts
+            # except Exception as e:
+            e.args += (execution_message,)
+            # loaded_scripts.append(e)
+            loaded_scripts = {'external':{'message': (1, e,e)}}
+            logger.critical('Execution error with subprocess' + e)
+            return loaded_scripts
+                # exit(1)
+        # Load plugins dynamically
+        elif section == 'ACTION' and json_dict[scripts_modules][section] == "load":
+            path_to_import = json_dict[scripts_modules]['FROM'] + '.' + json_dict[scripts_modules]['FILENAME']
+            loading_plugin = 'This is a loadable module (plugin): ' + path_to_import
+            print loading_plugin
+            logger.info(loading_plugin)
+            plugin_object = DynamicImporter(path_to_import, json_dict[scripts_modules]['CLASS'], )
+            instanciated_plugin = plugin_object.create_object(json_dict[scripts_modules]['PARAMETERS'])
+            # if hasattr(plugin_object, 'config_plugin') and callable(getattr(plugin_object, 'config_plugin')):
+            instanciated_plugin.config_plugin()
+            # if hasattr(plugin_object, 'works_execution') and callable(getattr(plugin_object, 'config_plugin')):
+            works_execution = instanciated_plugin.works_execution()
+            logger.info('Works: ' + works_execution)
+            # if hasattr(plugin_object, 'output') and callable(getattr(plugin_object, 'output')):
+            output = instanciated_plugin.output()
+            print output
+            logger.info('Output: ' + output)
+            loaded_scripts = {'plugin':{'size': output}}
         return loaded_scripts
 
     def __prepare_configs_for_execution(self, json_dict,scripts_modules,home_folder, logger=None):
