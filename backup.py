@@ -69,7 +69,7 @@ if type(json_dict) is not str:
     size_final = 'Empty'
     # exit(1)
     for script_result in execution_scripts_result:
-        print type(script_result[0])
+        # print type(script_result[0])
         if type(script_result[0]) is dict:
             if 'plugin' in script_result[0] and 'size' in script_result[0]['plugin']:
                 size_final = script_result[0]['plugin']['size']
@@ -125,6 +125,5 @@ def create_timed_rotating_log(path, logger):
     handler = TimedRotatingFileHandler(path, 'midnight', 1)
     logger.addHandler(handler)
     logger.info('Logs rotated')
-
 
 create_timed_rotating_log(json_dict['GENERAL']['LOG_FOLDER'], logger)
