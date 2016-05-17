@@ -93,6 +93,10 @@ if type(json_dict) is not str:
         status_backup = '0'
     else:
         status_backup = '1'
+    if 'STORAGE' in json_dict:
+        storage_name = json_dict['STORAGE']['PARAMETERS']['DESTINATION']
+    else:
+        storage_name = 'Other Snapshot, private, etc, custom'
     # Send report.
     data_post = {
         'srvname': json_dict['GENERAL']['HOSTNAME'],
@@ -101,7 +105,7 @@ if type(json_dict) is not str:
         'size': size_final,
         'log': open(json_dict['GENERAL']['LOG_FOLDER'], 'rb').read(),
         'error': '',
-        'destination': json_dict['STORAGE']['PARAMETERS']['DESTINATION']
+        'destination': storage_name
                  }
     request_to_brt = Communications.send_post(Communications(), data_post)
     logger.info('Report sent status: ' + str(request_to_brt.status_code) + ' <===> ' + request_to_brt.reason)
