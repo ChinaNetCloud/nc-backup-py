@@ -1,5 +1,6 @@
 from subprocess import Popen
 from subprocess import PIPE
+
 # from subprocess import check_output
 from subprocess import call
 from subprocess import CalledProcessError
@@ -20,21 +21,14 @@ class SubprocessExecution:
             logger.info(log_string)
         else:
             print log_string
-        try:
-            self.__process = Popen(shell_command, shell=True, stdout=PIPE, stderr=PIPE)
-        except CalledProcessError as e:
-            return 1, 'STDOUT: Unespected ERROR on execition', 'STRERR: Unespected ERROR on execition'
+
+        self.__process = Popen(shell_command, shell=True, stdout=PIPE, stderr=PIPE)
         if wait_cmd is True:
             self.__process.wait()
-
+        #     if self.__process.poll() is None:
         return_code = self.__process.poll()
         stdout, stderr = self.__process.communicate()
-        # print stdout
-        # print stderr
         return return_code, stdout, 'stderr: ' + stderr
-        # stdout, stderr = self.__process.communicate()
-        # # print 'Error: ' + stderr
-        # return stdout, stderr
 
     def print_output(self, communicates_message):
         for message in communicates_message:

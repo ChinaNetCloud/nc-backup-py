@@ -53,36 +53,33 @@ if type(json_dict) is not str:
         nc_backup_py_home = json_dict['GENERAL']['HOME_FOLDER']
         logger.info('Backups execution...')
         logger.info('Loading and executing modules from configuration sections')
-        try:
-            logger.info('Iterating configs')
-            execution_scripts_result = BackupExecutionLogic.iterate_config_script(BackupExecutionLogic(), json_dict,
-                                                                          nc_backup_py_home, logger)
-            # print execution_scripts_result
-            logger.info('Config itaration done')
-            successful_execution = True
-        except Exception as exception_executing_external_script:
-            logger.critical('The main script did not Execute the backups scripts after loading configs: ')
-            # exception_executing_external_script
-            successful_execution = False
-    # FIX This code as last check up of all the OUTPUT
-    # print execution_scripts_result
+        # try:
+        logger.info('Iterating configs')
+        execution_scripts_result = BackupExecutionLogic.iterate_config_script(BackupExecutionLogic(), json_dict,
+                                                                      nc_backup_py_home, logger)
+        # print execution_scripts_result
+        logger.info('Config itaration done')
+        successful_execution = True
+
     size_final = 'Empty'
-    # exit(1)
     for script_result in execution_scripts_result:
         # print type(script_result[0])
         if type(script_result[0]) is dict:
             if 'plugin' in script_result[0] and 'size' in script_result[0]['plugin']:
                 size_final = script_result[0]['plugin']['size']
+                successful_execution = True
             elif 'external' in script_result[0] and \
                             'message' in script_result[0]['external'] and \
-                            script_result[0]['external']['message'][0] is None:
+                            script_result[0]['external']['message'][0] is 0:
                 successful_execution = True
             else:
                 successful_execution = False
+                script_warning = 'Warning:' + str(script_result)
+                print script_warning
+                logger.warning(script_warning)
                 break
         else:
             script_result_error = 'One of the scrits retuned a non zero result pease check the logs'
-            # print script_result[0]
             print script_result_error
             logger.warning(script_result_error)
             successful_execution = False
@@ -98,6 +95,9 @@ if type(json_dict) is not str:
     else:
         storage_name = 'Other Snapshot, private, etc, custom'
     # Send report.
+    report_attempt_message = 'Trying to send report to BRT'
+    logger.info(report_attempt_message)
+    print report_attempt_message
     data_post = {
         'srvname': json_dict['GENERAL']['HOSTNAME'],
         'result': status_backup,

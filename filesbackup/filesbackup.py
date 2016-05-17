@@ -14,9 +14,9 @@ class FileBackups:
         self.__tar_program = tar_program
         self.__sudo_command = sudo_command
 
-    @staticmethod
-    def files_backup():
-        print "Executing files backup"
+    # @staticmethod
+    # def files_backup():
+    #     print "Executing files backup"
 
     def file_backup_commands(self):
         parser_object = argparse.ArgumentParser()
@@ -38,8 +38,6 @@ class FileBackups:
 
     def file_backup_execution(self, filesets, destination='', excluded_filesets=''):
         """Execute the files tar and compression"""
-        # #Files and folders checkups
-        # Included filesets
         print 'Making a compressed copy of the local files to: ' + destination
 
         if excluded_filesets:
@@ -59,7 +57,8 @@ class FileBackups:
         if (os_name):
             if not os.path.isdir(destination + '\\files'):
                 create_dir_cmd = 'mkdir ' + destination + '\\files'
-                execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), create_dir_cmd)
+                execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), create_dir_cmd, True)
+                print execution_mkdir
             result_file_name = destination + '\\files\\compressed\\filebackup_' + datetime_string
             filesets = filesets.split()
             ZipCompression(result_file_name + '.zip', filesets)
@@ -81,23 +80,24 @@ class FileBackups:
                 # print tar_command
                 if not os.path.isdir(destination + '/files'):
                     create_dir_cmd = 'mkdir ' + destination + '/files'
-                    execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), create_dir_cmd)
-                    if execution_mkdir != 0:
+                    execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), create_dir_cmd, True)
+                    if execution_mkdir[0] != 0:
                         print 'Could Not create directory with command: ' + create_dir_cmd
-                        print 'Error code: ' + str(execution_mkdir)
-            try:
-                execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), tar_command, True)
-                # SubprocessExecution.print_output(SubprocessExecution(), execution_message)
-            except Exception as e:
-                e.args += (execution_message,)
-                raise
-            if execution_message != 0:
+                        print 'Error code: ' + str(execution_mkdir[0])
+            execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), tar_command, True)
+            print execution_message
+            if execution_message [0] != 0:
                 print 'Executing the tar command: ' + tar_command
-                print 'Returned nor zero exit code: ' + str(execution_message)
+                print 'Returned nor zero exit code: ' + str(execution_message[0],) + ', ' + str(execution_message[1]) + \
+                      ', ' + str(execution_message[2])
+                exit(1)
+            else:
+                print 'Successful execution: ' + str(execution_message[0]) + ', ' + str(execution_message[1]) + \
+                      ', ' + str(execution_message[2])
 
 
 if __name__ == "__main__":
-    FileBackups.files_backup()
+    # FileBackups.files_backup()
     command_object = FileBackups.file_backup_commands(FileBackups())
     if command_object.FILESET_INCLUDE:
         sys.path.append(command_object.HOME_FOLDER)
@@ -108,7 +108,11 @@ if __name__ == "__main__":
         print 'Work Folder: ' + command_object.WORK_FOLDER
         print 'Files and folders to exclude:' + command_object.FILESET_EXCLUDE
 
-        FileBackups.file_backup_execution(FileBackups(command_object.COMPRESSION_CMD_CHAIN
+        files_backup_execution = FileBackups.file_backup_execution(FileBackups(command_object.COMPRESSION_CMD_CHAIN
                                                                       , command_object.SUDO_COMMAND)
                                                           , command_object.FILESET_INCLUDE
                                                           , command_object.WORK_FOLDER, command_object.FILESET_EXCLUDE)
+        # if files_backup_execution =:
+        #     exit(0)
+        # else:
+        #     exit(1)

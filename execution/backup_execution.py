@@ -25,6 +25,7 @@ class BackupExecutionLogic:
                 for section in json_dict[scripts_modules]:
                     external_execution = self.__execute_selection_of_external_script(section,json_dict,scripts_modules,
                                                                                      home, logger)
+                    # print external_execution
                     if external_execution:
                         result_message.append(external_execution)
             # print external_execution
@@ -49,42 +50,42 @@ class BackupExecutionLogic:
             pass_parameters = self.__organize_parameters_for_custom_script(json_dict[scripts_modules],
                                                                            json_dict['GENERAL'], logger)
             logger.info('Finished parameters preparation for section')
-            # check if file exists
+
             if path.isfile(module_to_call):
                 log_string = "Loading from file: " + module_to_call
                 print log_string
                 logger.info(log_string)
             if pass_parameters is not None:
                 module_to_call = module_to_call + ' ' + pass_parameters
-                logger.info('Calling module: ' + module_to_call)
+                module_call_message = 'Calling module: ' + module_to_call
+                print module_call_message
+                logger.info(module_call_message)
 
             log_string = "List of parameters passed to script: " + module_to_call
-            # print log_string
+            print log_string
             logger.info(log_string)
-            # Execute command
-            execution_message = []
-            # execution_message.append(module_to_call)
-            # try:
+
             out_put_exec = SubprocessExecution.main_execution_function(SubprocessExecution(),
-                                                                            module_to_call, logger)
+                                                                            module_to_call, True, logger)
             # print 'AAAA'
             # print out_put_exec
-            # execution_message.append(out_put_exec)
-            # for this_part in out_put_exec:
-            #     if this_part is None or this_part == 'stderr: ':
-            #         logger.info('No output to show or error reported.')
-            #     else:
-            #         logger.info('Output:' + str(this_part))
-            # loaded_scripts.append({'external':{'message': execution_message}})
+
+            if out_put_exec[0] is not 0:
+                logger.critical('Error executing external script')
+                logger.critical('Eddor Code: ' + str(out_put_exec[0]) + \
+                                ' StdOut: ' + out_put_exec[1] + \
+                                ' StdErr: ' + str(out_put_exec[2]))
+                exit(1)
+            elif out_put_exec[0] is 0:
+                logger.info('the execution was succesfull')
+                logger.info('StdOut: ' + out_put_exec[1])
             loaded_scripts = {'external':{'message': out_put_exec}}
             return loaded_scripts
-            # except Exception as e:
-            e.args += (execution_message,)
-            # loaded_scripts.append(e)
-            loaded_scripts = {'external':{'message': (1, e,e)}}
-            logger.critical('Execution error with subprocess' + e)
-            return loaded_scripts
-                # exit(1)
+            # e.args += (execution_message,)
+            # loaded_scripts = {'external':{'message': (1, e,e)}}
+            # logger.critical('Execution error with subprocess' + e)
+            # return loaded_scripts
+
         # Load plugins dynamically
         elif section == 'ACTION' and json_dict[scripts_modules][section] == "load":
             path_to_import = json_dict[scripts_modules]['FROM'] + '.' + json_dict[scripts_modules]['FILENAME']
