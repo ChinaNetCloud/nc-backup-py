@@ -12,7 +12,6 @@ from collections import OrderedDict
 
 class HddImageRun:
 
-
     def hdd_image_commands(self):
         parser_object = argparse.ArgumentParser()
         parser_object.add_argument('-R', '--REGION', type=str
