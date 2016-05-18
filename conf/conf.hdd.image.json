@@ -1,4 +1,5 @@
-  "GENERAL": {
+{
+  "GENERAL":{
     "HOSTNAME": "srv-yhouse-test1",
     "WORK_FOLDER": "/home/ncadmin/backup",
     "LOCAL_BACKUP": "/home/ncadmin/backup/local",
