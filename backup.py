@@ -61,7 +61,7 @@ if type(json_dict) is not str:
         logger.info('Config itaration done')
         successful_execution = True
 
-    size_final = 'Empty'
+    size_final = 'No Value'
     for script_result in execution_scripts_result:
         # print type(script_result[0])
         if type(script_result[0]) is dict:

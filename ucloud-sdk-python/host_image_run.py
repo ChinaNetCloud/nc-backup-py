@@ -7,7 +7,9 @@ import json
 import time
 import argparse
 
-#实例化 API 句柄
+
+from collections import OrderedDict
+
 class HddImageRun:
 
 
@@ -41,6 +43,8 @@ if __name__=='__main__':
     response = ApiClient.get("/", Parameters );
     result_execution = json.dumps(response, sort_keys=True, indent=4, separators=(',', ': '))
     print result_execution
-    if result_execution['RetCode'] != 0:
+    doc_dict = json.loads(result_execution, object_pairs_hook=OrderedDict)
+    # print type(result_execution)
+    if doc_dict['RetCode'] != 0:
         print 'return code different than 0, script has failed'
         exit(1)
