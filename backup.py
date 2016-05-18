@@ -34,18 +34,20 @@ except Exception as exceptio_reading_commands:
     successful_execution = False
     execution_scripts_result = []
 
-
-# Allow only one process to run at the time
-pid_file = 'backup.pid'
-fp = open(pid_file, 'w')
-try:
-    fcntl.lockf(fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
-except IOError:
-    # another instance is running
-    not_multi_thread = 'There is already and instance of this process being executed.'
-    logger.critical(not_multi_thread)
-    print not_multi_thread
-    sys.exit(0)
+if (os_name):
+    print 'is windows'
+else:
+    # Allow only one process to run at the time
+    pid_file = 'backup.pid'
+    fp = open(pid_file, 'w')
+    try:
+        fcntl.lockf(fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except IOError:
+        # another instance is running
+        not_multi_thread = 'There is already and instance of this process being executed.'
+        logger.critical(not_multi_thread)
+        print not_multi_thread
+        sys.exit(0)
 
 
 if type(json_dict) is not str:
