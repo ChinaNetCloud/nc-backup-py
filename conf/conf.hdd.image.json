@@ -12,7 +12,7 @@
     "EXECUTABLE": "host_image_run.py",
     "PARAMETERS": {
       "REGION": "cn-north-03",
-      "HOST_ID": "uhost-rep4lv"
+      "HOST_ID": "uhost-rep4lv OtherHostID"
     }
   }
 }

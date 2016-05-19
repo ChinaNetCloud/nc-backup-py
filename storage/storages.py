@@ -1,4 +1,5 @@
 import sys
+import time
 
 
 from os import listdir
@@ -36,9 +37,25 @@ class AWSS3(Storage):
         execution_message = []
         for file_to_upload in files_to_upload:
             aws_command = upload_command + ' '+ mypath_to_dir + '/' + file_to_upload + ' s3://'+ bucket + '/' + client_host_name + '/' + file_to_upload
-            # print aws_command
-            execution_message.append(SubprocessExecution.main_execution_function(SubprocessExecution(), aws_command))
-            # SubprocessExecution.print_output(SubprocessExecution(), execution_message)
+            count = 1
+            time_retry = 60
+            while count <= 5:
+                print 'Trying upload attempt number: ' + str(count)
+                tmp_execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), aws_command)
+                # print tmp_execution_message
+                time_retry = time_retry * count
+                if tmp_execution_message[0] == 0:
+                    print 'Upload attempt ' + str(count) +' successful.'
+                    break
+                else:
+                    print 'Upload attempt number: ' + str(count) + ' FAILED for: ' + aws_command
+                    print 'StdOut: ' + str(tmp_execution_message[0])
+                    print 'StdErr:' + str(tmp_execution_message[0])
+                    print 'We will wait for: ' + str(time_retry/60) + ' minute(s) before upload attempt number: ' + \
+                          str(count + 1)
+                    time.sleep(time_retry)
+                count = count + 1
+            execution_message.append(tmp_execution_message)
         if remove_objective == 'True':
             execution_message.append(SubprocessExecution.main_execution_function(SubprocessExecution(), 'rm -rf ' + mypath_to_dir))
             # SubprocessExecution.print_output(SubprocessExecution(), execution_message)

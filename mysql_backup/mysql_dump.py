@@ -25,7 +25,8 @@ class mydump:
         parser_object.add_argument('--DATA_DIR', type=str, help='Data dir path', required=True,action="store")
         parser_object.add_argument('--MY_INSTANCES', type=str, help='Instance port', required=True,action="store")
         parser_object.add_argument('--LOG', type=str, help='Log path', required=True,action="store")
-        args_list = parser_object.parse_args()
+        # args_list = parser_object.parse_args()
+        args_list, unknown = parser_object.parse_known_args()
         return args_list
 
     def get_instanceinfo(self,MY_INSTANCE_NAME):

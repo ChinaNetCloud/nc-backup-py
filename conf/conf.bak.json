@@ -63,12 +63,10 @@
   },
   "DBSBACKUP": {
     "ACTION": "execute",
-    "NAME": "mydump",
-    "EXECUTABLE": "",
+    "NAME": "mysql_backup",
+    "EXECUTABLE": "mysql_dump.py",
     "EXECUTE_WITH": "python",
-    "EXECUTABLE": "",
     "PARAMETERS": {
-      "METHOD": "mydump",
       "CONF_PATH": "/etc/my.cnf",
       "CREDENTIAL_PATH": "/root/.mycrendential",
       "DATA_DIR": "/var/lib/mysql/data",
