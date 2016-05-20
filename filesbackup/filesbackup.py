@@ -39,7 +39,6 @@ class FileBackups:
     def file_backup_execution(self, filesets, destination='', excluded_filesets=''):
         """Execute the files tar and compression"""
         print 'Making a compressed copy of the local files to: ' + destination
-
         if excluded_filesets:
             print 'Backup objective(s): ' + filesets + '. Excluded files: ' + excluded_filesets
         else:

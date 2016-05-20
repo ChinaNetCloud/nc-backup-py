@@ -80,3 +80,18 @@
       "RUN3": "1st sun"
     }
 }
+
+
+,
+  "DBSBACKUP": {
+    "ACTION": "execute",
+    "NAME": "mysql_backup",
+    "EXECUTABLE": "mysql_dump.py",
+    "EXECUTE_WITH": "python",
+    "PARAMETERS": {
+      "CREDENTIAL_PATH": "/Users/cncuser/Documents/py/nc-backup-py/conf/mysql.credentials",
+      "DATA_DIR": "/usr/local/var/mysql",
+      "MY_INSTANCES": "3306",
+      "LOG": "/usr/local/var/mysql/Abel-Guzman-Sanchezs-MacBook-Air.local.err"
+    }
+  }
