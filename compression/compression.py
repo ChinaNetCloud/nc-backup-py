@@ -34,23 +34,24 @@ class CompressionWorks:
 
     def compression_execution(self, objectives,destination):
         """Execute compression of files"""
-        if objectives != '' and objectives is not None:
-            objectives = objectives.replace(' /', ' ')
-            objectives = objectives[1:]
+        objectives_list = objectives.split()
         datetime_string = time.strftime("%Y%m%d_%H%M%S")
-        # tar_command = '/usr/bin/sudo /bin/tar czCf / ' + destination + '/filesbackup_' \
-        #                   + datetime_string + '.tar.gz ' + objectives
+        print objectives_list
         tar_command = self.__sudo_command + ' ' + self.__tar_program + ' ' + destination + '/filesbackup_' \
-                          + datetime_string + '.tar.gz ' + objectives
-        if not os.path.isdir(destination):
-            execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), 'mkdir ' + destination)
-            # SubprocessExecution.print_output(SubprocessExecution(), execution_mkdir)
-        try:
-            execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), tar_command)
-            # SubprocessExecution.print_output(SubprocessExecution(), execution_message)
-        except Exception as e:
-            e.args += (execution_message,)
-            raise
+        + datetime_string + '.tar.gz '
+        for objective in objectives_list:
+            if objective != '' and objective is not None:
+                objective = objective.replace(' /', ' ')
+                objective = objective[1:]
+
+                tar_command = tar_command + ' ' + objective
+                if not os.path.isdir(destination):
+                    execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), 'mkdir ' + destination)
+
+        print tar_command
+        execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), tar_command)
+
+        return execution_message
 
 if __name__ == "__main__":
     command_compression = CompressionWorks.compression_commands(CompressionWorks())
@@ -65,6 +66,7 @@ if __name__ == "__main__":
         tar_execution = CompressionWorks.compression_execution(CompressionWorks(command_compression.COMPRESSION_CMD_CHAIN,
                                                                                 command_compression.SUDO_COMMAND), command_compression.OBJECTIVES
                                                                , command_compression.DESTINATION)
+        print tar_execution
     if command_compression.REMOVE_OBJECTIVES:
         print 'Deleting files after objective files as per config option --REMOVE_OBJECTIVES: ' \
               + command_compression.OBJECTIVES

@@ -81,7 +81,7 @@ class BackupExecutionLogic:
                 logger.critical('Eddor Code: ' + str(out_put_exec[0]) + \
                                 ' StdOut: ' + out_put_exec[1] + \
                                 ' StdErr: ' + str(out_put_exec[2]))
-                exit(1)
+                # exit(1)
             elif out_put_exec[0] is 0:
                 logger.info('the execution was succesfull')
                 logger.info('StdOut: ' + out_put_exec[1])

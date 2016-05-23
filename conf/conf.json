@@ -34,8 +34,11 @@
       "LOG": "/usr/local/var/mysql/Abel-Guzman-Sanchezs-MacBook-Air.local.err",
       "BINLOG_PATH": "/usr/local/var/mysql/",
       "BINLOG_FILE_PREFIX": "mysql-bin",
-      "DESTINATION": "/Users/cncuser/Downloads/backup/files",
-      "TAR_COMMAND": "sudo /usr/local/Cellar/gnu-tar/1.28/bin/tar czf "
+      "DESTINATION": "/Users/cncuser/Downloads/backup",
+      "TAR_COMMAND": "sudo /usr/local/Cellar/gnu-tar/1.28/bin/tar czf ",
+      "MYSQL_DUMP_BINARY": "/usr/bin/mysql",
+      "MYSQL_BINARY": "/usr/bin/mysql",
+      "PREFIX_FOLDER": "mydump"
     }
   },
   "COMPRESSION": {
@@ -44,7 +47,7 @@
     "EXECUTABLE": "",
     "EXECUTE_WITH": "",
     "PARAMETERS": {
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/files",
+      "OBJECTIVES": "/Users/cncuser/Downloads/backup/files /Users/cncuser/Downloads/backup/mydump",
       "DESTINATION": "/Users/cncuser/Downloads/backup/compressed",
       "REMOVE_OBJECTIVES": "True"
     }

@@ -1,24 +1,34 @@
 -Project name: nc-backup-py.
 
--Executable Modules:
+-Executable Script:
 
-+backup.py: Main script that can execute and control other scripts execution (needs arguments)
-+compression.py: compression script (needs arguments)
-+encryption.py Encryption and decryption script. (needs arguments)
-+filesbackup.py does backups of filesets with exclusions (needs arguments)
-+storage.py connects and saves files to different storages (done local and AWS S3). (needs arguments)
++ backup.py: Main script that can execute and control other scripts execution (needs arguments)
++ compression.py: compression script (needs arguments)
++ encryption.py Encryption and decryption script. (needs arguments)
++ filesbackup.py does backups of filesets with exclusions (needs arguments)
++ storage.py connects and saves files to different storages (done local and AWS S3). (needs arguments)
++ MySQl backup.
 
--Pending modules:
+-Pending Scripts:
++ mongo
++ reporting
++ OSS storage
++ snapshots for different storages.
++ clean up scripts for local and remote files.
++ Windows compatibility:
++ Active directory backup
++ ms-sql backup.
 
-+mysql
-+mongo
-+reporting
-+OSS storage
-+snapshots for different storages.
-+clean up scripts for local and remote files.
-+Windows compatibility:
-+Active directory backup
-+ms-sql backup.
+-We also have available a module feature in the configs available through configuration as well. current modules:
++ tools/size_calculation.py: Size calculation
+
+
+-Tools: every module or script include or make use of a set of tools included in tools folder.
++ date_str_utils.py
++ filesystem_handling
++ os_works
++ requests_utils
++ size calculation (This is also a module)
 
 Requirements:
 -
@@ -71,29 +81,29 @@ Maybe at some point in the future I would implement being able to have more than
 
 Then about include and exclude, every module receives a group of parameters. From a special optional section that looks like this in the case of exclude and include.
 
-"FILESET":{
-(...)
-"PARAMETERS": {
-  "FILESET_INCLUDE": "c:\\backup\\backup_test_a C:\\Zabbix\\Log C:\\backup_test_b\\backup_test_1",
-  "FILESET_EXCLUDE": "C:\\backup_test_b\\backup_test_1\\test_2.txt"
-}
-(...)
-}
+    "FILESET":{
+    (...)
+    "PARAMETERS": {
+      "FILESET_INCLUDE": "c:\\backup\\backup_test_a C:\\Zabbix\\Log C:\\backup_test_b\\backup_test_1",
+      "FILESET_EXCLUDE": "C:\\backup_test_b\\backup_test_1\\test_2.txt"
+    }
+    (...)
+    }
 
 Notice: FILESET, in this case is the name of a custom module.
 Aside from that the config file has a compulsory section called GENERAL, where the user is supposed to specify general parameters that are used by most modules and passed to all of them. It looks like this:
 
 
-{
-  "GENERAL": {
-    "HOSTNAME": "WIN-G5AKB09AALD",
-    "WORK_FOLDER": "c:\\backup",
-    "LOCAL_BACKUP": "c:\\backup\\local",
-    "HOME_FOLDER": "c:\\backup\\nc-backup-py",
-    "LOG_FOLDER": "c:\\backup\\nc-backup-py\\log\\ncbackup.log"
-    },
-(...)
-}
+    {
+      "GENERAL": {
+        "HOSTNAME": "WIN-G5AKB09AALD",
+        "WORK_FOLDER": "c:\\backup",
+        "LOCAL_BACKUP": "c:\\backup\\local",
+        "HOME_FOLDER": "c:\\backup\\nc-backup-py",
+        "LOG_FOLDER": "c:\\backup\\nc-backup-py\\log\\ncbackup.log"
+        },
+    (...)
+    }
 
 Every section is flexible to add as many parameters as the specific module to be execute needs.
 
@@ -112,6 +122,7 @@ Plugins:
 -Should have 3 callable functions:
 + config_plugin: Need to implement a way to pass arguments with something like *args
 + works_execution: can only print stuff.
+
 You need to use the login features to work with it.
 + output: output final result.
 
@@ -121,15 +132,16 @@ the class when costructed. So ot's your duty to parse this dictionary if you
 need config parameters.
 
 The plugins also need a config section similar to this:
-  "SIZE":{
-    "ACTION": "load",
-    "FROM": "tools",
-    "FILENAME": "size_calculation",
-    "CLASS": "SizeCalculation",
-    "PARAMETERS": {
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted"
-    }
-  }
+
+      "SIZE":{
+        "ACTION": "load",
+        "FROM": "tools",
+        "FILENAME": "size_calculation",
+        "CLASS": "SizeCalculation",
+        "PARAMETERS": {
+          "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted"
+        }
+      }
 
 
 AWS CLI integration

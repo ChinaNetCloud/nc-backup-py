@@ -12,27 +12,24 @@ from execution.backup_execution import BackupExecutionLogic
 from communications.communications import Communications
 from tools.os_works import OSInformation
 
-
+command_object = backupCommands.feature_commands(backupCommands())
 os_name = OSInformation.isWindows()
 if (os_name):
     config_file_location = 'conf\\confw.json'
 else:
     import fcntl
-    config_file_location = 'conf/conf.json'
+    if not command_object.config:
+        config_file_location = 'conf/conf.json'
+    else:
+        config_file_location = command_object.config
 
 json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig(), config_file_location)
 logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', 10,
                                       json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
+# Set the backup as failed by default.
 successful_execution = False
-try:
-    command_object = backupCommands.feature_commands(backupCommands())
-
-except Exception as exceptio_reading_commands:
-    logger.critical('The main script did not manage to read the parameters passed by user Exited with: ')
-    successful_execution = False
-    execution_scripts_result = []
 
 if (os_name):
     print 'is windows'
