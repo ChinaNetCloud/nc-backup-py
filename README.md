@@ -236,4 +236,4 @@ python send_sms.py "13777777777|137xxxxxxxx|138xxxxxxxx" "测试短信"
 Abel Guzman
 
 # Report bugs at:
-+ abel.guzman@chinanetcloud.com
++ abel.guzman (at) chinanetcloud.com
