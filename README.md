@@ -206,6 +206,8 @@ The AWS CLI will calculate and auto-populate the Content-MD5 header for both sta
 
 # LICENSE
 
+To be defined
+
 
 # Others
 UCLoud using sdk:
