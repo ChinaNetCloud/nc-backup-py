@@ -35,8 +35,7 @@ every module or script include or make use of a set of tools included in tools f
 + requests_utils
 + size calculation (This is also a module)
 
-##Requirements:
--
+## Requirements:
 python 2.7
 
 ###Python modules
@@ -44,14 +43,11 @@ python 2.7
 + Crypto (Actually Crypto.Cipher)
 
 ####python 2.6 also requires:
-+argparse
++ argparse
 
 ##ROAD MAP:
-+ Storage (local DONE)
-+ Communications (reports basic DONE)
-+ clean ups
-+ DBS
-+ logs
+
+To be added.
 
 # The JSON config file.
 ##Introduction
