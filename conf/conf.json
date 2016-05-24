@@ -78,7 +78,6 @@
     "PARAMETERS":{
       "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
       "DESTINATION":"s3",
-      "__options": "local,s3,ssh,oss",
       "BUCKET_NAME": "cncbackup",
       "UPLOAD_COMMAND": "aws s3 cp",
       "REMOVE_OBJECTIVES": "True"

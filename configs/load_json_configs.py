@@ -6,7 +6,7 @@ import os.path
 from collections import OrderedDict
 
 class LoadJsonConfig:
-    __config_file = 'conf/conf.json'
+    __config_file = '../conf/conf.json'
 
     def read_config_file(self, file_path=''):
         if file_path != '':
@@ -18,7 +18,7 @@ class LoadJsonConfig:
                     doc_dict = json.load(stream_doc, object_pairs_hook=OrderedDict)
                     return doc_dict
             except EnvironmentError as e:
-                logging.critical('Error loading config file: ',e.message)
+                logging.critical('Config json file found, but there was an error loading it: ',e.message)
 
         else:
             return 'File not found at ' + file_path
