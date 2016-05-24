@@ -1,11 +1,11 @@
-#Project nc-backup-py.
+# Project nc-backup-py.
 
 The project has a main script that is executed by calling the following command:
 
 $ python backup.py -r -c /path/to/conf.json
 this command is able to perform all the backup tasks in sequential order according to the conf.json configuration file order.
 
-##Executable Scripts:
+## Executable Scripts:
 + backup.py: Main script that can execute and control other scripts execution (needs arguments)
 + compression.py: compression script (needs arguments)
 + encryption.py Encryption and decryption script. (needs arguments)
@@ -13,7 +13,7 @@ this command is able to perform all the backup tasks in sequential order accordi
 + storage.py connects and saves files to different storages (done local and AWS S3). (needs arguments)
 + MySQl backup.
 
-##Pending Scripts:
+## Pending Scripts:
 + mongo
 + reporting
 + OSS storage
@@ -23,11 +23,11 @@ this command is able to perform all the backup tasks in sequential order accordi
 + Active directory backup
 + ms-sql backup.
 
-##Plugins
+## Plugins
 -We also have available a module/plugin feature in the configs available through configuration as well. current modules:
 + tools/size_calculation.py: Size calculation
 
-##Tools
+## Tools
 every module or script include or make use of a set of tools included in tools folder.
 + date_str_utils.py
 + filesystem_handling
@@ -38,19 +38,19 @@ every module or script include or make use of a set of tools included in tools f
 ## Requirements:
 python 2.7
 
-###Python modules
+### Python modules
 + requests
 + Crypto (Actually Crypto.Cipher)
 
-####python 2.6 also requires:
+#### python 2.6 also requires:
 + argparse
 
-##ROAD MAP:
+## ROAD MAP:
 
 To be added.
 
 # The JSON config file.
-##Introduction
+## Introduction
 A .json config file is the sole config for all modules and scripts used. This is standard JSON; with a few Keywords specific to the software and sections. Maybe at some point in the future we might need to implement being able to have more than one .json config file that can be included from a central file. Something like and include feature.
 The config only has one mandatory section It looks like this:
 
@@ -71,7 +71,7 @@ The config only has one mandatory section It looks like this:
 + HOME_FOLDER: Where the backups software installation files live
 + (Optional) LOCAL_BACKUP: if the server needs to keep local backups, this is the folder where they will be kept.
 + LOG_FOLDER: Folder or to store logs or specific file name where to store the logs.
-###General tips to keep present:
+### General tips to keep present:
 + Every section is flexible to add as many parameters as the specific module to be execute needs.
 + The only section with a compulsory name is GENERAL, because it has parameters that are used by all the other modules. The rest of the executable modules can be called any name, as long a you use a few key words (from 0 to 3 depending on how special the module is; development language, path, executable name) that explain how to find and execute.
 + The config file is the same for windows and Linux, what changes is the OS specific parameters.
@@ -120,7 +120,7 @@ The plugins also need a config section similar to this:
         }
       }
 This is a working plugin that only calculates the size of the files to be backed up.
-###Other Current working sections and specific explanations
+### Other Current working sections and specific explanations
 **MySQL Dump:**
 
       "DBSBACKUP": {
@@ -200,7 +200,11 @@ Q: Does the AWS CLI validate checksums?¶
 The AWS CLI will perform checksum validation for uploading and downloading files in specific scenarios.
 Upload
 The AWS CLI will calculate and auto-populate the Content-MD5 header for both standard and multipart uploads. If the checksum that S3 calculates does not match the Content-MD5 provided, S3 will not store the object and instead will return an error message back the AWS CLI. The AWS CLI will retry this error up to 5 times before giving up. On the case that any files fail to transfer successfully to S3, the AWS CLI will exit with a non zero RC. See aws help returncodes for more information.
-LICENSE
+
+# LICENSE
+
+
+# Others
 UCLoud using sdk:
 + The script is able to do UCLOUD images of systems.
 + Nett to develop to make HDD snapshots.
@@ -222,8 +226,9 @@ Added here:
 send_sms.py 使用示范
 python send_sms.py "13777777777|137xxxxxxxx|138xxxxxxxx" "测试短信"
 #监控脚本示范建议加入crontab 1分钟一次
-Authors:
+
+# Authors:
 Abel Guzman
-Report bugs at:
+
+# Report bugs at:
 + abel.guzman@chinanetcloud.com
-+
