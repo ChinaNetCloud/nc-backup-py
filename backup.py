@@ -1,5 +1,5 @@
 import logging
-
+import time
 import sys
 
 # from logging.handlers import RotatingFileHandler
@@ -12,40 +12,39 @@ from execution.backup_execution import BackupExecutionLogic
 from communications.communications import Communications
 from tools.os_works import OSInformation
 
-
+command_object = backupCommands.feature_commands(backupCommands())
 os_name = OSInformation.isWindows()
 if (os_name):
     config_file_location = 'conf\\confw.json'
 else:
     import fcntl
-    config_file_location = 'conf/conf.json'
+    if not command_object.config:
+        config_file_location = 'conf/conf.json'
+    else:
+        config_file_location = command_object.config
 
 json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig(), config_file_location)
 logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', 10,
                                       json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
+# Set the backup as failed by default.
 successful_execution = False
-try:
-    command_object = backupCommands.feature_commands(backupCommands())
 
-except Exception as exceptio_reading_commands:
-    logger.critical('The main script did not manage to read the parameters passed by user Exited with: ')
-    successful_execution = False
-    execution_scripts_result = []
-
-
-# Allow only one process to run at the time
-pid_file = 'backup.pid'
-fp = open(pid_file, 'w')
-try:
-    fcntl.lockf(fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
-except IOError:
-    # another instance is running
-    not_multi_thread = 'There is already and instance of this process being executed.'
-    logger.critical(not_multi_thread)
-    print not_multi_thread
-    sys.exit(0)
+if (os_name):
+    print 'is windows'
+else:
+    # Allow only one process to run at the time
+    pid_file = 'backup.pid'
+    fp = open(pid_file, 'w')
+    try:
+        fcntl.lockf(fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except IOError:
+        # another instance is running
+        not_multi_thread = 'There is already and instance of this process being executed.'
+        logger.critical(not_multi_thread)
+        print not_multi_thread
+        sys.exit(0)
 
 
 if type(json_dict) is not str:
@@ -60,8 +59,8 @@ if type(json_dict) is not str:
         # print execution_scripts_result
         logger.info('Config itaration done')
         successful_execution = True
-
-    size_final = 'Empty'
+    # the size checkups should be removed from here in the future. Ned to think if a less decoupled way.
+    size_final = 'N/A' # Not aplicable, means the script does not have size.
     for script_result in execution_scripts_result:
         # print type(script_result[0])
         if type(script_result[0]) is dict:
@@ -86,6 +85,10 @@ if type(json_dict) is not str:
 
     logger.info('Sending report...')
 
+    # Here we send the report.
+    # It would be good to find a way to move this away from here
+    # so the script does not have to Report necesarity
+    #ALSO need to implement retries in e.g in 5, 20, 1h 4h, then fail (log everything)
     if successful_execution == True :
         status_backup = '0'
     else:
@@ -107,12 +110,34 @@ if type(json_dict) is not str:
         'error': '',
         'destination': storage_name
                  }
-    request_to_brt = Communications.send_post(Communications(), data_post)
-    logger.info('Report sent status: ' + str(request_to_brt.status_code) + ' <===> ' + request_to_brt.reason)
-    print 'Response from server:'
-    print (request_to_brt.status_code, request_to_brt.reason)
-    # else:
-    #     logger.critical('Execution Error before sending report.')
+    count=1
+    time_retry = 60
+    while count <= 5:
+        request_to_brt = Communications.send_post(Communications(), data_post)
+        logger.info('Report sent status: ' + str(request_to_brt.status_code) + ' <===> ' + request_to_brt.reason)
+        print 'Response from server:'
+        attempt_notification = 'Attempt: ' + str(count)
+        print attempt_notification
+        logger.info(attempt_notification)
+        print (request_to_brt.status_code, request_to_brt.reason)
+        # this should make the script wait for 60s (1min), 120s (2min), 360s (6min), 1440s (24min), 7200s (2h)
+        time_retry = time_retry * count
+        count = count + 1
+        if request_to_brt.status_code == 200:
+            break
+        elif request_to_brt.status_code != 200 and count is not 5:
+            attempt_failed_notification = 'The attempt to send report failed. Attempt number ' + \
+                                          str(count) + ' will be in: ' + str(time_retry/60) + ' minutes.'
+            print attempt_failed_notification
+            logger.warning(attempt_failed_notification)
+            time.sleep(time_retry)
+        elif count == 5 and request_to_brt.status_code != 200:
+            attempt_failed_notification = 'Last attempt to send report FAILED, please check connectivity to BRT'
+            print attempt_failed_notification
+            logger.critical(attempt_failed_notification)
+            exit(1)
+
+            # else:
 elif type(json_dict) is str:
     logger.critical('Execution Error with: ' + json_dict + command_object.config)
 else:

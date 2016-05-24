@@ -22,8 +22,9 @@ class FileBackups:
         parser_object = argparse.ArgumentParser()
         parser_object.add_argument('-i', '--FILESET_INCLUDE', type=str
                                    , help='Included fileset to backup', required=True)
-        parser_object.add_argument('-H', '--HOME_FOLDER', type=str
-                                   , help='Script home folder required(from where the master script runs)', required=True)
+        parser_object.add_argument('-H', '--HOME_FOLDER', type=str,
+                                   help='Script home folder required(from where the master script runs)',
+                                   required=True)
         parser_object.add_argument('-w', '--WORK_FOLDER', type=str
                                    , help='This is the folder to use for temporary files works', required=True)
         parser_object.add_argument('-C', '--COMPRESSION_CMD_CHAIN', type=str
@@ -39,7 +40,6 @@ class FileBackups:
     def file_backup_execution(self, filesets, destination='', excluded_filesets=''):
         """Execute the files tar and compression"""
         print 'Making a compressed copy of the local files to: ' + destination
-
         if excluded_filesets:
             print 'Backup objective(s): ' + filesets + '. Excluded files: ' + excluded_filesets
         else:

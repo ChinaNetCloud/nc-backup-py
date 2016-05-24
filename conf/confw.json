@@ -1,20 +1,19 @@
 {
   "GENERAL": {
-    "HOSTNAME": "srv-cnc-wintest",
-    "WORK_FOLDER": "c:\\backup",
-    "LOCAL_BACKUP": "c:\\backup\\local",
-    "HOME_FOLDER": "c:\\backup\\nc-backup-py",
-    "LOG_FOLDER": "c:\\backup\\nc-backup-py\\log\\ncbackup.log"
+    "HOSTNAME": "ryan_laptop",
+    "WORK_FOLDER": "d:\\Dev",
+    "LOCAL_BACKUP": "d:\\TestBackup",
+    "HOME_FOLDER": "d:\\Dev\\nc-backup-py",
+    "LOG_FOLDER": "d:\\Dev\\nc-backup-py\\log\\ncbackup.log"
     },
   "FILESET":{
     "ACTION": "execute",
     "NAME": "filesbackup",
     "EXECUTABLE": "",
     "EXECUTE_WITH": "python",
-    "EXECUTABLE": "",
     "PARAMETERS": {
-      "FILESET_INCLUDE": "c:\\TestSite c:\\Zabbix\\Log",
-      "FILESET_EXCLUDE": "c:\\Zabbix\\Log\\testexclude"
+      "FILESET_INCLUDE": "d:\\Testing d:\\TestPath\\TestA\\TestA.txt",
+      "FILESET_EXCLUDE": "d:\\Testing\\TestExclude"
     }
   },
   "STORAGE": {

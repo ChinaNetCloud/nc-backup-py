@@ -1,18 +1,18 @@
 {
-  "GENERAL": {
+  "GENERAL":{
     "HOSTNAME": "srv-yhouse-test1",
-    "WORK_FOLDER": "/Users/cncuser/Downloads/backup",
-    "LOCAL_BACKUP": "/Users/cncuser/Downloads/backup/local",
-    "HOME_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py",
-    "LOG_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log"
+    "WORK_FOLDER": "/home/ncadmin/backup",
+    "LOCAL_BACKUP": "/home/ncadmin/backup/local",
+    "HOME_FOLDER": "/home/ncadmin/nc-backup-py",
+    "LOG_FOLDER": "/home/ncadmin/nc-backup-py/log/ncbackup.log"
   },
   "UCLOUD_SNAPSHOT":{
     "ACTION": "execute",
     "NAME": "ucloud-sdk-python",
-    "EXECUTABLE": "host_image_run",
+    "EXECUTABLE": "host_image_run.py",
     "PARAMETERS": {
       "REGION": "cn-north-03",
-      "HOST_ID": "uhost-rep4lv"
+      "HOST_ID": "uhost-rep4lv OtherHostID"
     }
   }
 }

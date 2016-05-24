@@ -1,5 +1,6 @@
-import imp
-import sys
+#import imp
+#import sys
+import time
 
 
 from os import path
@@ -15,10 +16,16 @@ class BackupExecutionLogic:
     def iterate_config_script(self,json_dict, home, logger=None):
         c = 1
         result = []
+        start_time = time.time()
         for scripts_modules in json_dict:
-            log_sring = "Section " + str(c) + ": " + scripts_modules
+            log_sring = "Section " + str(c) + ": " + scripts_modules + '.'
             print log_sring
             logger.info(log_sring)
+            start_time = time.time()
+            # start_time = time.localtime()
+            # time_log = 'Start time: ' + str(start_time)
+            # print time_log
+            # logger.info(time_log)
             #select the script to execute
             result_message = []
             if scripts_modules != 'GENERAL':
@@ -28,13 +35,12 @@ class BackupExecutionLogic:
                     # print external_execution
                     if external_execution:
                         result_message.append(external_execution)
-            # print external_execution
-            # if external_execution:
             c += 1
             if result_message:
                 result.append(result_message)
-            # print 'AAAAA'
-            # print result
+            time_log_final = 'Execution time in seconds: ' + str(time.time() - start_time)
+            print time_log_final
+            logger.info(time_log_final)
         return result
 
     def __execute_selection_of_external_script(self,section ,json_dict, scripts_modules, home_folder, logger=None):
@@ -75,7 +81,7 @@ class BackupExecutionLogic:
                 logger.critical('Eddor Code: ' + str(out_put_exec[0]) + \
                                 ' StdOut: ' + out_put_exec[1] + \
                                 ' StdErr: ' + str(out_put_exec[2]))
-                exit(1)
+                # exit(1)
             elif out_put_exec[0] is 0:
                 logger.info('the execution was succesfull')
                 logger.info('StdOut: ' + out_put_exec[1])

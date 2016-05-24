@@ -21,13 +21,33 @@
       "FILESET_EXCLUDE": "/Users/cncuser/Documents/Trabajo /Users/cncuser/Documents/Install/ /Users/cncuser/Documents/Personal"
     }
   },
+  "DBSBACKUP": {
+    "ACTION": "execute",
+    "NAME": "mysql_backup",
+    "EXECUTABLE": "mysql_dump.py",
+    "EXECUTE_WITH": "python",
+    "PARAMETERS": {
+      "CREDENTIAL_PATH": "/Users/cncuser/Documents/py/nc-backup-py/conf/mysql.credentials",
+      "CONF_PATH": "/etc/my.cnf",
+      "DATA_DIR": "/usr/local/var/mysql",
+      "MY_INSTANCES": "3306",
+      "LOG": "/usr/local/var/mysql/Abel-Guzman-Sanchezs-MacBook-Air.local.err",
+      "BINLOG_PATH": "/usr/local/var/mysql/",
+      "BINLOG_FILE_PREFIX": "mysql-bin",
+      "DESTINATION": "/Users/cncuser/Downloads/backup",
+      "TAR_COMMAND": "sudo /usr/local/Cellar/gnu-tar/1.28/bin/tar czf ",
+      "MYSQL_DUMP_BINARY": "/usr/bin/mysql",
+      "MYSQL_BINARY": "/usr/bin/mysql",
+      "PREFIX_FOLDER": "mydump"
+    }
+  },
   "COMPRESSION": {
     "ACTION": "execute",
     "NAME": "compression",
     "EXECUTABLE": "",
     "EXECUTE_WITH": "",
     "PARAMETERS": {
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/files",
+      "OBJECTIVES": "/Users/cncuser/Downloads/backup/files /Users/cncuser/Downloads/backup/mydump",
       "DESTINATION": "/Users/cncuser/Downloads/backup/compressed",
       "REMOVE_OBJECTIVES": "True"
     }
@@ -58,7 +78,6 @@
     "PARAMETERS":{
       "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
       "DESTINATION":"s3",
-      "__options": "local,s3,ssh,oss",
       "BUCKET_NAME": "cncbackup",
       "UPLOAD_COMMAND": "aws s3 cp",
       "REMOVE_OBJECTIVES": "True"
