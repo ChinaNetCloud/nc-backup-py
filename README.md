@@ -1,15 +1,19 @@
--Project name: nc-backup-py.
+#Project nc-backup-py.
+
 The project has a main script that is executed by calling the following command:
+
 $ python backup.py -r -c /path/to/conf.json
 this command is able to perform all the backup tasks in sequential order according to the conf.json configuration file order.
--Executable Scripts:
+
+##Executable Scripts:
 + backup.py: Main script that can execute and control other scripts execution (needs arguments)
 + compression.py: compression script (needs arguments)
 + encryption.py Encryption and decryption script. (needs arguments)
 + filesbackup.py does backups of filesets with exclusions (needs arguments)
 + storage.py connects and saves files to different storages (done local and AWS S3). (needs arguments)
 + MySQl backup.
--Pending Scripts:
+
+##Pending Scripts:
 + mongo
 + reporting
 + OSS storage
@@ -18,48 +22,37 @@ this command is able to perform all the backup tasks in sequential order accordi
 + Windows compatibility:
 + Active directory backup
 + ms-sql backup.
--We also have available a module feature in the configs available through configuration as well. current modules:
+
+##Plugins
+-We also have available a module/plugin feature in the configs available through configuration as well. current modules:
 + tools/size_calculation.py: Size calculation
--Tools: every module or script include or make use of a set of tools included in tools folder.
+
+##Tools
+every module or script include or make use of a set of tools included in tools folder.
 + date_str_utils.py
 + filesystem_handling
 + os_works
 + requests_utils
 + size calculation (This is also a module)
-Requirements:
+
+##Requirements:
 -
 python 2.7
-Python modules
--requests
--Crypto (Actually Crypto.Cipher)
-python 2.6 also requires:
--argparse
-ROAD MAP:
--Storage (local DONE)
--Communications (reports basic DONE)
--clean ups
--DBS
--logs
-Bug:
-Issues:
-- TC_TIME env variable and other language related variable that might stop execution with CHinese and types of characters.
-- Current code should have create_preconfitions and delete_files moved to the new class filesystem_handling in tools
-Next Release:
--Scheduler
--Improve Flow control
--Other?
--Add hostname to logs.
-Done to be tested:
--Master
--Filesbackup
--Compression
--Pending Encryption
-Plugins:
--Should have 3 callable functions:
-+ config_plugin: Need to implement a way to pass arguments with something like *args
-+ works_execution: can only print stuff.
-You need to use the login features to work with it.
-+ output: output final result.
+
+###Python modules
++ requests
++ Crypto (Actually Crypto.Cipher)
+
+####python 2.6 also requires:
++argparse
+
+##ROAD MAP:
++ Storage (local DONE)
++ Communications (reports basic DONE)
++ clean ups
++ DBS
++ logs
+
 # The JSON config file.
 ##Introduction
 A .json config file is the sole config for all modules and scripts used. This is standard JSON; with a few Keywords specific to the software and sections. Maybe at some point in the future we might need to implement being able to have more than one .json config file that can be included from a central file. Something like and include feature.
