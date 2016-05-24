@@ -97,6 +97,7 @@ The following is a real working section that calls and executes external colde t
           "FILESET_EXCLUDE": "/Users/cncuser/Documents/Trabajo /Users/cncuser/Documents/Install/ /Users/cncuser/Documents/Personal"
         }
       }
+
 **Line by line explanation**
  "FILESET":{ Defines a section beginning, the name can be anything, but as a convention is good to give it a name according to it's content.
  "ACTION": "execute", The kay word ACTION says to the script the now I want to say what to do in the section, there are 2 possible options defined for now:
@@ -121,7 +122,9 @@ The plugins also need a config section similar to this:
       }
 This is a working plugin that only calculates the size of the files to be backed up.
 ### Other Current working sections and specific explanations
+
 **MySQL Dump:**
+
 
       "DBSBACKUP": {
         "ACTION": "execute",
