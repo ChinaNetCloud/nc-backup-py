@@ -1,6 +1,12 @@
 -Project name: nc-backup-py.
 
--Executable Script:
+The project has a main script that is executed by calling the following command:
+
+$ python backup.py -r -c /path/to/conf.json
+
+this scommand is able to perform all the backup tasks in secuential order according to the conf.json configuration file order.
+
+-Executable Scripts:
 
 + backup.py: Main script that can execute and control other scripts execution (needs arguments)
 + compression.py: compression script (needs arguments)
@@ -153,17 +159,13 @@ Upload
 The AWS CLI will calculate and auto-populate the Content-MD5 header for both standard and multipart uploads. If the checksum that S3 calculates does not match the Content-MD5 provided, S3 will not store the object and instead will return an error message back the AWS CLI. The AWS CLI will retry this error up to 5 times before giving up. On the case that any files fail to transfer successfully to S3, the AWS CLI will exit with a non zero RC. See aws help returncodes for more information.
 LICENSE
 
-Authors:
-Abel Guzman
+UCLoud using sdk:
++ The script is able to do UCLOUD images of systems.
++ Nett to develop to make HDD snapshots.
 
-Report bugs at:
-abel.guzman@chinanetcloud.com
-
-
-ucloud sdk:
-Abel Guzman added here:
-host_image_run.py
-hdd_snapshot_run.py
+Added here:
++ host_image_run.py
++ hdd_snapshot_run.py
 
 #使用方法
 
@@ -185,3 +187,10 @@ send_sms.py 使用示范
 python send_sms.py "13777777777|137xxxxxxxx|138xxxxxxxx" "测试短信"
 
 #监控脚本示范建议加入crontab 1分钟一次
+
+Authors:
+Abel Guzman
+
+Report bugs at:
++ abel.guzman@chinanetcloud.com
++
