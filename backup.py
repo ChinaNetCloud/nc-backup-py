@@ -24,6 +24,10 @@ else:
         config_file_location = command_object.config
 
 json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig(), config_file_location)
+if type(json_dict) is str:
+    print 'Unexpected error, the config file was supposed to be loaded in a dictionary. Got this instead:'
+    print json_dict
+    exit(1)
 logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', 10,
                                       json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
