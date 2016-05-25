@@ -1,44 +1,30 @@
 {
   "GENERAL": {
-    "HOSTNAME": "srv-nc-backup-py-test1",
-    "WORK_FOLDER": "/Users/cncuser/Downloads/backup",
-    "LOCAL_BACKUP": "/Users/cncuser/Downloads/backup/local",
-    "HOME_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py",
-    "LOG_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log"
+    "HOSTNAME": "srv-randy-test-db3",
+    "WORK_FOLDER": "/opt/backup2",
+    "LOCAL_BACKUP": "/opt/backup2/local",
+    "HOME_FOLDER": "/home/randy.yang/git/nc-backup-py",
+    "LOG_FOLDER": "/home/randy.yang/git/nc-backup-py/log/ncbackup.log"
     },
-  "SCHEDULE": {
-    "RUN1": "mon-sat",
-    "RUN2": "2nd-5th sun",
-    "RUN3": "1st sun"
-  },
-  "FILESET":{
-    "ACTION": "execute",
-    "NAME": "filesbackup",
-    "EXECUTE_WITH": "python",
-    "EXECUTABLE": "",
-    "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc /Users/cncuser/Documents/",
-      "FILESET_EXCLUDE": "/Users/cncuser/Documents/Trabajo /Users/cncuser/Documents/Install/ /Users/cncuser/Documents/Personal"
-    }
-  },
   "DBSBACKUP": {
     "ACTION": "execute",
     "NAME": "mysql_backup",
     "EXECUTABLE": "mysql_dump.py",
     "EXECUTE_WITH": "python",
     "PARAMETERS": {
-      "CREDENTIAL_PATH": "/Users/cncuser/Documents/py/nc-backup-py/conf/mysql.credentials",
+      "CREDENTIAL_PATH": "/opt/ncscripts/backup/key/mysql_backup.creds",
       "CONF_PATH": "/etc/my.cnf",
-      "DATA_DIR": "/usr/local/var/mysql",
+      "DATA_DIR": "/var/lib/mysql/data",
       "MY_INSTANCES": "3306",
-      "LOG": "/usr/local/var/mysql/Abel-Guzman-Sanchezs-MacBook-Air.local.err",
-      "BINLOG_PATH": "/usr/local/var/mysql/",
+      "BINLOG_PATH": "/var/lib/mysql/data",
       "BINLOG_FILE_PREFIX": "mysql-bin",
-      "DESTINATION": "/Users/cncuser/Downloads/backup",
-      "TAR_COMMAND": "sudo /usr/local/Cellar/gnu-tar/1.28/bin/tar czf ",
-      "MYSQL_DUMP_BINARY": "/usr/bin/mysql",
+      "DESTINATION": "/opt/backup2",
+      "TAR_COMMAND": "sudo /bin/tar czf",
+      "MYSQL_DUMP_BINARY": "/usr/bin/mysqldump",
       "MYSQL_BINARY": "/usr/bin/mysql",
-      "PREFIX_FOLDER": "mydump"
+      "PREFIX_FOLDER": "mydump",
+      "EXCLUDE_DB": "mysql",
+      "EXCLUDE_TABLE": "mysql.user mysql.func mysql.event"
     }
   },
   "COMPRESSION": {
@@ -47,49 +33,10 @@
     "EXECUTABLE": "",
     "EXECUTE_WITH": "",
     "PARAMETERS": {
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/files /Users/cncuser/Downloads/backup/mydump",
-      "DESTINATION": "/Users/cncuser/Downloads/backup/compressed",
+      "TAR_COMMAND": "sudo /bin/tar czCf /",
+      "OBJECTIVES": "/opt/backup2/mydump",
+      "DESTINATION": "/opt/backup2/compressed",
       "REMOVE_OBJECTIVES": "True"
-    }
-  },
-  "ENCRYPTION": {
-    "ACTION": "execute",
-    "NAME": "encryption",
-    "PARAMETERS": {
-      "KEY_FILE": "/Users/cncuser/Documents/py/nc-backup-py/conf/key_file",
-      "FILE_SIZE": "1",
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/compressed",
-      "DESTINATION":"/Users/cncuser/Downloads/backup/encrypted",
-      "REMOVE_OBJECTIVES": "True"
-    }
-  },
-  "SIZE":{
-    "ACTION": "load",
-    "FROM": "tools",
-    "FILENAME": "size_calculation",
-    "CLASS": "SizeCalculation",
-    "PARAMETERS": {
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted"
-    }
-  },
-  "STORAGE": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
-      "DESTINATION":"s3",
-      "BUCKET_NAME": "cncbackup",
-      "UPLOAD_COMMAND": "aws s3 cp",
-      "REMOVE_OBJECTIVES": "True"
-    }
-  },
-  "CLEANUP":{
-    "BUCKET": "cncbackup",
-    "PREFIX": "srv-nc-backup-py-test1/",
-    "KEEP": {
-      "DAILY": {"NUMBER": "7"},
-      "WEEKLY": {"NUMBER": "2", "DAY": "1"},
-      "MONTHLY": {"NUMBER": "2", "DAY": "1"}
     }
   }
 }
