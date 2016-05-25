@@ -131,11 +131,11 @@ if __name__ == "__main__":
                 # exit(0)
                 for file_to_add in only_files:
                     out_file_str = encryption_command.DESTINATION + '/' + datetime_string + '.tar.gz.crypt'
-                    with open(objective + '/' + file_to_add, 'rb') as in_file, \
-                            open(out_file_str, 'wb') as out_file, \
-                            open(encryption_command.KEY_FILE, 'r') as key_file:
-                        key_from_file =key_file.read().replace('\n', '')
-                        EncryptionWorks.encrypt(EncryptionWorks(), in_file, out_file,key_from_file)
+                    with open(objective + '/' + file_to_add, 'rb') as in_file:
+                        with open(out_file_str, 'wb') as out_file:
+                            with open(encryption_command.KEY_FILE, 'r') as key_file:
+                                key_from_file =key_file.read().replace('\n', '')
+                                EncryptionWorks.encrypt(EncryptionWorks(), in_file, out_file,key_from_file)
                     # Split only if requested
                     if encryption_command.FILE_SIZE is not None and int(encryption_command.FILE_SIZE) >= 1:
                         EncryptionWorks.split_binary_file(EncryptionWorks(),out_file_str,encryption_command.FILE_SIZE)
@@ -152,11 +152,11 @@ if __name__ == "__main__":
             datetime_string = time.strftime("%Y%m%d_%H%M%S")
 
             EncryptionWorks.cat_files(EncryptionWorks(), encryption_command.OBJECTIVES)
-            with open(encryption_command.OBJECTIVES, 'rb') as in_file, \
-                    open(encryption_command.DESTINATION, 'wb') as out_file, \
-                    open(encryption_command.KEY_FILE, 'r') as key_file:
-                key_from_file =key_file.read().replace('\n', '')
-                # print key_from_file
-                EncryptionWorks.decrypt(EncryptionWorks(), in_file, out_file, key_from_file)
-                # Compressed file is not a directory.
+            with open(encryption_command.OBJECTIVES, 'rb') as in_file:
+                with open(encryption_command.DESTINATION, 'wb') as out_file:
+                    with open(encryption_command.KEY_FILE, 'r') as key_file:
+                        key_from_file =key_file.read().replace('\n', '')
+                        # print key_from_file
+                        EncryptionWorks.decrypt(EncryptionWorks(), in_file, out_file, key_from_file)
+                        # Compressed file is not a directory.
 

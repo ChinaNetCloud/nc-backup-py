@@ -14,12 +14,13 @@ this command is able to perform all the backup tasks in sequential order accordi
 + MySQl backup.
 
 ## Pending Scripts:
+
 + mongo
 + reporting
 + OSS storage
 + snapshots for different storages.
 + clean up scripts for local and remote files.
-+ Windows compatibility:
++ Windows compatibility
 + Active directory backup
 + ms-sql backup.
 
