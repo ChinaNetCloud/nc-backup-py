@@ -6,8 +6,6 @@ import sys
 from os import listdir
 from os.path import isfile, join, isdir
 from hashlib import md5
-from Crypto.Cipher import AES
-from Crypto import Random
 
 
 class EncryptionWorks:
@@ -60,6 +58,7 @@ class EncryptionWorks:
         cipher = AES.new(key, AES.MODE_CBC, iv)
         next_chunk = ''
         finished = False
+        print in_file
         while not finished:
             chunk, next_chunk = next_chunk, cipher.decrypt(in_file.read(1024 * bs))
             if len(next_chunk) == 0:
@@ -83,10 +82,8 @@ class EncryptionWorks:
         # SubprocessExecution.print_output(SubprocessExecution(), execution_split)
 
     def split_binary_file(self, path_to_file, chunk_size):
-
         chunk_size =  int(chunk_size) * 1024 * 1024  # 500Mb  - max chapter size
         BUF = 50 * 1024 * 1024  # 50GB   - memory buffer size
-
         chapters = 0
         uglybuf = ''
         with open(path_to_file, 'rb') as src:
@@ -110,6 +107,7 @@ class EncryptionWorks:
         print command_cat
         cat_execution = SubprocessExecution.main_execution_function(SubprocessExecution(), command_cat)
         # SubprocessExecution.print_output(SubprocessExecution(), cat_execution)
+        return cat_execution
 
 if __name__ == "__main__":
     print "Encrypting/Decrypting files"
@@ -117,6 +115,8 @@ if __name__ == "__main__":
     sys.path.append(encryption_command.HOME_FOLDER)
     from execution.subprocess_execution import SubprocessExecution
     from tools.filesystem_handling import FilesystemHandling
+    from Crypto.Cipher import AES
+    from Crypto import Random
     if encryption_command.DECRYPT is None \
             or encryption_command.DECRYPT == '-e' \
             or encryption_command.DECRYPT == False:
@@ -148,10 +148,9 @@ if __name__ == "__main__":
 
     elif encryption_command.DECRYPT == '-d' or encryption_command.DECRYPT is True:
         if encryption_command.OBJECTIVES and encryption_command.DESTINATION:
-
             datetime_string = time.strftime("%Y%m%d_%H%M%S")
-
-            EncryptionWorks.cat_files(EncryptionWorks(), encryption_command.OBJECTIVES)
+            cat_execution_result = EncryptionWorks.cat_files(EncryptionWorks(), encryption_command.OBJECTIVES)
+            print cat_execution_result
             with open(encryption_command.OBJECTIVES, 'rb') as in_file:
                 with open(encryption_command.DESTINATION, 'wb') as out_file:
                     with open(encryption_command.KEY_FILE, 'r') as key_file:

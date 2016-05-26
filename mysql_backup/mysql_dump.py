@@ -102,13 +102,6 @@ class mydump:
 
     def run_backup(self,mysql_and_credentials, mysql_dump_and_credentials, DESTINATION, PREFIX, script_prefix,
                    MY_INSTANCE_NAME):
-     #   chain_exclude_dbs = ""
-     #   if self.args_list.EXCLUDE_DB.split():
-     #       list_dbs = self.args_list.EXCLUDE_DB.split()
-     #       for db in list_dbs:
-     #           chain_exclude_dbs += " --ignore"
-     #   else:
-     #       list_dbs = ""
         chain_exclude_tables = ""
         if self.args_list.EXCLUDE_TABLE.split():
             list_tables = self.args_list.EXCLUDE_TABLE.split()
@@ -136,13 +129,16 @@ class mydump:
                                          "--skip-add-drop-table --master-data=2 --dump-date --databases " + \
                      DB_NAME + chain_exclude_tables + "|sudo gzip > " + DESTINATION + "/" + PREFIX + "_" + script_prefix + \
                      "_" + MY_INSTANCE_NAME + "_" + DB_NAME+".sql.gz"
+            print command3
             command4=mysql_dump_and_credentials+" --opt --routines --triggers --events --flush-privileges " \
                                                 "--skip-add-drop-table --master-data=2 --single-transaction  " \
                                                 "--skip-add-locks --skip-lock-tables --dump-date --databases "\
                      + DB_NAME + chain_exclude_tables + " | sudo gzip > " + DESTINATION + "/" + PREFIX + "_" + script_prefix + "_" + \
                      MY_INSTANCE_NAME + "_" + DB_NAME + ".sql.gz"
+            print command4
             print "---- Backing up Instance: "+MY_INSTANCE_NAME+" Database : "+DB_NAME+" ---- "
             command5=mysql_and_credentials + " -e "+_SQL2+"|grep -v TABLE|wc -l"
+            print command5
             stdout2, stderr = Popen(command5, shell=True, stdout=PIPE, stderr=PIPE).communicate()
             if stdout2!=0:
                 print "---- "+DB_NAME+" has MYISAM TABLES , using DUMP backup method ---- "
@@ -184,11 +180,15 @@ def main():
         rotate_stdout,rotate_stderr=mydump_object.log_rotate(mysql_and_credentials)
         print rotate_stdout
         print rotate_stderr
+        if rotate_stderr:
+            exit(1)
         backup_stdout,backup_stderr=mydump_object.run_backup(mysql_and_credentials,mysql_dump_and_credentials,
                                                              mydump_object.DESTINATION,mydump_object.PREFIX_BACKUP,
                                                              mydump_object.script_prefix,MY_INSTANCE_NAME)
         print backup_stdout
         print backup_stderr
+        if backup_stderr:
+            exit(1)
         # print mydump_object.args_list.BINLOG_PATH + 'AAAAA'
         logbak_stdout,logbak_stderr=mydump_object.backup_logs(MYSQL_DATA_DIR,mydump_object.DESTINATION,
                                                               mydump_object.script_prefix,
