@@ -50,6 +50,14 @@ python 2.7
 
 To be added.
 
+# Installation
++ Clone repository: git clone -b master https://gitlab.service.chinanetcloud.com/backup/nc-backup-py.git
++ cd into the folder: cd nc-backup-py
++ Configure: follow the guide lines in the chapter called The JSON config file.
++ run: python backup.py -r -c /path/to/conf.json
++ Use log/ncbackup.log for troublesooting purposes.
+
+
 # The JSON config file.
 ## Introduction
 A .json config file is the sole config for all modules and scripts used. This is standard JSON; with a few Keywords specific to the software and sections. Maybe at some point in the future we might need to implement being able to have more than one .json config file that can be included from a central file. Something like and include feature.
@@ -208,6 +216,16 @@ Upload
 The AWS CLI will calculate and auto-populate the Content-MD5 header for both standard and multipart uploads. If the checksum that S3 calculates does not match the Content-MD5 provided, S3 will not store the object and instead will return an error message back the AWS CLI. The AWS CLI will retry this error up to 5 times before giving up. On the case that any files fail to transfer successfully to S3, the AWS CLI will exit with a non zero RC. See aws help returncodes for more information.
 
 # How to decrypt
+
+The encryption script is the same script used for decription. Is should be user as follows:
+
+python encryption/encryption.py -d --KEY_FILE "conf/key_file" --OBJECTIVES "/Users/cncuser/Downloads/backup/compressed" --DESTINATION "/Users/cncuser/Downloads/backup/encrypted" --HOME_FOLDER "/Users/cncuser/Documents/py/nc-backup-py"
+
++ -d: is to say we are decrypting.
++ --KEY_FILE "conf/key_file": is to indicate the path to the keyfile to used for decryption.
++ --OBJECTIVES "/path/to/file(s)": It's to say where are the encrypted files to be decrypted. if the download is more than one file they need to have names that start with the same partern; the software asumes you mean wild card (*) at the end.
++ --DESTINATION "path/and/name/of/tar.gz/file": this is the name and path that you want the resulting file to have after decryption
++ --HOME_FOLDER "/path/to/source/code/nc-backup-py": this is for the encryption script to know where the whole backups software is installed.
 
 # LICENSE
 

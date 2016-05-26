@@ -6,6 +6,8 @@ import sys
 from os import listdir
 from os.path import isfile, join, isdir
 from hashlib import md5
+from Crypto.Cipher import AES
+from Crypto import Random
 
 
 class EncryptionWorks:
@@ -115,8 +117,7 @@ if __name__ == "__main__":
     sys.path.append(encryption_command.HOME_FOLDER)
     from execution.subprocess_execution import SubprocessExecution
     from tools.filesystem_handling import FilesystemHandling
-    from Crypto.Cipher import AES
-    from Crypto import Random
+
     if encryption_command.DECRYPT is None \
             or encryption_command.DECRYPT == '-e' \
             or encryption_command.DECRYPT == False:
