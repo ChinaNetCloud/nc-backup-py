@@ -82,14 +82,14 @@ class mydump:
             credential_file=self.args_list.CREDENTIAL_PATH.split()[0]
             MYSQL_DATA_DIR=self.args_list.DATA_DIR.split()[0]
             print "---- MySQL Instance Data Dir: "+MYSQL_DATA_DIR+" ----"
-            mysql_dump_and_credentials="sudo mysqldump --defaults-extra-file="+credential_file
-            mysql_and_credentials = "sudo mysql --defaults-extra-file="+credential_file
+            mysql_dump_and_credentials="sudo " + self.mysql_dump_binary + " --defaults-extra-file="+credential_file
+            mysql_and_credentials = "sudo " + self.MYSQL + " --defaults-extra-file="+credential_file
         else:
             credential_file=self.args_list.CREDENTIAL_PATH.split()[0]
             MYSQL_DATA_DIR=self.args_list.DATA_DIR.split()[1]
             print "---- MySQL Instance Data Dir: "+MYSQL_DATA_DIR+" ----"
-            mysql_dump_and_credentials="sudo mysqldump --defaults-extra-file="+credential_file
-            mysql_and_credentials = "sudo mysql --defaults-extra-file=" + credential_file
+            mysql_dump_and_credentials="sudo " + self.mysql_dump_binary + " --defaults-extra-file="+credential_file
+            mysql_and_credentials = "sudo " + self.MYSQL + " --defaults-extra-file=" + credential_file
         return MYSQL_DATA_DIR,mysql_dump_and_credentials, mysql_and_credentials
 
     def log_rotate(self,mysql_and_credentials):
@@ -176,7 +176,7 @@ def main():
         print "---- Processing instance: "+MY_INSTANCE_NAME+" ----"
 
         MYSQL_DATA_DIR,mysql_dump_and_credentials,mysql_and_credentials=mydump_object.get_instanceinfo(MY_INSTANCE_NAME)
-
+        # print (MYSQL_DATA_DIR,mysql_dump_and_credentials,mysql_and_credentials)
         rotate_stdout,rotate_stderr=mydump_object.log_rotate(mysql_and_credentials)
         print rotate_stdout
         print rotate_stderr
