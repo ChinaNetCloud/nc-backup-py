@@ -6,11 +6,6 @@
     "HOME_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py",
     "LOG_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log"
     },
-  "SCHEDULE": {
-    "RUN1": "mon-sat",
-    "RUN2": "2nd-5th sun",
-    "RUN3": "1st sun"
-  },
   "FILESET":{
     "ACTION": "execute",
     "NAME": "filesbackup",
@@ -31,14 +26,15 @@
       "CONF_PATH": "/etc/my.cnf",
       "DATA_DIR": "/usr/local/var/mysql",
       "MY_INSTANCES": "3306",
-      "LOG": "/usr/local/var/mysql/Abel-Guzman-Sanchezs-MacBook-Air.local.err",
-      "BINLOG_PATH": "/usr/local/var/mysql/",
+      "BINLOG_PATH": "/usr/local/var/mysql",
       "BINLOG_FILE_PREFIX": "mysql-bin",
       "DESTINATION": "/Users/cncuser/Downloads/backup",
-      "TAR_COMMAND": "sudo /usr/local/Cellar/gnu-tar/1.28/bin/tar czf ",
-      "MYSQL_DUMP_BINARY": "/usr/bin/mysql",
-      "MYSQL_BINARY": "/usr/bin/mysql",
-      "PREFIX_FOLDER": "mydump"
+      "TAR_COMMAND": "sudo /usr/local/Cellar/gnu-tar/1.28/bin/tar czf",
+      "MYSQL_DUMP_BINARY": "/usr/local/bin/mysqldump",
+      "MYSQL_BINARY": "/usr/local/bin/mysql",
+      "PREFIX_FOLDER": "mydump",
+      "EXCLUDE_DB": "mysql",
+      "EXCLUDE_TABLE": "mysql.user mysql.func mysql.event"
     }
   },
   "COMPRESSION": {
@@ -47,17 +43,18 @@
     "EXECUTABLE": "",
     "EXECUTE_WITH": "",
     "PARAMETERS": {
+      "TAR_COMMAND": "sudo /usr/local/Cellar/gnu-tar/1.28/bin/tar czCf /",
       "OBJECTIVES": "/Users/cncuser/Downloads/backup/files /Users/cncuser/Downloads/backup/mydump",
       "DESTINATION": "/Users/cncuser/Downloads/backup/compressed",
       "REMOVE_OBJECTIVES": "True"
     }
   },
-  "ENCRYPTION": {
+    "ENCRYPTION": {
     "ACTION": "execute",
     "NAME": "encryption",
     "PARAMETERS": {
       "KEY_FILE": "/Users/cncuser/Documents/py/nc-backup-py/conf/key_file",
-      "FILE_SIZE": "1",
+      "FILE_SIZE": "4",
       "OBJECTIVES": "/Users/cncuser/Downloads/backup/compressed",
       "DESTINATION":"/Users/cncuser/Downloads/backup/encrypted",
       "REMOVE_OBJECTIVES": "True"

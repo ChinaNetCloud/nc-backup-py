@@ -35,6 +35,10 @@ class mydump:
             self.MYSQL = self.args_list.MYSQL_BINARY
         else:
             self.MYSQL = "/usr/bin/mysql"
+        if self.args_list.TAR_COMMAND:
+            self.tar_command = self.args_list.TAR_COMMAND
+        else:
+            self.tar_command = 'sudo /bin/tar czf'
         self.DESTINATION = self.args_list.DESTINATION + '/'+self.script_prefix
         self.PREFIX_BACKUP = time.strftime('%Y%m%d',time.localtime(time.time())) + "_"+self.args_list.HOSTNAME
         if self.DESTINATION:
@@ -61,29 +65,31 @@ class mydump:
                                    required=True,action="store")
         parser_object.add_argument('--DATA_DIR', type=str, help='Data dir path', required=True,action="store")
         parser_object.add_argument('--MY_INSTANCES', type=str, help='Instance port', required=True,action="store")
-        parser_object.add_argument('--LOG', type=str, help='Log path', required=True,action="store")
         parser_object.add_argument('--BINLOG_PATH', type=str, help='Bin Log folder', required=True, action="store")
         parser_object.add_argument('--BINLOG_FILE_PREFIX', type=str, help='Bin Log file prefix',
                                    required=True, action='store')
         parser_object.add_argument('--MYSQL_DUMP_BINARY',type=str, help='MySQL Dump Binarey',  required=False)
         parser_object.add_argument('--MYSQL_BINARY', type=str, help='MySQL Binarey', required=False)
         parser_object.add_argument('--PREFIX_FOLDER', type=str, help='Prefix or folder to use', required=False)
+        parser_object.add_argument('--TAR_COMMAND', type=str, help='tar command to use', required=False)
+        parser_object.add_argument('--EXCLUDE_DB', type=str, help='exclude database', required=False)
+        parser_object.add_argument('--EXCLUDE_TABLE', type=str, help='exclude database table', required=False)
         args_list, unknown = parser_object.parse_known_args()
         return args_list
 
     def get_instanceinfo(self,MY_INSTANCE_NAME):
         if MY_INSTANCE_NAME=="3306":
-            credential_file=self.args_list.CREDENTIAL_PATH[0]
-            MYSQL_DATA_DIR=self.args_list.DATA_DIR[0]
+            credential_file=self.args_list.CREDENTIAL_PATH.split()[0]
+            MYSQL_DATA_DIR=self.args_list.DATA_DIR.split()[0]
             print "---- MySQL Instance Data Dir: "+MYSQL_DATA_DIR+" ----"
-            mysql_dump_and_credentials="sudo mysqldump --defaults-extra-file="+credential_file
-            mysql_and_credentials = "sudo mysql --defaults-extra-file="+credential_file
+            mysql_dump_and_credentials = self.mysql_dump_binary + " --defaults-extra-file="+credential_file
+            mysql_and_credentials = self.MYSQL + " --defaults-extra-file="+credential_file
         else:
-            credential_file=self.args_list.CREDENTIAL_PATH[1]
-            MYSQL_DATA_DIR=self.args_list.DATA_DIR[1]
+            credential_file=self.args_list.CREDENTIAL_PATH.split()[0]
+            MYSQL_DATA_DIR=self.args_list.DATA_DIR.split()[1]
             print "---- MySQL Instance Data Dir: "+MYSQL_DATA_DIR+" ----"
-            mysql_dump_and_credentials="sudo mysqldump --defaults-extra-file="+credential_file
-            mysql_and_credentials = "sudo mysql --defaults-extra-file=" + credential_file
+            mysql_dump_and_credentials = self.mysql_dump_binary + " --defaults-extra-file="+credential_file
+            mysql_and_credentials = self.MYSQL + " --defaults-extra-file=" + credential_file
         return MYSQL_DATA_DIR,mysql_dump_and_credentials, mysql_and_credentials
 
     def log_rotate(self,mysql_and_credentials):
@@ -96,23 +102,43 @@ class mydump:
 
     def run_backup(self,mysql_and_credentials, mysql_dump_and_credentials, DESTINATION, PREFIX, script_prefix,
                    MY_INSTANCE_NAME):
+        chain_exclude_tables = ""
+        if self.args_list.EXCLUDE_TABLE:
+            list_tables = self.args_list.EXCLUDE_TABLE.split()
+            for table in list_tables:
+                chain_exclude_tables += " --ignore-table=" + table
+        else:
+            list_tables = ""
+            chain_exclude_tables = ""
+        
         command1=mysql_and_credentials + " -e 'show databases' | sed '/Database/d' | grep -v 'information_schema' " \
                                          "| grep -v 'performance_schema'"
         stdout, stderr = Popen(command1, shell=True, stdout=PIPE, stderr=PIPE).communicate()
-        for DB_NAME in stdout.split('\n')[:-1]:
+        db_all = stdout.split('\n')[:-1]
+        chain_exclude_dbs = ""
+        if self.args_list.EXCLUDE_DB:
+            list_dbs = self.args_list.EXCLUDE_DB.split()
+        else:
+            list_dbs = []
+        i = None
+        db_include = [ i for i in db_all if i not in list_dbs ]
+        for DB_NAME in db_include:
             _SQL2="\"USE information_schema; SELECT TABLE_NAME FROM TABLES WHERE TABLE_SCHEMA='" + \
                   DB_NAME + "' AND TABLE_TYPE= 'BASE TABLE' AND ENGINE NOT like 'innodb';\""
             command3=mysql_dump_and_credentials+" --opt --routines --triggers --events --flush-privileges " \
                                          "--skip-add-drop-table --master-data=2 --dump-date --databases " + \
-                     DB_NAME + "|sudo gzip > " + DESTINATION + "/" + PREFIX + "_" + script_prefix + \
+                     DB_NAME + chain_exclude_tables + "| gzip > " + DESTINATION + "/" + PREFIX + "_" + script_prefix + \
                      "_" + MY_INSTANCE_NAME + "_" + DB_NAME+".sql.gz"
+            print command3
             command4=mysql_dump_and_credentials+" --opt --routines --triggers --events --flush-privileges " \
                                                 "--skip-add-drop-table --master-data=2 --single-transaction  " \
                                                 "--skip-add-locks --skip-lock-tables --dump-date --databases "\
-                     + DB_NAME + " | sudo gzip > " + DESTINATION + "/" + PREFIX + "_" + script_prefix + "_" + \
+                     + DB_NAME + chain_exclude_tables + " | gzip > " + DESTINATION + "/" + PREFIX + "_" + script_prefix + "_" + \
                      MY_INSTANCE_NAME + "_" + DB_NAME + ".sql.gz"
+            print command4
             print "---- Backing up Instance: "+MY_INSTANCE_NAME+" Database : "+DB_NAME+" ---- "
             command5=mysql_and_credentials + " -e "+_SQL2+"|grep -v TABLE|wc -l"
+            print command5
             stdout2, stderr = Popen(command5, shell=True, stdout=PIPE, stderr=PIPE).communicate()
             if stdout2!=0:
                 print "---- "+DB_NAME+" has MYISAM TABLES , using DUMP backup method ---- "
@@ -128,14 +154,11 @@ class mydump:
         j=""
         command6="ls -l "+MYSQL_DATA_DIR+"| grep 'mysql-bin' | awk '{ print $NF }'"
 
-        if BINLOG_PATH[-1] != '/':
-            print 'The path to the folder needs to end in /'
-            BINLOG_PATH = BINLOG_PATH + '/'
         stdout6, stderr6 = Popen(command6, shell=True, stdout=PIPE, stderr=PIPE).communicate()
         for i in stdout6.split('\n')[:-1]:
             j=j+" "+MYSQL_DATA_DIR+i
-        command7="sudo /usr/local/Cellar/gnu-tar/1.28/bin/tar czf " + str(DESTINATION) + "/" + str(script_prefix) \
-                 + "_" + str(MY_INSTANCE_NAME) +".bin-log.gz " + BINLOG_PATH + '/' + BINLOG_FILE_PREFIX + '.*'
+        command7=self.tar_command + ' ' + str(DESTINATION) + "/" + str(script_prefix) \
+                 + "_" + str(MY_INSTANCE_NAME) +".bin-log.gz " + BINLOG_PATH + "/" + BINLOG_FILE_PREFIX + '.*'
         print command7
         logbak_stdout,logbak_stderr=Popen(command7, shell=True, stdout=PIPE, stderr=PIPE).communicate()
 
@@ -144,24 +167,28 @@ class mydump:
 
 def main():
 
-    saveout = sys.stdout
+    #saveout = sys.stdout
     mydump_object=mydump()
-    sys.out=mydump_object.args_list.LOG
+    #sys.out=mydump_object.args_list.LOG
 
     for MY_INSTANCE_NAME in mydump_object.args_list.MY_INSTANCES.split(','):
 
         print "---- Processing instance: "+MY_INSTANCE_NAME+" ----"
 
         MYSQL_DATA_DIR,mysql_dump_and_credentials,mysql_and_credentials=mydump_object.get_instanceinfo(MY_INSTANCE_NAME)
-
+        # print (MYSQL_DATA_DIR,mysql_dump_and_credentials,mysql_and_credentials)
         rotate_stdout,rotate_stderr=mydump_object.log_rotate(mysql_and_credentials)
         print rotate_stdout
         print rotate_stderr
+        if rotate_stderr:
+            exit(1)
         backup_stdout,backup_stderr=mydump_object.run_backup(mysql_and_credentials,mysql_dump_and_credentials,
                                                              mydump_object.DESTINATION,mydump_object.PREFIX_BACKUP,
                                                              mydump_object.script_prefix,MY_INSTANCE_NAME)
         print backup_stdout
         print backup_stderr
+        if backup_stderr:
+            exit(1)
         # print mydump_object.args_list.BINLOG_PATH + 'AAAAA'
         logbak_stdout,logbak_stderr=mydump_object.backup_logs(MYSQL_DATA_DIR,mydump_object.DESTINATION,
                                                               mydump_object.script_prefix,
@@ -170,7 +197,7 @@ def main():
                                                               mydump_object.args_list.BINLOG_FILE_PREFIX)
         print logbak_stdout
         print logbak_stderr
-    sys.stdout=saveout
+    #sys.stdout=saveout
 
 
 

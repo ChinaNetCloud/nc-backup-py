@@ -106,7 +106,7 @@ if __name__ == "__main__":
         from tools.os_works import OSInformation
         print "Parameters in use, Fileset: " + command_object.FILESET_INCLUDE
         print 'Work Folder: ' + command_object.WORK_FOLDER
-        print 'Files and folders to exclude:' + command_object.FILESET_EXCLUDE
+        print 'Files and folders to exclude:' + str(command_object.FILESET_EXCLUDE)
 
         files_backup_execution = FileBackups.file_backup_execution(FileBackups(command_object.COMPRESSION_CMD_CHAIN
                                                                       , command_object.SUDO_COMMAND)

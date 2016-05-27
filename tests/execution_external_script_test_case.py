@@ -9,4 +9,5 @@ import config_test
 class ExecuteExternalScriptTestCase (unittest.TestCase):
     # To be implemented.
     def test_invalid_path_given_in_config(self):
+        print 'Pending ExecuteExternalScriptTestCase'
         self.assertEqual(1,1)

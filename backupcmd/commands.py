@@ -9,7 +9,6 @@ class backupCommands:
         group_run.add_argument('-t', '--test', help='Test run script',
                                    action="store_true")
         parser_object.add_argument('-c', '--config', type=str, help='Configuration file path', required=True)
-        #  -c /var/www/py/nc-backup-py/conf/conf.json
 
         args_list = parser_object.parse_args()
         return args_list

@@ -22,21 +22,23 @@ class Storage:
 
 
 class AWSS3(Storage):
-    def __init__(self, home_path):
+    def __init__(self, home_path=''):
         self.__home_path = home_path
         # self.__subprocess_upload = SubprocessExecution()
 
     def list_content(self):
         print "Listing directory content"
 
-    def upload_content(self, mypath_to_dir, bucket, client_host_name, upload_command='aws s3 cp', remove_objective='False'):
+    def upload_content(self, mypath_to_dir, bucket, client_host_name, upload_command='aws s3 cp',
+                       remove_objective='False'):
         print 'Uploading to storage S3'
         files_to_upload = [f for f in listdir(mypath_to_dir) if isfile(join(mypath_to_dir, f))]
         sys.path.append(self.__home_path)
         from execution.subprocess_execution import SubprocessExecution
         execution_message = []
         for file_to_upload in files_to_upload:
-            aws_command = upload_command + ' '+ mypath_to_dir + '/' + file_to_upload + ' s3://'+ bucket + '/' + client_host_name + '/' + file_to_upload
+            aws_command = upload_command + ' '+ mypath_to_dir + '/' + file_to_upload + ' s3://'+ bucket + '/' \
+                          + client_host_name + '/' + file_to_upload
             count = 1
             time_retry = 60
             while count <= 5:
@@ -57,11 +59,31 @@ class AWSS3(Storage):
                 count = count + 1
             execution_message.append(tmp_execution_message)
         if remove_objective == 'True':
-            execution_message.append(SubprocessExecution.main_execution_function(SubprocessExecution(), 'rm -rf ' + mypath_to_dir))
+            execution_message.append(SubprocessExecution.main_execution_function(SubprocessExecution(),
+                                                                                 'rm -rf ' + mypath_to_dir))
         return execution_message
 
     def remove_content(self):
         print 'S3: removing files from storage'
+
+    def check_size_content(self):
+        print 'checking the files size'
+
+class AliyunOSS(Storage):
+    def __init__(self, home_path=''):
+        self.__home_path = home_path
+        # self.__subprocess_upload = SubprocessExecution()
+
+    def list_content(self):
+        print "Listing directory content"
+
+    def upload_content(self, mypath_to_dir, bucket, client_host_name, upload_command='alicmd  --upload',
+                       remove_objective='False'):
+        print 'Trying uploading to Aliyun OSS bucket'
+
+    def remove_content(self):
+        print 'S3: removing files from storage'
+
 
     def check_size_content(self):
         print 'checking the files size'
