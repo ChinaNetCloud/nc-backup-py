@@ -39,7 +39,7 @@ if (os_name):
     print 'is windows'
 else:
     # Allow only one process to run at the time
-    pid_file = 'backup.pid'
+    pid_file = json_dict['GENERAL']['HOME_FOLDER'] + '/backup.pid'
     fp = open(pid_file, 'w')
     try:
         fcntl.lockf(fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -124,10 +124,12 @@ if type(json_dict) is not str:
         print attempt_notification
         logger.info(attempt_notification)
         print (request_to_brt.status_code, request_to_brt.reason)
+        logger.info('Server response: ' + str(request_to_brt.status_code) + ' ' + str(request_to_brt.reason))
         # this should make the script wait for 60s (1min), 120s (2min), 360s (6min), 1440s (24min), 7200s (2h)
         time_retry = time_retry * count
         count = count + 1
         if request_to_brt.status_code == 200:
+            logger.info('Sent')
             break
         elif request_to_brt.status_code != 200 and count is not 5:
             attempt_failed_notification = 'The attempt to send report failed. Attempt number ' + \
@@ -150,13 +152,23 @@ else:
 logger.info('Execution ends here.')
 logger = logging.getLogger('ncbackup')
 
-def create_timed_rotating_log(path, logger):
-    """"""
-    logger = logging.getLogger('Rotating Logs')
-    logger.setLevel(logging.INFO)
-    # handler = RotatingFileHandler(path, maxBytes=9192, backupCount=5)
-    handler = TimedRotatingFileHandler(path, 'midnight', 1)
-    logger.addHandler(handler)
-    logger.info('Logs rotated')
 
-create_timed_rotating_log(json_dict['GENERAL']['LOG_FOLDER'], logger)
+from execution.subprocess_execution import SubprocessExecution
+command_rotatelogs = 'mv ' + json_dict['GENERAL']['LOG_FOLDER'] + ' ' + \
+                     json_dict['GENERAL']['LOG_FOLDER'] +'1'
+execution_rotation_result = SubprocessExecution.main_execution_function(SubprocessExecution(), command_rotatelogs, True)
+print execution_rotation_result
+# command_rotatelogs = 'rm ' + json_dict['GENERAL']['LOG_FOLDER'] + '1'
+# execution_rotation_result = SubprocessExecution.main_execution_function(SubprocessExecution(), command_rotatelogs, True)
+# print execution_rotation_result
+# def create_timed_rotating_log(path, logger):
+#     """"""
+#     logger = logging.getLogger('Rotating Logs')
+#     logger.setLevel(logging.INFO)
+#     # handler = RotatingFileHandler(path, maxBytes=9192, backupCount=5)
+#     handler = TimedRotatingFileHandler(path, when="h",
+#                                         interval=1 , backupCount=5)
+#     logger.addHandler(handler)
+#     logger.info('Logs rotated')
+
+# create_timed_rotating_log(json_dict['GENERAL']['LOG_FOLDER'], logger)

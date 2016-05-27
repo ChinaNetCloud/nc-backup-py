@@ -1,5 +1,4 @@
 # Project nc-backup-py.
-
 The project has a main script that is executed by calling the following command:
 
 $ python backup.py -r -c /path/to/conf.json
