@@ -6,18 +6,6 @@ import sys
 
 class FileBackups:
 
-    def __init__(self, tar_program='/usr/local/Cellar/gnu-tar/1.28/bin/tar czCf /', sudo_command='/usr/bin/sudo'):
-        if tar_program=='' or tar_program is None:
-            tar_program='/usr/local/Cellar/gnu-tar/1.28/bin/tar czCf /'
-        if sudo_command=='' or sudo_command is None:
-            sudo_command='/usr/bin/sudo'
-        self.__tar_program = tar_program
-        self.__sudo_command = sudo_command
-
-    # @staticmethod
-    # def files_backup():
-    #     print "Executing files backup"
-
     def file_backup_commands(self):
         parser_object = argparse.ArgumentParser()
         parser_object.add_argument('-i', '--FILESET_INCLUDE', type=str
@@ -29,15 +17,15 @@ class FileBackups:
                                    , help='This is the folder to use for temporary files works', required=True)
         parser_object.add_argument('-C', '--COMPRESSION_CMD_CHAIN', type=str
                                    , help='This is the compression command software and it''s parameters', required=False)
-        parser_object.add_argument('-s', '--SUDO_COMMAND', type=str
-                                   , help='Sudo command',
+        parser_object.add_argument('-T', '--TAR_COMMAND', type=str
+                                   , help='Tar command',
                                    required=False)
         parser_object.add_argument('-e', '--FILESET_EXCLUDE', type=str
                                    , help='Files not to be included', required=False)
         args_list, unknown = parser_object.parse_known_args()
         return args_list
 
-    def file_backup_execution(self, filesets, destination='', excluded_filesets=''):
+    def file_backup_execution(self, filesets, destination='', excluded_filesets='', tar_command=''):
         """Execute the files tar and compression"""
         print 'Making a compressed copy of the local files to: ' + destination
         if excluded_filesets:
@@ -75,7 +63,7 @@ class FileBackups:
                 sys.stderr.write('Execution as root is not allowed the GID for this user can not be 0')
                 exit(1)
             else:
-                tar_command = self.__sudo_command + ' ' + self.__tar_program + ' ' + destination + '/files/filesbackup_' \
+                tar_command = tar_command + ' ' + destination + '/files/filesbackup_' \
                               + datetime_string + '.tar.gz ' + filesets + excluded_files
                 # print tar_command
                 if not os.path.isdir(destination + '/files'):
@@ -107,12 +95,11 @@ if __name__ == "__main__":
         print "Parameters in use, Fileset: " + command_object.FILESET_INCLUDE
         print 'Work Folder: ' + command_object.WORK_FOLDER
         print 'Files and folders to exclude:' + str(command_object.FILESET_EXCLUDE)
-
-        files_backup_execution = FileBackups.file_backup_execution(FileBackups(command_object.COMPRESSION_CMD_CHAIN
-                                                                      , command_object.SUDO_COMMAND)
-                                                          , command_object.FILESET_INCLUDE
-                                                          , command_object.WORK_FOLDER, command_object.FILESET_EXCLUDE)
-        # if files_backup_execution =:
-        #     exit(0)
-        # else:
-        #     exit(1)
+        if command_object.TAR_COMMAND:
+            tar_command = command_object.TAR_COMMAND
+        else:
+            tar_command = 'sudo /bin/tar czCf /'
+        FileBackups.file_backup_execution(FileBackups(),
+                                          command_object.FILESET_INCLUDE,
+                                          command_object.WORK_FOLDER,
+                                          command_object.FILESET_EXCLUDE, tar_command)

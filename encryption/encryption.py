@@ -151,6 +151,9 @@ if __name__ == "__main__":
     if encryption_command.DECRYPT is None \
             or encryption_command.DECRYPT == '-e' \
             or encryption_command.DECRYPT == False:
+        if not isfile(encryption_command.KEY_FILE):
+            print 'The encription key file was NOT found at: ' + encryption_command.KEY_FILE
+            exit(1)
         if encryption_command.OBJECTIVES and encryption_command.DESTINATION:
             FilesystemHandling.create_directory(encryption_command.DESTINATION)
             objectives_to_encrypt = encryption_command.OBJECTIVES.split(' ')
@@ -189,17 +192,22 @@ if __name__ == "__main__":
             datetime_string = time.strftime("%Y%m%d_%H%M%S")
             if not encryption_command.OBJECTIVES.endswith('000'):
                 cat_execution_result = EncryptionWorks.cat_files(EncryptionWorks(), encryption_command.OBJECTIVES)
+                with open(encryption_command.OBJECTIVES, 'rb') as in_file:
+                    with open(cat_execution_result, 'wb') as out_file:
+                        with open(encryption_command.KEY_FILE, 'r') as key_file:
+                            key_from_file = key_file.read().replace('\n', '')
+                            EncryptionWorks.decrypt(EncryptionWorks(), in_file, out_file, key_from_file, 32,
+                                                    encryption_command.HOME_FOLDER)
+                        # Compressed file is not a directory.
             else:
                 result_name = encryption_command.OBJECTIVES.replace('.000', '')
                 cat_execution_result = SubprocessExecution.main_execution_function(SubprocessExecution(),
                                                                                    'mv ' + encryption_command.OBJECTIVES + ' ' + result_name)
-            # print cat_execution_result
-            with open(encryption_command.OBJECTIVES, 'rb') as in_file:
-                with open(cat_execution_result, 'wb') as out_file:
-                    with open(encryption_command.KEY_FILE, 'r') as key_file:
-                        key_from_file =key_file.read().replace('\n', '')
-                        # print key_from_file
-                        # print in_file, out_file, key_from_file
-                        EncryptionWorks.decrypt(EncryptionWorks(), in_file, out_file, key_from_file, 32, encryption_command.HOME_FOLDER)
-                        # Compressed file is not a directory.
+
+                with open(result_name, 'rb') as in_file:
+                    with open(encryption_command.DESTINATION, 'wb') as out_file:
+                        with open(encryption_command.KEY_FILE, 'r') as key_file:
+                            key_from_file =key_file.read().replace('\n', '')
+                            EncryptionWorks.decrypt(EncryptionWorks(), in_file, out_file, key_from_file, 32, encryption_command.HOME_FOLDER)
+                            # Compressed file is not a directory.
 

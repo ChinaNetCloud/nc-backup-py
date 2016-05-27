@@ -40,17 +40,34 @@ python 2.7
 
 ### Python modules
 + requests
-+ Crypto
++ Crypto (Only for python 2.7)
 + argparse
++ simplejson (Only for python 2.6)
+
+
++ For AWS backups:
+    - awscli
++ Other requirements (Optionals). This are required if you need to install some of the dependencies, but they are not software requirements.
+    - git
+    - pip
 
 ## ROAD MAP
 To be added.
 
 # Installation
++ Check that you have the requirements installed (Check the requirements section) on your Server.
 + Clone repository: git clone -b master https://gitlab.service.chinanetcloud.com/backup/nc-backup-py.git
-+ cd into the folder: cd nc-backup-py
-+ Configure: follow the guide lines in the chapter called The JSON config file.
-+ run: python backup.py -r -c /path/to/conf.json
++ Call (cd) into the folder: cd nc-backup-py
++ Configure: follow the guide lines in the chapter called The JSON config file. the confignfile is in conf/conf.json, but you can create your own with a custom name if wanted.
++ Configure credentails accordingly; if Db server, create credentials file, create encription key, etc.
++ Create log directory (No need to create the file, but you need to specify the path to the file in the configs). This needs to be fixed.
++ add the following to sudoers configurations. Courl be here: /etc/sodoers:
+
+        Defaults:ncbackup !requiretty
+        Cmnd_Alias NCBACKUP = /bin/tar czCf / [A-z_/ ]* , /usr/bin/find, /bin/tar czf [A-z_/ ]*
+        ncbackup ALL = NOPASSWD: NCBACKUP
+
++ Run: python backup.py -r -c /path/to/conf.json
 + Use log/ncbackup.log for troublesooting purposes.
 
 

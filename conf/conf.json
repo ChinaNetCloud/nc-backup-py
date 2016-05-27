@@ -1,6 +1,6 @@
 {
   "GENERAL": {
-    "HOSTNAME": "srv-nc-backup-py-test1",
+    "HOSTNAME": "srv-nc-py27-abel-mac-db1",
     "WORK_FOLDER": "/Users/cncuser/Downloads/backup",
     "LOCAL_BACKUP": "/Users/cncuser/Downloads/backup/local",
     "HOME_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py",
@@ -13,7 +13,8 @@
     "EXECUTABLE": "",
     "PARAMETERS": {
       "FILESET_INCLUDE": "/etc /Users/cncuser/Documents/",
-      "FILESET_EXCLUDE": "/Users/cncuser/Documents/Trabajo /Users/cncuser/Documents/Install/ /Users/cncuser/Documents/Personal"
+      "FILESET_EXCLUDE": "/Users/cncuser/Documents/Trabajo /Users/cncuser/Documents/Install/ /Users/cncuser/Documents/Personal",
+      "TAR_COMMAND": "sudo /usr/local/Cellar/gnu-tar/1.28/bin/tar czCf /"
     }
   },
   "DBSBACKUP": {
