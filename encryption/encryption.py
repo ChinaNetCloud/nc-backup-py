@@ -5,13 +5,14 @@ import sys
 
 from os import listdir
 from os.path import isfile, join, isdir
-from hashlib import md5
-from Crypto.Cipher import AES
+
 
 python_version = '2.7'
 if sys.version_info[0] == 2 and sys.version_info[1] == 7:
     python_version = '2.7'
     from Crypto import Random
+    from hashlib import md5
+    from Crypto.Cipher import AES
 elif sys.version_info[0] == 2 and sys.version_info[1] < 7 and sys.version_info[1] > 5:
     python_version = '2.6'
 else:
@@ -48,8 +49,8 @@ class EncryptionWorks:
 
     def encrypt(self, in_file, out_file, password, key_length=32, python_version='2.7', home_folder=''):
         # print python_version
-        bs = AES.block_size
         if python_version == '2.7':
+            bs = AES.block_size
             with open(password, 'r') as key_file:
                 password = key_file.read().replace('\n', '')
             salt = Random.new().read(bs - len('Salted__'))
