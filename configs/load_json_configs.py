@@ -1,9 +1,23 @@
-import json
+import sys
+print 'Python V ' + str(sys.version_info[0]) + '.' + str(sys.version_info[1])
+
+if sys.version_info[0] == 2 and sys.version_info[1] == 7:
+    import json
+elif sys.version_info[0] == 2 and sys.version_info[1] < 7 and sys.version_info[1] > 5:
+    import simplejson as json
+elif sys.version_info[0] == 3:
+    print 'Python version 3 is not officially supported use python 2.7 or you are on your own'
+    import json
+else:
+    print 'Unsupported Python version'
+    import json
+
 import logging
 import os.path
 
 
 from collections import OrderedDict
+
 
 class LoadJsonConfig:
     __config_file = '../conf/conf.json'

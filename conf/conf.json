@@ -56,7 +56,8 @@
       "KEY_FILE": "/Users/cncuser/Documents/py/nc-backup-py/conf/key_file",
       "FILE_SIZE": "4",
       "OBJECTIVES": "/Users/cncuser/Downloads/backup/compressed",
-      "DESTINATION":"/Users/cncuser/Downloads/backup/encrypted"
+      "DESTINATION":"/Users/cncuser/Downloads/backup/encrypted",
+      "REMOVE_OBJECTIVES": "True"
     }
   },
   "SIZE":{

@@ -7,8 +7,16 @@ from os import listdir
 from os.path import isfile, join, isdir
 from hashlib import md5
 from Crypto.Cipher import AES
-from Crypto import Random
 
+python_version = '2.7'
+if sys.version_info[0] == 2 and sys.version_info[1] == 7:
+    python_version = '2.7'
+    from Crypto import Random
+elif sys.version_info[0] == 2 and sys.version_info[1] < 7 and sys.version_info[1] > 5:
+    python_version = '2.6'
+else:
+    print 'Unsupported python version, you are on your own'
+    python_version = 'Unsupported'
 
 class EncryptionWorks:
     """OpenSSL encryption"""
@@ -38,29 +46,49 @@ class EncryptionWorks:
             d += d_i
         return d[:key_length], d[key_length:key_length+iv_length]
 
-    def encrypt(self, in_file, out_file, password, key_length=32):
+    def encrypt(self, in_file, out_file, password, key_length=32, python_version='2.7', home_folder=''):
+        # print python_version
         bs = AES.block_size
-        salt = Random.new().read(bs - len('Salted__'))
-        key, iv = self.__derive_key_and_iv(password, salt, key_length, bs)
-        cipher = AES.new(key, AES.MODE_CBC, iv)
-        out_file.write('Salted__' + salt)
-        finished = False
-        while not finished:
-            chunk = in_file.read(1024 * bs)
-            if len(chunk) == 0 or len(chunk) % bs != 0:
-                padding_length = bs - (len(chunk) % bs)
-                chunk += padding_length * chr(padding_length)
-                finished = True
-            out_file.write(cipher.encrypt(chunk))
+        if python_version == '2.7':
+            with open(password, 'r') as key_file:
+                password = key_file.read().replace('\n', '')
+            salt = Random.new().read(bs - len('Salted__'))
+            key, iv = self.__derive_key_and_iv(password, salt, key_length, bs)
+            cipher = AES.new(key, AES.MODE_CBC, iv)
+            out_file.write('Salted__' + salt)
+            finished = False
+            while not finished:
+                chunk = in_file.read(1024 * bs)
+                if len(chunk) == 0 or len(chunk) % bs != 0:
+                    padding_length = bs - (len(chunk) % bs)
+                    chunk += padding_length * chr(padding_length)
+                    finished = True
+                out_file.write(cipher.encrypt(chunk))
+        else:
+            # (echo 08df2cecc643985e7c274de03a819b21;
+            # cat / opt / test / compressed / filesbackup_20160526_212715.tar.gz) | / usr / bin / gpg - agent - -daemon
+            # gpg2 - -batch - -yes - -no - tty - -quiet - c - -passphrase - fd
+            # 0 > / opt / test / encrypted / 20160526
+            # _212844.tar.gz.crypt
+            command_encrypt = 'cat '+ password +' '+ in_file.name +\
+                              ' | /usr/bin/gpg-agent --daemon gpg2 --batch --yes --no-tty ' \
+                              '--quiet -c --passphrase-fd 0 > ' + out_file.name
+            execution_encrytion = SubprocessExecution.main_execution_function(SubprocessExecution(), command_encrypt, True)
+            print execution_encrytion
 
-    def decrypt(self, in_file, out_file, password, key_length=32):
+            if execution_encrytion[0] == 0:
+                return out_file.name
+
+
+    def decrypt(self, in_file, out_file, password, key_length=32, home_folder=''):
         bs = AES.block_size
         salt = in_file.read(bs)[len('Salted__'):]
         key, iv = self.__derive_key_and_iv(password, salt, key_length, bs)
         cipher = AES.new(key, AES.MODE_CBC, iv)
         next_chunk = ''
         finished = False
-        print in_file
+        print out_file
+        # print in_file
         while not finished:
             chunk, next_chunk = next_chunk, cipher.decrypt(in_file.read(1024 * bs))
             if len(next_chunk) == 0:
@@ -74,11 +102,12 @@ class EncryptionWorks:
                 chunk = chunk[:-padding_length]
                 finished = True
             out_file.write(chunk)
+        return out_file.name
 
     def split_file(self,path_to_file, chunk_size):
         # To be deprecated in favor of split_binary_file
         print path_to_file
-        command_split = 'split --bytes=' + chunk_size + ' ' + path_to_file + ' ' + path_to_file
+        command_split = 'split --bytes=' + chunk_size + 'M ' + path_to_file + ' ' + path_to_file
         print command_split
         execution_split = SubprocessExecution.main_execution_function(SubprocessExecution(), command_split, True)
         # SubprocessExecution.print_output(SubprocessExecution(), execution_split)
@@ -134,13 +163,20 @@ if __name__ == "__main__":
                     out_file_str = encryption_command.DESTINATION + '/' + datetime_string + '.tar.gz.crypt'
                     with open(objective + '/' + file_to_add, 'rb') as in_file:
                         with open(out_file_str, 'wb') as out_file:
-                            with open(encryption_command.KEY_FILE, 'r') as key_file:
-                                key_from_file =key_file.read().replace('\n', '')
-                                EncryptionWorks.encrypt(EncryptionWorks(), in_file, out_file,key_from_file)
+                            file_encrypted = EncryptionWorks.encrypt(EncryptionWorks(), in_file, out_file,
+                                                    encryption_command.KEY_FILE, 32,
+                                                    python_version, encryption_command.HOME_FOLDER)
                     # Split only if requested
-                    if encryption_command.FILE_SIZE is not None and int(encryption_command.FILE_SIZE) >= 1:
+                    if encryption_command.FILE_SIZE is not None and \
+                                    int(encryption_command.FILE_SIZE) >= 1 and python_version == '2.7':
                         EncryptionWorks.split_binary_file(EncryptionWorks(),out_file_str,encryption_command.FILE_SIZE)
                         FilesystemHandling.remove_files(out_file_str)
+                    elif encryption_command.FILE_SIZE is not None and \
+                                    int(encryption_command.FILE_SIZE) >= 1 and python_version == '2.6':
+                        EncryptionWorks.split_file(EncryptionWorks(), file_encrypted, encryption_command.FILE_SIZE)
+                        FilesystemHandling.remove_files(out_file_str)
+
+
                         # Compressed file is not a directory.
         if encryption_command.REMOVE_OBJECTIVES == 'True':
             print 'Deleting files after objective files as per config option --REMOVE_OBJECTIVES: ' \
@@ -150,13 +186,19 @@ if __name__ == "__main__":
     elif encryption_command.DECRYPT == '-d' or encryption_command.DECRYPT is True:
         if encryption_command.OBJECTIVES and encryption_command.DESTINATION:
             datetime_string = time.strftime("%Y%m%d_%H%M%S")
-            cat_execution_result = EncryptionWorks.cat_files(EncryptionWorks(), encryption_command.OBJECTIVES)
-            print cat_execution_result
+            if not encryption_command.OBJECTIVES.endswith('000'):
+                cat_execution_result = EncryptionWorks.cat_files(EncryptionWorks(), encryption_command.OBJECTIVES)
+            else:
+                result_name = encryption_command.OBJECTIVES.replace('.000', '')
+                cat_execution_result = SubprocessExecution.main_execution_function(SubprocessExecution(),
+                                                                                   'mv ' + encryption_command.OBJECTIVES + ' ' + result_name)
+            # print cat_execution_result
             with open(encryption_command.OBJECTIVES, 'rb') as in_file:
-                with open(encryption_command.DESTINATION, 'wb') as out_file:
+                with open(cat_execution_result, 'wb') as out_file:
                     with open(encryption_command.KEY_FILE, 'r') as key_file:
                         key_from_file =key_file.read().replace('\n', '')
                         # print key_from_file
-                        EncryptionWorks.decrypt(EncryptionWorks(), in_file, out_file, key_from_file)
+                        # print in_file, out_file, key_from_file
+                        EncryptionWorks.decrypt(EncryptionWorks(), in_file, out_file, key_from_file, 32, encryption_command.HOME_FOLDER)
                         # Compressed file is not a directory.
 

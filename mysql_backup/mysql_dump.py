@@ -82,14 +82,14 @@ class mydump:
             credential_file=self.args_list.CREDENTIAL_PATH.split()[0]
             MYSQL_DATA_DIR=self.args_list.DATA_DIR.split()[0]
             print "---- MySQL Instance Data Dir: "+MYSQL_DATA_DIR+" ----"
-            mysql_dump_and_credentials="sudo " + self.mysql_dump_binary + " --defaults-extra-file="+credential_file
-            mysql_and_credentials = "sudo " + self.MYSQL + " --defaults-extra-file="+credential_file
+            mysql_dump_and_credentials = self.mysql_dump_binary + " --defaults-extra-file="+credential_file
+            mysql_and_credentials = self.MYSQL + " --defaults-extra-file="+credential_file
         else:
             credential_file=self.args_list.CREDENTIAL_PATH.split()[0]
             MYSQL_DATA_DIR=self.args_list.DATA_DIR.split()[1]
             print "---- MySQL Instance Data Dir: "+MYSQL_DATA_DIR+" ----"
-            mysql_dump_and_credentials="sudo " + self.mysql_dump_binary + " --defaults-extra-file="+credential_file
-            mysql_and_credentials = "sudo " + self.MYSQL + " --defaults-extra-file=" + credential_file
+            mysql_dump_and_credentials = self.mysql_dump_binary + " --defaults-extra-file="+credential_file
+            mysql_and_credentials = self.MYSQL + " --defaults-extra-file=" + credential_file
         return MYSQL_DATA_DIR,mysql_dump_and_credentials, mysql_and_credentials
 
     def log_rotate(self,mysql_and_credentials):
@@ -103,7 +103,7 @@ class mydump:
     def run_backup(self,mysql_and_credentials, mysql_dump_and_credentials, DESTINATION, PREFIX, script_prefix,
                    MY_INSTANCE_NAME):
         chain_exclude_tables = ""
-        if self.args_list.EXCLUDE_TABLE.split():
+        if self.args_list.EXCLUDE_TABLE:
             list_tables = self.args_list.EXCLUDE_TABLE.split()
             for table in list_tables:
                 chain_exclude_tables += " --ignore-table=" + table
@@ -116,24 +116,24 @@ class mydump:
         stdout, stderr = Popen(command1, shell=True, stdout=PIPE, stderr=PIPE).communicate()
         db_all = stdout.split('\n')[:-1]
         chain_exclude_dbs = ""
-        if self.args_list.EXCLUDE_DB.split():
+        if self.args_list.EXCLUDE_DB:
             list_dbs = self.args_list.EXCLUDE_DB.split()
         else:
-            list_dbs = ""
-        i = ""
+            list_dbs = []
+        i = None
         db_include = [ i for i in db_all if i not in list_dbs ]
         for DB_NAME in db_include:
             _SQL2="\"USE information_schema; SELECT TABLE_NAME FROM TABLES WHERE TABLE_SCHEMA='" + \
                   DB_NAME + "' AND TABLE_TYPE= 'BASE TABLE' AND ENGINE NOT like 'innodb';\""
             command3=mysql_dump_and_credentials+" --opt --routines --triggers --events --flush-privileges " \
                                          "--skip-add-drop-table --master-data=2 --dump-date --databases " + \
-                     DB_NAME + chain_exclude_tables + "|sudo gzip > " + DESTINATION + "/" + PREFIX + "_" + script_prefix + \
+                     DB_NAME + chain_exclude_tables + "| gzip > " + DESTINATION + "/" + PREFIX + "_" + script_prefix + \
                      "_" + MY_INSTANCE_NAME + "_" + DB_NAME+".sql.gz"
             print command3
             command4=mysql_dump_and_credentials+" --opt --routines --triggers --events --flush-privileges " \
                                                 "--skip-add-drop-table --master-data=2 --single-transaction  " \
                                                 "--skip-add-locks --skip-lock-tables --dump-date --databases "\
-                     + DB_NAME + chain_exclude_tables + " | sudo gzip > " + DESTINATION + "/" + PREFIX + "_" + script_prefix + "_" + \
+                     + DB_NAME + chain_exclude_tables + " | gzip > " + DESTINATION + "/" + PREFIX + "_" + script_prefix + "_" + \
                      MY_INSTANCE_NAME + "_" + DB_NAME + ".sql.gz"
             print command4
             print "---- Backing up Instance: "+MY_INSTANCE_NAME+" Database : "+DB_NAME+" ---- "

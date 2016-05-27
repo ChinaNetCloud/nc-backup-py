@@ -11,7 +11,7 @@ this command is able to perform all the backup tasks in sequential order accordi
 + encryption.py Encryption and decryption script. (needs arguments)
 + filesbackup.py does backups of filesets with exclusions (needs arguments)
 + storage.py connects and saves files to different storages (done local and AWS S3). (needs arguments)
-+ MySQl backup.
++ mysql_dump.py: MySQl backup.
 
 ## Pending Scripts:
 
@@ -41,13 +41,10 @@ python 2.7
 
 ### Python modules
 + requests
-+ Crypto (Actually Crypto.Cipher)
-
-#### python 2.6 also requires:
++ Crypto
 + argparse
 
-## ROAD MAP:
-
+## ROAD MAP
 To be added.
 
 # Installation
@@ -216,7 +213,7 @@ Upload
 The AWS CLI will calculate and auto-populate the Content-MD5 header for both standard and multipart uploads. If the checksum that S3 calculates does not match the Content-MD5 provided, S3 will not store the object and instead will return an error message back the AWS CLI. The AWS CLI will retry this error up to 5 times before giving up. On the case that any files fail to transfer successfully to S3, the AWS CLI will exit with a non zero RC. See aws help returncodes for more information.
 
 # How to decrypt
-
+## if the server doing backups has python 2.7
 The encryption script is the same script used for decription. Is should be user as follows:
 
 python encryption/encryption.py -d --KEY_FILE "conf/key_file" --OBJECTIVES "/Users/cncuser/Downloads/backup/compressed" --DESTINATION "/Users/cncuser/Downloads/backup/encrypted" --HOME_FOLDER "/Users/cncuser/Documents/py/nc-backup-py"
@@ -226,6 +223,10 @@ python encryption/encryption.py -d --KEY_FILE "conf/key_file" --OBJECTIVES "/Use
 + --OBJECTIVES "/path/to/file(s)": It's to say where are the encrypted files to be decrypted. if the download is more than one file they need to have names that start with the same partern; the software asumes you mean wild card (*) at the end.
 + --DESTINATION "path/and/name/of/tar.gz/file": this is the name and path that you want the resulting file to have after decryption
 + --HOME_FOLDER "/path/to/source/code/nc-backup-py": this is for the encryption script to know where the whole backups software is installed.
+
+## if the server doing backups has python 2.6
+Use the same method as weth ncbackup bash script: https://wiki.service.chinanetcloud.com/wiki/Operations:NC-OP_TP-782-How_to_restore_GPG_encrypt_backup_files
+
 
 # LICENSE
 
