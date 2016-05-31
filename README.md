@@ -252,7 +252,8 @@ Use the same method as weth ncbackup bash script: https://wiki.service.chinanetc
 
 # Reference Manuel for commands:
 
-+ GENERAL - Refers to the main section of the configuration. The content of this section is passed to most scripts and plugins executed.
+## General section
++ GENERAL - Identifies the main section of the configuration. The content of this section is passed to most scripts and plugins executed.
 ++ HOSTNAME - Server unique identificator name.
 ++ WORK_FOLDER - Temporary folder to do the works.
 ++ LOCAL_BACKUP - Place to keep the copies of local backups if this option is selected. This will be probably deprecated in firther versions of the software.
@@ -260,11 +261,26 @@ Use the same method as weth ncbackup bash script: https://wiki.service.chinanetc
 ++ LOG_FOLDER - Path to log file, this variable will be modified in the next version of the software.
 
 
+## Other sections key words
++ ACTION - tells the software what to do with the section of the configuration. for now it has 2 options that actually do something. In other words how to loadthe code. Execute and load, find theit entries for explanations of what they do.
++ execute - Key word for the ACTION parameter, execute means that this section executes and external script that is not dependant on the main script and needs it's own way to be executed.
++ load - Key word for the ACTION parameter, load means that this section loads a pluging via importing it dynamically. the code doe not depend on each other but the dynamically loaded code has to follow certain structure.
 
+# To be completed
++ NAME
++ EXECUTABLE
++ EXECUTE_WITH
++ PARAMETERS
++ TAR_COMMAND
++ OBJECTIVES
++ DESTINATION
++ REMOVE_OBJECTIVES
++ True
++ False
++ KEY_FILE
++ FILE_SIZE - Size of the encrypted files, always given in MB. The next versions might include other units if deamed required.
++ FROM - folder where the plugin is located. This parameter might be merged with NAME in future versions.
 
-To
-
-be completed.
 
 # LICENSE
 

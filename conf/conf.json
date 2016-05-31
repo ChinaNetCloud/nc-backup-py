@@ -13,7 +13,7 @@
     "EXECUTABLE": "",
     "PARAMETERS": {
       "FILESET_INCLUDE": "/etc /Users/cncuser/Documents/",
-      "FILESET_EXCLUDE": "/Users/cncuser/Documents/Trabajo /Users/cncuser/Documents/Install/ /Users/cncuser/Documents/Personal",
+      "FILESET_EXCLUDE": "/Users/cncuser/Documents/Trabajo /Users/cncuser/Documents/py/daniel /Users/cncuser/Documents/Install/ /Users/cncuser/Documents/Personal",
       "TAR_COMMAND": "sudo /usr/local/Cellar/gnu-tar/1.28/bin/tar czCf /"
     }
   },

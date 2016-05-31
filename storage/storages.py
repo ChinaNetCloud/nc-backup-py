@@ -47,7 +47,7 @@ class AWSS3(Storage):
                 # print tmp_execution_message
                 time_retry = time_retry * count
                 if tmp_execution_message[0] == 0:
-                    print 'Upload attempt ' + str(count) +' successful.'
+                    print 'Upload attempt ' + str(count) + ' successful.'
                     break
                 else:
                     print 'Upload attempt number: ' + str(count) + ' FAILED for: ' + aws_command
@@ -83,26 +83,42 @@ class AliyunOSS(Storage):
         files_to_upload = [f for f in listdir(mypath_to_dir) if isfile(join(mypath_to_dir, f))]
         import oss2
         credential_dict = self.__read_credentials_from_file(credentials_file)
-        print credential_dict['access_key'], credential_dict['access_id'], credential_dict['bucket'], credential_dict['host']
-        # if client_host_name != '' and client_host_name is str:
-        #     credential_dict['host'] =
         if bucket != '' and bucket is str:
             credential_dict['bucket'] = bucket
-
         auth = oss2.Auth(credential_dict['access_id'], credential_dict['access_key'])
-        # print auth
-        service = oss2.Service(auth, credential_dict['host'])
-        # print service
-        print([b.name for b in oss2.BucketIterator(service)])
-        #
-        # bucket = oss2.Bucket(auth, 'http://oss-cn-hangzhou.aliyuncs.com', 'bucket')
-        # # bucket.create_bucket(oss2.models.BUCKET_ACL_PRIVATE)
-        #
-        # bucket.put_object_from_file('remote.txt', 'local.txt')
-        # print bucket
-        #
-        # print([b.name for b in oss2.BucketIterator(service)])
+
+        bucket = oss2.Bucket(auth, credential_dict['host'], credential_dict['bucket'])
         execution_message = []
+        for file_to_upload in files_to_upload:
+            tmp_result_execution = ''
+            local_file = mypath_to_dir + '/' + file_to_upload
+            # print local_file
+            count = 1
+            time_retry = 60
+            while count <= 5:
+                try:
+                    tmp_result_execution = bucket.put_object_from_file (client_host_name + '/' + file_to_upload, local_file)
+                except:
+                    print 'Attempt failed'
+                    # print('status={0}, request_id={1}'.format(e.status, e.request_id))
+                time_retry = time_retry * count
+                if tmp_result_execution and tmp_result_execution.status == 200:
+                    message_return = 'Status: ' + str(tmp_result_execution.status) + ' Request ID: ' + \
+                                     str(tmp_result_execution.request_id) + tmp_result_execution.etag
+                    status_success = 0
+                    print 'Upload attempt ' + str(count) + ' successful.'
+                    break
+                else:
+                    status_success = 1
+                    print 'Upload attempt number: ' + str(count) + ' FAILED for: ' + local_file
+                    print tmp_result_execution
+                    # print tmp_result_execution.headers
+                    print 'We will wait for: ' + str(time_retry / 60) + ' minute(s) before upload attempt number: ' + \
+                          str(count + 1)
+                    time.sleep(time_retry)
+                count = count + 1
+            execution_message.append((status_success, message_return, ''))
+
         sys.path.append(self.__home_path)
         from execution.subprocess_execution import SubprocessExecution
         if remove_objective == 'True':

@@ -32,11 +32,11 @@ class StorageExecution:
     def iterate_resut(self, uploads_to_cloud):
         succesful = 0
         count_file = 1
-
+        print uploads_to_cloud
         for upload_to_cloud in uploads_to_cloud:
             if upload_to_cloud[0] is not 0:
                 print 'upload of file number ' + str(
-                    count_file) + ' failed, please run the upload command manually for debug pusposes'
+                    count_file) + ' failed to upload.'
                 exit(1)
             count_file = count_file + 1
 
@@ -59,12 +59,15 @@ if __name__ == "__main__":
                                             storage_cmd.UPLOAD_COMMAND, storage_cmd.REMOVE_OBJECTIVES)
         succesful = 0
         count_file = 1
-
-        for upload_to_s3 in uploads_to_s3:
-            if upload_to_s3[0] is not 0:
-                print 'upload of file number ' + str(count_file) + ' failed, please run the upload command manually for debug pusposes'
-                exit(1)
-            count_file = count_file + 1
+        if uploads_to_s3:
+            StorageExecution.iterate_resut(StorageExecution(), uploads_to_s3)
+        else:
+            print 'Executing OSS upload retuned a None result'
+        # for upload_to_s3 in uploads_to_s3:
+        #     if upload_to_s3[0] is not 0:
+        #         print 'upload of file number ' + str(count_file) + ' failed, please run the upload command manually for debug pusposes'
+        #         exit(1)
+        #     count_file = count_file + 1
     elif storage_cmd.DESTINATION == 'oss':
         print "calling OSS storage upload functions"
         from storages import AliyunOSS
