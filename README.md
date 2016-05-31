@@ -1,10 +1,12 @@
-# Project nc-backup-py.
+# Project nc-backup-py
+
 The project has a main script that is executed by calling the following command:
 
 $ python backup.py -r -c /path/to/conf.json
 this command is able to perform all the backup tasks in sequential order according to the conf.json configuration file order.
 
 ## Executable Scripts:
+
 + backup.py: Main script that can execute and control other scripts execution (needs arguments)
 + compression.py: compression script (needs arguments)
 + encryption.py Encryption and decryption script. (needs arguments)
@@ -24,6 +26,7 @@ this command is able to perform all the backup tasks in sequential order accordi
 + ms-sql backup.
 
 ## Plugins
+
 -We also have available a module/plugin feature in the configs available through configuration as well. current modules:
 + tools/size_calculation.py: Size calculation
 
@@ -46,8 +49,11 @@ python 2.7
 
 
 + For AWS backups:
-    - awscli
-+ Other requirements (Optionals). This are required if you need to install some of the dependencies, but they are not software requirements.
+    - awscli: pip install awscli
++ For Aliyun ISS
+    - OSS SKD: pip install OSS2: https://help.aliyun.com/document_detail/32026.html?spm=5176.doc32027.6.296.03bgw0
+
++ Other requirements (Optionals). This are required if you need to install some of the dependencies, but they are not requirements of the software.
     - git
     - pip
 
@@ -68,6 +74,7 @@ To be added.
         ncbackup ALL = NOPASSWD: NCBACKUP
 
 + Run: python backup.py -r -c /path/to/conf.json
+    - You might need to put the whole file path to backup.py
 + Use log/ncbackup.log for troublesooting purposes.
 
 
@@ -243,6 +250,21 @@ python encryption/encryption.py -d --KEY_FILE "conf/key_file" --OBJECTIVES "/Use
 ## if the server doing backups has python 2.6
 Use the same method as weth ncbackup bash script: https://wiki.service.chinanetcloud.com/wiki/Operations:NC-OP_TP-782-How_to_restore_GPG_encrypt_backup_files
 
+# Reference Manuel for commands:
+
++ GENERAL - Refers to the main section of the configuration. The content of this section is passed to most scripts and plugins executed.
+++ HOSTNAME - Server unique identificator name.
+++ WORK_FOLDER - Temporary folder to do the works.
+++ LOCAL_BACKUP - Place to keep the copies of local backups if this option is selected. This will be probably deprecated in firther versions of the software.
+++ HOME_FOLDER - Place where the source code is located (Install folder).
+++ LOG_FOLDER - Path to log file, this variable will be modified in the next version of the software.
+
+
+
+
+To
+
+be completed.
 
 # LICENSE
 

@@ -50,7 +50,7 @@
       "REMOVE_OBJECTIVES": "True"
     }
   },
-    "ENCRYPTION": {
+  "ENCRYPTION": {
     "ACTION": "execute",
     "NAME": "encryption",
     "PARAMETERS": {
@@ -78,6 +78,17 @@
       "DESTINATION":"s3",
       "BUCKET_NAME": "cncbackup",
       "UPLOAD_COMMAND": "aws s3 cp",
+      "REMOVE_OBJECTIVES": "False"
+    }
+  },
+  "STORAGE_OSS": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
+      "DESTINATION":"oss",
+      "BUCKET_NAME": "cncbackup",
+      "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
       "REMOVE_OBJECTIVES": "True"
     }
   },
