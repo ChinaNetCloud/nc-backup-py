@@ -1,4 +1,10 @@
 {
+  "QA":{
+    "ACTION": "load",
+    "FROM": "qa",
+    "FILENAME": "qa",
+    "CLASS": "QA"
+  },
   "GENERAL": {
     "HOSTNAME": "srv-nc-py27-abel-mac-db1",
     "WORK_FOLDER": "/Users/cncuser/Downloads/backup",
@@ -6,9 +12,6 @@
     "HOME_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py",
     "LOG_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log"
     },
-  "QA":{
-    
-  },
   "FILESET":{
     "ACTION": "execute",
     "NAME": "filesbackup",
