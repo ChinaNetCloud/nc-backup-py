@@ -6,6 +6,9 @@
     "HOME_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py",
     "LOG_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log"
     },
+  "QA":{
+    
+  },
   "FILESET":{
     "ACTION": "execute",
     "NAME": "filesbackup",

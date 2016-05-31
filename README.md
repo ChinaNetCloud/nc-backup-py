@@ -39,7 +39,7 @@ every module or script include or make use of a set of tools included in tools f
 + size calculation (This is also a module)
 
 ## Requirements:
-python 2.7
+python 2.7 or 2.6
 
 ### Python modules
 + requests
@@ -51,7 +51,8 @@ python 2.7
 + For AWS backups:
     - awscli: pip install awscli
 + For Aliyun ISS
-    - OSS SKD: pip install OSS2: https://help.aliyun.com/document_detail/32026.html?spm=5176.doc32027.6.296.03bgw0
+    - OSS SKD: pip install OSS2:
+    https://help.aliyun.com/document_detail/32026.html?spm=5176.doc32027.6.296.03bgw0
 
 + Other requirements (Optionals). This are required if you need to install some of the dependencies, but they are not requirements of the software.
     - git
