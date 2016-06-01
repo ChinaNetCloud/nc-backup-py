@@ -4,10 +4,7 @@ import time
 from os import path
 
 from subprocess_execution import SubprocessExecution
-
-
-from logs_script.log_handler import LoggerHandlers
-
+# from logs_script.log_handler import LoggerHandlers
 
 class BackupExecutionLogic:
     """Scripts execution logic"""
@@ -15,6 +12,7 @@ class BackupExecutionLogic:
         c = 1
         result = []
         start_time = time.time()
+
         for scripts_modules in json_dict:
             log_sring = "Section " + str(c) + ": " + scripts_modules + '.'
             print log_sring

@@ -7,11 +7,13 @@ class QA:
         print 'Checking QA according to configs'
         self.__logger = logger
 
+
     def config_plugin(self):
         print 'Size calculation plugin\'s config is NOT in use'
 
     def works_execution(self):
-        self.check_user()
+        self.__check_user()
+        self.__check_os_paths()
 
     def output(self):
         """Check User running script"""
@@ -30,10 +32,11 @@ class QA:
             result_log = 'User setup policy is correct'
             self.__logger.info(result_log)
         else:
-            result_log = 'The servers does not follow our user policy standards, please FIX user: ' + self.__username
+            result_log = 'Config did not pass QA!. The servers does not follow our user policy standards, ' \
+                         'please FIX user: ' + self.__username
             self.__logger.warning(result_log)
 
-    def check_user(self):
+    def __check_user(self):
         print 'Checking user.'
         self.__username = pwd.getpwuid(os.getuid()).pw_gecos
         self.__gid = os.getgid()
@@ -43,5 +46,30 @@ class QA:
         else:
             self._result_user_eval = False
 
-    def check_os_paths(self):
-        print 'IMPLEMENT'
+    def __check_os_paths(self, a_dict_configs=None):
+        self.dict_configs = {}
+        if not a_dict_configs:
+            """Config file access"""
+            self.dict_configs['file_conf'] = {}
+            self.dict_configs['file_conf']['path'] = '/etc/nc-backup-py/conf.json'
+            self.dict_configs['file_conf']['owner'] = 'root'
+            self.dict_configs['file_conf']['group'] = 'ncbackup'
+            self.dict_configs['file_conf']['permissions'] = '740'
+            """Log file permits"""
+            self.dict_configs['folder_logs'] = {}
+            self.dict_configs['folder_logs']['path'] = '/var/log/nc-backup-py/'
+            self.dict_configs['folder_logs']['owner'] = 'ncbackup'
+            self.dict_configs['folder_logs']['group'] = 'ncbackup'
+            self.dict_configs['folder_logs']['permissions'] = '664'
+            """"Source code location"""
+            self.dict_configs['folder_code'] = {}
+            self.dict_configs['folder_code']['path'] = '/var/lib/nc-backup-py'
+            self.dict_configs['folder_code']['owner'] = 'ncbackup'
+            self.dict_configs['folder_code']['group'] = 'ncbackup'
+            self.dict_configs['folder_code']['permissions'] = '664'
+        else:
+            self.dict_configs = a_dict_configs
+        # print self.dict_configs
+        for dict_file_permits in self.dict_configs:
+            # print "AA"
+            pass
