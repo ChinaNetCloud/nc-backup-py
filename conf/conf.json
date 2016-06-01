@@ -1,10 +1,16 @@
 {
+  "QA":{
+    "ACTION": "load",
+    "FROM": "qa",
+    "FILENAME": "qa",
+    "CLASS": "QA"
+  },
   "GENERAL": {
-    "HOSTNAME": "srv-nc-backup-py-test1",
-    "WORK_FOLDER": "/Users/cncuser/Downloads/backup",
-    "LOCAL_BACKUP": "/Users/cncuser/Downloads/backup/local",
-    "HOME_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py",
-    "LOG_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log"
+    "HOSTNAME": "srv-nc-py27-abel-mac-db1",
+    "WORK_FOLDER": "/Users/cncuser/Downloads/backup/",
+    "LOCAL_BACKUP": "/Users/cncuser/Downloads/backup/local/  ",
+    "HOME_FOLDER": "  /Users/cncuser/Documents/py/nc-backup-py",
+    "LOG_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py/log/nc-backup-py.log/"
     },
   "FILESET":{
     "ACTION": "execute",
@@ -13,7 +19,8 @@
     "EXECUTABLE": "",
     "PARAMETERS": {
       "FILESET_INCLUDE": "/etc /Users/cncuser/Documents/",
-      "FILESET_EXCLUDE": "/Users/cncuser/Documents/Trabajo /Users/cncuser/Documents/Install/ /Users/cncuser/Documents/Personal"
+      "FILESET_EXCLUDE": "/Users/cncuser/Documents/Trabajo /Users/cncuser/Documents/py/daniel /Users/cncuser/Documents/Install/ /Users/cncuser/Documents/Personal",
+      "TAR_COMMAND": "sudo /usr/local/Cellar/gnu-tar/1.28/bin/tar czCf /"
     }
   },
   "DBSBACKUP": {
@@ -49,7 +56,7 @@
       "REMOVE_OBJECTIVES": "True"
     }
   },
-    "ENCRYPTION": {
+  "ENCRYPTION": {
     "ACTION": "execute",
     "NAME": "encryption",
     "PARAMETERS": {
@@ -77,6 +84,17 @@
       "DESTINATION":"s3",
       "BUCKET_NAME": "cncbackup",
       "UPLOAD_COMMAND": "aws s3 cp",
+      "REMOVE_OBJECTIVES": "False"
+    }
+  },
+  "STORAGE_OSS": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
+      "DESTINATION":"oss",
+      "BUCKET_NAME": "cncbackup",
+      "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
       "REMOVE_OBJECTIVES": "True"
     }
   },

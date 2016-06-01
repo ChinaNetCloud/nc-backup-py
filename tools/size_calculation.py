@@ -2,7 +2,7 @@ import os
 
 
 class SizeCalculation:
-    def __init__(self, parameters):
+    def __init__(self, parameters, logger=None):
          self.__parameters_dict = parameters
          # print self.__parameters_dict['OBJECTIVES']
     def config_plugin(self):

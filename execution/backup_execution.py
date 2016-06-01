@@ -1,15 +1,10 @@
-#import imp
-#import sys
 import time
 
 
 from os import path
 
 from subprocess_execution import SubprocessExecution
-
-
-from logs_script.log_handler import LoggerHandlers
-
+# from logs_script.log_handler import LoggerHandlers
 
 class BackupExecutionLogic:
     """Scripts execution logic"""
@@ -17,16 +12,12 @@ class BackupExecutionLogic:
         c = 1
         result = []
         start_time = time.time()
+
         for scripts_modules in json_dict:
             log_sring = "Section " + str(c) + ": " + scripts_modules + '.'
             print log_sring
             logger.info(log_sring)
             start_time = time.time()
-            # start_time = time.localtime()
-            # time_log = 'Start time: ' + str(start_time)
-            # print time_log
-            # logger.info(time_log)
-            #select the script to execute
             result_message = []
             if scripts_modules != 'GENERAL':
                 for section in json_dict[scripts_modules]:
@@ -87,10 +78,7 @@ class BackupExecutionLogic:
                 logger.info('StdOut: ' + out_put_exec[1])
             loaded_scripts = {'external':{'message': out_put_exec}}
             return loaded_scripts
-            # e.args += (execution_message,)
-            # loaded_scripts = {'external':{'message': (1, e,e)}}
-            # logger.critical('Execution error with subprocess' + e)
-            # return loaded_scripts
+
 
         # Load plugins dynamically
         elif section == 'ACTION' and json_dict[scripts_modules][section] == "load":
@@ -99,16 +87,16 @@ class BackupExecutionLogic:
             print loading_plugin
             logger.info(loading_plugin)
             plugin_object = DynamicImporter(path_to_import, json_dict[scripts_modules]['CLASS'], )
-            instanciated_plugin = plugin_object.create_object(json_dict[scripts_modules]['PARAMETERS'])
-            # if hasattr(plugin_object, 'config_plugin') and callable(getattr(plugin_object, 'config_plugin')):
+            if json_dict[scripts_modules].get('PARAMETERS'):
+                instanciated_plugin = plugin_object.create_object(json_dict[scripts_modules]['PARAMETERS'], logger)
+            else:
+                instanciated_plugin = plugin_object.create_object(logger)
             instanciated_plugin.config_plugin()
-            # if hasattr(plugin_object, 'works_execution') and callable(getattr(plugin_object, 'config_plugin')):
             works_execution = instanciated_plugin.works_execution()
-            logger.info('Works: ' + works_execution)
-            # if hasattr(plugin_object, 'output') and callable(getattr(plugin_object, 'output')):
+            logger.info('Works: ' + str(works_execution))
             output = instanciated_plugin.output()
             print output
-            logger.info('Output: ' + output)
+            logger.info('Output: ' + str(output))
             loaded_scripts = {'plugin':{'size': output}}
         return loaded_scripts
 
@@ -162,10 +150,14 @@ class DynamicImporter:
         self.__module = __import__(module_name,globals(),locals(), [class_name])
         self.__class_name = class_name
 
-    def create_object(self, parameters=None):
+    def create_object(self, parameters=None, logger=None):
         my_class = getattr(self.__module, self.__class_name)
-        if parameters:
+        if parameters and not logger:
             instance = my_class(parameters)
+        elif parameters and logger:
+            instance = my_class(parameters, logger)
+        elif logger and not parameters:
+            instance = my_class(None, logger)
         else:
             instance = my_class()
         return instance

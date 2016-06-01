@@ -11,6 +11,7 @@ from configs.load_json_configs import LoadJsonConfig
 from execution.backup_execution import BackupExecutionLogic
 from communications.communications import Communications
 from tools.os_works import OSInformation
+from execution.config_parser import ConfigParser
 
 command_object = backupCommands.feature_commands(backupCommands())
 os_name = OSInformation.isWindows()
@@ -24,6 +25,9 @@ else:
         config_file_location = command_object.config
 
 json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig(), config_file_location)
+#parse dictionaty.
+
+
 if type(json_dict) is str:
     print 'Unexpected error, the config file was supposed to be loaded in a dictionary. Got this instead:'
     print json_dict
@@ -31,7 +35,8 @@ if type(json_dict) is str:
 logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', 10,
                                       json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
+json_dict = ConfigParser.replace_end_backslash_and_spaces(ConfigParser(), json_dict, logger)
+# print json_dict
 # Set the backup as failed by default.
 successful_execution = False
 
