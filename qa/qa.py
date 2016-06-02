@@ -52,7 +52,7 @@ class QA:
             """Config file access"""
             self.dict_configs['file_conf'] = {}
             self.dict_configs['file_conf']['path'] = '/etc/nc-backup-py/conf.json'
-            self.dict_configs['file_conf']['owner'] = 'root'
+            self.dict_configs['file_conf']['owner'] = 'ncbackup'
             self.dict_configs['file_conf']['group'] = 'ncbackup'
             self.dict_configs['file_conf']['permissions'] = '740'
             """Log file permits"""
@@ -67,6 +67,16 @@ class QA:
             self.dict_configs['folder_code']['owner'] = 'ncbackup'
             self.dict_configs['folder_code']['group'] = 'ncbackup'
             self.dict_configs['folder_code']['permissions'] = '664'
+            """Key_file"""
+            self.dict_configs['folder_code'] = {}
+            self.dict_configs['folder_code']['path'] = '/etc/nc-backup-py/key_file'
+            self.dict_configs['folder_code']['owner'] = 'ncbackup'
+            self.dict_configs['folder_code']['group'] = 'ncbackup'
+            self.dict_configs['folder_code']['permissions'] = '400'
+
+            """MySQL credentials"""
+            mysql_credentials_path = '/etc/nc-backup-py/mysql.credentials'
+            # if ()
         else:
             self.dict_configs = a_dict_configs
         # print self.dict_configs

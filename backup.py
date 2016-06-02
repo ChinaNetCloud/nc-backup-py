@@ -45,6 +45,7 @@ if (os_name):
 else:
     # Allow only one process to run at the time
     pid_file = json_dict['GENERAL']['HOME_FOLDER'] + '/backup.pid'
+    # pid_file = '/var/log/nc-backup-py/backup.pid'
     fp = open(pid_file, 'w')
     try:
         fcntl.lockf(fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
