@@ -35,7 +35,7 @@ if type(json_dict) is str:
 logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', 10,
                                       json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-json_dict = ConfigParser.replace_end_backslash_and_spaces(ConfigParser(), json_dict, logger)
+json_dict = ConfigParser.validator_basic(ConfigParser(), json_dict, logger)
 # print json_dict
 # Set the backup as failed by default.
 successful_execution = False

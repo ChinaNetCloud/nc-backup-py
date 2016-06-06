@@ -54,8 +54,12 @@ class AWSS3(Storage):
                     print 'Upload attempt ' + str(count) + ' successful.'
                     break
                 elif tmp_execution_message[0] == 127:
-                    print "The backups software can not find AWS CLI binary. Is it installed?"
+                    print "Error with AWS CLI binary. Is it installed?"
                     break
+                # NEED TO DETERMINE: is
+                # elif tmp_execution_message[0] == 1:
+                #     print "Error with AWS CLI binary. Is it installed?"
+                #     break
                 else:
                     print 'Upload attempt number: ' + str(count) + ' FAILED for: ' + aws_command
                     print 'StdOut: ' + str(tmp_execution_message[0])

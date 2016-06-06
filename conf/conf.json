@@ -19,7 +19,7 @@
     "EXECUTABLE": "",
     "PARAMETERS": {
       "FILESET_INCLUDE": "/etc /vagrant",
-      "FILESET_EXCLUDE": "",
+      "FILESET_EXCLUDE": "/etc/yum.d",
       "TAR_COMMAND": "sudo /bin/tar czCf /"
     }
   },
@@ -29,7 +29,7 @@
     "EXECUTABLE": "mysql_dump.py",
     "EXECUTE_WITH": "python",
     "PARAMETERS": {
-      "CREDENTIAL_PATH": "/vagrant/nc-backup-py/conf/mysql.credentials",
+      "CREDENTIAL_PATH": "/etc/nc-backup-py/mysql.credentials",
       "CONF_PATH": "/etc/my.cnf",
       "DATA_DIR": "/var/lib/mysql",
       "MY_INSTANCES": "3306",
@@ -84,17 +84,6 @@
       "DESTINATION":"s3",
       "BUCKET_NAME": "cncbackup",
       "UPLOAD_COMMAND": "aws s3 cp",
-      "REMOVE_OBJECTIVES": "False"
-    }
-  },
-  "STORAGE_OSS": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "OBJECTIVES": "/opt/backup/encrypted",
-      "DESTINATION":"oss",
-      "BUCKET_NAME": "cncbackup",
-      "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
       "REMOVE_OBJECTIVES": "True"
     }
   },
