@@ -1,7 +1,3 @@
-
-
-
-
 {
   "GENERAL": {
     "HOSTNAME": "srv-nc-test1",
@@ -76,6 +72,17 @@
       "DATA_DIR": "/var/lib/mysql/data",
       "MY_INSTANCES": "3306",
       "LOG": "/var/log/mysql.log"
+    }
+  },
+  "STORAGE_OSS": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
+      "DESTINATION":"oss",
+      "BUCKET_NAME": "cncbackup",
+      "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
+      "REMOVE_OBJECTIVES": "True"
     }
   },
     "SCHEDULE": {

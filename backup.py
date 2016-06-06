@@ -35,7 +35,7 @@ if type(json_dict) is str:
 logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', 10,
                                       json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-json_dict = ConfigParser.replace_end_backslash_and_spaces(ConfigParser(), json_dict, logger)
+json_dict = ConfigParser.validator_basic(ConfigParser(), json_dict, logger)
 # print json_dict
 # Set the backup as failed by default.
 successful_execution = False
@@ -45,6 +45,7 @@ if (os_name):
 else:
     # Allow only one process to run at the time
     pid_file = json_dict['GENERAL']['HOME_FOLDER'] + '/backup.pid'
+    # pid_file = '/var/log/nc-backup-py/backup.pid'
     fp = open(pid_file, 'w')
     try:
         fcntl.lockf(fp, fcntl.LOCK_EX | fcntl.LOCK_NB)

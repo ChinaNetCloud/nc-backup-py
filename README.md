@@ -1,3 +1,5 @@
+Find the latest documentation here: https://wiki.service.chinanetcloud.com/wiki/Operations:NC-OP_TP-1069-Backups_system_installation_nc-backup-py. This readme file is not actively maintanined.
+
 # Project nc-backup-py
 
 The project has a main script that is executed by calling the following command:

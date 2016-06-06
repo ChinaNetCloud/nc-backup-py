@@ -122,6 +122,7 @@ class mydump:
             list_dbs = []
         i = None
         db_include = [ i for i in db_all if i not in list_dbs ]
+        # print db_include
         for DB_NAME in db_include:
             _SQL2="\"USE information_schema; SELECT TABLE_NAME FROM TABLES WHERE TABLE_SCHEMA='" + \
                   DB_NAME + "' AND TABLE_TYPE= 'BASE TABLE' AND ENGINE NOT like 'innodb';\""
@@ -135,12 +136,12 @@ class mydump:
                                                 "--skip-add-locks --skip-lock-tables --dump-date --databases "\
                      + DB_NAME + chain_exclude_tables + " | gzip > " + DESTINATION + "/" + PREFIX + "_" + script_prefix + "_" + \
                      MY_INSTANCE_NAME + "_" + DB_NAME + ".sql.gz"
-            print command4
+            # print command4
             print "---- Backing up Instance: "+MY_INSTANCE_NAME+" Database : "+DB_NAME+" ---- "
             command5=mysql_and_credentials + " -e "+_SQL2+"|grep -v TABLE|wc -l"
-            print command5
+            # print command5
             stdout2, stderr = Popen(command5, shell=True, stdout=PIPE, stderr=PIPE).communicate()
-            if stdout2!=0:
+            if stdout2 != 0:
                 print "---- "+DB_NAME+" has MYISAM TABLES , using DUMP backup method ---- "
                 backup_stdout,backup_stderr=Popen(command3, shell=True,stdout=PIPE, stderr=PIPE).communicate()
             else:

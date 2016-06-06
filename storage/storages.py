@@ -31,6 +31,8 @@ class AWSS3(Storage):
 
     def upload_content(self, mypath_to_dir, bucket, client_host_name, upload_command='aws s3 cp',
                        remove_objective='False'):
+        # aws_bin = upload_command.split()
+        # if aws_bin
         print 'Uploading to storage S3'
         files_to_upload = [f for f in listdir(mypath_to_dir) if isfile(join(mypath_to_dir, f))]
         sys.path.append(self.__home_path)
@@ -43,16 +45,25 @@ class AWSS3(Storage):
             time_retry = 60
             while count <= 5:
                 print 'Trying upload attempt number: ' + str(count)
+                # try:
                 tmp_execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), aws_command)
+                # except
                 # print tmp_execution_message
                 time_retry = time_retry * count
                 if tmp_execution_message[0] == 0:
                     print 'Upload attempt ' + str(count) + ' successful.'
                     break
+                elif tmp_execution_message[0] == 127:
+                    print "Error with AWS CLI binary. Is it installed?"
+                    break
+                # NEED TO DETERMINE: is
+                # elif tmp_execution_message[0] == 1:
+                #     print "Error with AWS CLI binary. Is it installed?"
+                #     break
                 else:
                     print 'Upload attempt number: ' + str(count) + ' FAILED for: ' + aws_command
                     print 'StdOut: ' + str(tmp_execution_message[0])
-                    print 'StdErr:' + str(tmp_execution_message[0])
+                    print 'StdErr: ' + str(tmp_execution_message[0])
                     print 'We will wait for: ' + str(time_retry/60) + ' minute(s) before upload attempt number: ' + \
                           str(count + 1)
                     time.sleep(time_retry)
@@ -145,11 +156,3 @@ class AliyunOSS(Storage):
                     myvars[name.strip()] = str(var)
 
         return myvars
-
-    # def find_between(s, first, last):
-    #     try:
-    #         start = s.index(first) + len(first)
-    #         end = s.index(last, start)
-    #         return s[start:end]
-    #     except ValueError:
-    #         return ""

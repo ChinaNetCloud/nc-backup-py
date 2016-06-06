@@ -6,11 +6,11 @@
     "CLASS": "QA"
   },
   "GENERAL": {
-    "HOSTNAME": "srv-nc-py27-abel-mac-db1",
-    "WORK_FOLDER": "/Users/cncuser/Downloads/backup/",
-    "LOCAL_BACKUP": "/Users/cncuser/Downloads/backup/local/  ",
-    "HOME_FOLDER": "  /Users/cncuser/Documents/py/nc-backup-py",
-    "LOG_FOLDER": "/Users/cncuser/Documents/py/nc-backup-py/log/nc-backup-py.log/"
+    "HOSTNAME": "srv-nc-py27-vbox-vagrant-db1",
+    "WORK_FOLDER": "/opt/backup",
+    "LOCAL_BACKUP": "/opt/backup/local",
+    "HOME_FOLDER": "/vagrant/nc-backup-py",
+    "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log"
     },
   "FILESET":{
     "ACTION": "execute",
@@ -18,9 +18,9 @@
     "EXECUTE_WITH": "python",
     "EXECUTABLE": "",
     "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc /Users/cncuser/Documents/",
-      "FILESET_EXCLUDE": "/Users/cncuser/Documents/Trabajo /Users/cncuser/Documents/py/daniel /Users/cncuser/Documents/Install/ /Users/cncuser/Documents/Personal",
-      "TAR_COMMAND": "sudo /usr/local/Cellar/gnu-tar/1.28/bin/tar czCf /"
+      "FILESET_INCLUDE": "/etc /vagrant",
+      "FILESET_EXCLUDE": "/etc/yum.d",
+      "TAR_COMMAND": "sudo /bin/tar czCf /"
     }
   },
   "DBSBACKUP": {
@@ -29,18 +29,18 @@
     "EXECUTABLE": "mysql_dump.py",
     "EXECUTE_WITH": "python",
     "PARAMETERS": {
-      "CREDENTIAL_PATH": "/Users/cncuser/Documents/py/nc-backup-py/conf/mysql.credentials",
+      "CREDENTIAL_PATH": "/etc/nc-backup-py/mysql.credentials",
       "CONF_PATH": "/etc/my.cnf",
-      "DATA_DIR": "/usr/local/var/mysql",
+      "DATA_DIR": "/var/lib/mysql",
       "MY_INSTANCES": "3306",
-      "BINLOG_PATH": "/usr/local/var/mysql",
+      "BINLOG_PATH": "/var/lib/mysql",
       "BINLOG_FILE_PREFIX": "mysql-bin",
-      "DESTINATION": "/Users/cncuser/Downloads/backup",
-      "TAR_COMMAND": "sudo /usr/local/Cellar/gnu-tar/1.28/bin/tar czf",
-      "MYSQL_DUMP_BINARY": "/usr/local/bin/mysqldump",
-      "MYSQL_BINARY": "/usr/local/bin/mysql",
+      "DESTINATION": "/opt/backup",
+      "TAR_COMMAND": "sudo /bin/tar czf",
+      "MYSQL_DUMP_BINARY": "/bin/mysqldump",
+      "MYSQL_BINARY": "/bin/mysql",
       "PREFIX_FOLDER": "mydump",
-      "EXCLUDE_DB": "mysql",
+      "EXCLUDE_DB": "",
       "EXCLUDE_TABLE": "mysql.user mysql.func mysql.event"
     }
   },
@@ -50,9 +50,9 @@
     "EXECUTABLE": "",
     "EXECUTE_WITH": "",
     "PARAMETERS": {
-      "TAR_COMMAND": "sudo /usr/local/Cellar/gnu-tar/1.28/bin/tar czCf /",
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/files /Users/cncuser/Downloads/backup/mydump",
-      "DESTINATION": "/Users/cncuser/Downloads/backup/compressed",
+      "TAR_COMMAND": "sudo /bin/tar czCf /",
+      "OBJECTIVES": "/opt/backup/files /opt/backup/mydump",
+      "DESTINATION": "/opt/backup/compressed",
       "REMOVE_OBJECTIVES": "True"
     }
   },
@@ -60,10 +60,10 @@
     "ACTION": "execute",
     "NAME": "encryption",
     "PARAMETERS": {
-      "KEY_FILE": "/Users/cncuser/Documents/py/nc-backup-py/conf/key_file",
-      "FILE_SIZE": "4",
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/compressed",
-      "DESTINATION":"/Users/cncuser/Downloads/backup/encrypted",
+      "KEY_FILE": "/vagrant/nc-backup-py/conf/key_file",
+      "FILE_SIZE": "4000",
+      "OBJECTIVES": "/opt/backup/compressed",
+      "DESTINATION":"/opt/backup/encrypted",
       "REMOVE_OBJECTIVES": "True"
     }
   },
@@ -73,28 +73,17 @@
     "FILENAME": "size_calculation",
     "CLASS": "SizeCalculation",
     "PARAMETERS": {
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted"
+      "OBJECTIVES": "/opt/backup/encrypted"
     }
   },
   "STORAGE": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
+      "OBJECTIVES": "/opt/backup/encrypted",
       "DESTINATION":"s3",
       "BUCKET_NAME": "cncbackup",
       "UPLOAD_COMMAND": "aws s3 cp",
-      "REMOVE_OBJECTIVES": "False"
-    }
-  },
-  "STORAGE_OSS": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
-      "DESTINATION":"oss",
-      "BUCKET_NAME": "cncbackup",
-      "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
       "REMOVE_OBJECTIVES": "True"
     }
   },
