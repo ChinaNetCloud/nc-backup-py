@@ -102,7 +102,6 @@ class ConfigParser:
         return True
 
     def is_abs_path(self, path_to_check):
-        # print path_to_check
         return os.path.isabs(path_to_check)
 
     def is_existing_abs_path(self, path_to_check):
