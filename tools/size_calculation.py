@@ -1,12 +1,14 @@
 import os
 
 
+from execution.config_parser import ConfigParser
+
 class SizeCalculation:
     def __init__(self, parameters, logger=None):
          self.__parameters_dict = parameters
-         # print self.__parameters_dict['OBJECTIVES']
+         self.__logger = logger
     def config_plugin(self):
-        print 'Size calculation plugin\'s config is NOT in use'
+        pass
 
     def works_execution(self):
         return self.get_dir_size(self.__parameters_dict['OBJECTIVES'])
@@ -16,6 +18,11 @@ class SizeCalculation:
 
     def get_dir_size(self, directory_objective):
         size = 0
+        if not ConfigParser.is_existing_abs_path(ConfigParser(), directory_objective):
+            size_path_error = 'The path provided to calculate size does not exist.'
+            self.__logger.warning(size_path_error)
+            return size_path_error
+
         for path, dirs, files in os.walk(directory_objective):
             for f in files:
                 size += os.path.getsize(os.path.join(path, f))

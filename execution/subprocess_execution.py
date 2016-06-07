@@ -2,8 +2,8 @@ from subprocess import Popen
 from subprocess import PIPE
 
 # from subprocess import check_output
-from subprocess import call
-from subprocess import CalledProcessError
+# from subprocess import call
+# from subprocess import CalledProcessError
 # from threading import Thread
 from Queue import Queue, Empty
 
@@ -25,7 +25,6 @@ class SubprocessExecution:
         self.__process = Popen(shell_command, shell=True, stdout=PIPE, stderr=PIPE)
         if wait_cmd is True:
             self.__process.wait()
-        #     if self.__process.poll() is None:
         return_code = self.__process.poll()
         stdout, stderr = self.__process.communicate()
         return return_code, stdout, 'stderr: ' + stderr

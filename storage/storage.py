@@ -45,6 +45,14 @@ if __name__ == "__main__":
     sys.path.append(storage_cmd.HOME_FOLDER)
     from tools.filesystem_handling import FilesystemHandling
     from execution.subprocess_execution import SubprocessExecution
+    from execution.config_parser import ConfigParser
+    if str(storage_cmd.DESTINATION) not in ['s3', 'oss', 'ssh', 'local', 'azure']:
+        print 'Not supported storage destination: ' + str(storage_cmd.DESTINATION)
+        exit(1)
+    if not ConfigParser.is_existing_abs_path(ConfigParser(), storage_cmd.OBJECTIVES):
+        print 'OBJECTIVES hast to exist for storage to work, stopping execution'
+        exit(1)
+
     print 'Executing backup files type: ' + storage_cmd.DESTINATION
     if storage_cmd.DESTINATION == 'local':
         command_move = 'mv ' + storage_cmd.OBJECTIVES + '/* ' + storage_cmd.LOCAL_BACKUP
@@ -63,11 +71,7 @@ if __name__ == "__main__":
             StorageExecution.iterate_resut(StorageExecution(), uploads_to_s3)
         else:
             print 'Executing OSS upload retuned a None result'
-        # for upload_to_s3 in uploads_to_s3:
-        #     if upload_to_s3[0] is not 0:
-        #         print 'upload of file number ' + str(count_file) + ' failed, please run the upload command manually for debug pusposes'
-        #         exit(1)
-        #     count_file = count_file + 1
+
     elif storage_cmd.DESTINATION == 'oss':
         print "calling OSS storage upload functions"
         from storages import AliyunOSS

@@ -167,17 +167,29 @@ class mydump:
 
 
 def main():
-
-    #saveout = sys.stdout
     mydump_object=mydump()
-    #sys.out=mydump_object.args_list.LOG
+    sys.path.append(mydump_object.args_list.HOME_FOLDER)
+    from execution.config_parser import ConfigParser
+
+    if not mydump_object.args_list.MY_INSTANCES or mydump_object.args_list.MY_INSTANCES == '':
+        mydump_object.args_list.MY_INSTANCES = '3306'
+    if mydump_object.args_list.BINLOG_PATH and mydump_object.args_list.BINLOG_PATH != '':
+        if not ConfigParser.is_existing_abs_path(ConfigParser(),mydump_object.args_list.BINLOG_PATH):
+            print 'The path to bin Log folder does not exits, execution will not contune'
+            exit(1)
+    else:
+        print 'Bin log folder is empty, this parameter is required, execution will not contune'
+        exit(1)
+
+    if not mydump_object.args_list.BINLOG_FILE_PREFIX or mydump_object.args_list.BINLOG_FILE_PREFIX == '':
+        print 'Bin file name can not be empty, execution will not contune'
+        exit(1)
 
     for MY_INSTANCE_NAME in mydump_object.args_list.MY_INSTANCES.split(','):
 
         print "---- Processing instance: "+MY_INSTANCE_NAME+" ----"
 
         MYSQL_DATA_DIR,mysql_dump_and_credentials,mysql_and_credentials=mydump_object.get_instanceinfo(MY_INSTANCE_NAME)
-        # print (MYSQL_DATA_DIR,mysql_dump_and_credentials,mysql_and_credentials)
         rotate_stdout,rotate_stderr=mydump_object.log_rotate(mysql_and_credentials)
         print rotate_stdout
         print rotate_stderr
@@ -190,7 +202,6 @@ def main():
         print backup_stderr
         if backup_stderr:
             exit(1)
-        # print mydump_object.args_list.BINLOG_PATH + 'AAAAA'
         logbak_stdout,logbak_stderr=mydump_object.backup_logs(MYSQL_DATA_DIR,mydump_object.DESTINATION,
                                                               mydump_object.script_prefix,
                                                               MY_INSTANCE_NAME,
@@ -198,8 +209,6 @@ def main():
                                                               mydump_object.args_list.BINLOG_FILE_PREFIX)
         print logbak_stdout
         print logbak_stderr
-    #sys.stdout=saveout
-
 
 
 if __name__ == "__main__":

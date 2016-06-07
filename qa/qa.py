@@ -6,7 +6,7 @@ class QA:
     def __init__(self, logger=None):
         print 'Checking QA according to configs'
         self.__logger = logger
-
+        self.__username = None
 
     def config_plugin(self):
         print 'Size calculation plugin\'s config is NOT in use'
@@ -38,9 +38,10 @@ class QA:
 
     def __check_user(self):
         print 'Checking user.'
-        self.__username = pwd.getpwuid(os.getuid()).pw_gecos
+        self.__username = pwd.getpwuid(os.getuid()).pw_name
         self.__gid = os.getgid()
         self.__uid = os.geteuid()
+
         if self.__username == 'ncbackup' and int(self.__gid) > 0 and int(self.__uid) > 0:
             self._result_user_eval = True
         else:

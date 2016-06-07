@@ -2,8 +2,6 @@ import logging
 import time
 import sys
 
-# from logging.handlers import RotatingFileHandler
-from logging.handlers import TimedRotatingFileHandler
 
 from logs_script.log_handler import LoggerHandlers
 from backupcmd.commands import backupCommands
@@ -36,7 +34,7 @@ logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', 10,
                                       json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 json_dict = ConfigParser.validator_basic(ConfigParser(), json_dict, logger)
-# print json_dict
+
 # Set the backup as failed by default.
 successful_execution = False
 
@@ -164,17 +162,3 @@ command_rotatelogs = 'mv ' + json_dict['GENERAL']['LOG_FOLDER'] + ' ' + \
                      json_dict['GENERAL']['LOG_FOLDER'] +'1'
 execution_rotation_result = SubprocessExecution.main_execution_function(SubprocessExecution(), command_rotatelogs, True)
 print execution_rotation_result
-# command_rotatelogs = 'rm ' + json_dict['GENERAL']['LOG_FOLDER'] + '1'
-# execution_rotation_result = SubprocessExecution.main_execution_function(SubprocessExecution(), command_rotatelogs, True)
-# print execution_rotation_result
-# def create_timed_rotating_log(path, logger):
-#     """"""
-#     logger = logging.getLogger('Rotating Logs')
-#     logger.setLevel(logging.INFO)
-#     # handler = RotatingFileHandler(path, maxBytes=9192, backupCount=5)
-#     handler = TimedRotatingFileHandler(path, when="h",
-#                                         interval=1 , backupCount=5)
-#     logger.addHandler(handler)
-#     logger.info('Logs rotated')
-
-# create_timed_rotating_log(json_dict['GENERAL']['LOG_FOLDER'], logger)

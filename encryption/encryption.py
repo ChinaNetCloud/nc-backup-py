@@ -147,12 +147,22 @@ if __name__ == "__main__":
     sys.path.append(encryption_command.HOME_FOLDER)
     from execution.subprocess_execution import SubprocessExecution
     from tools.filesystem_handling import FilesystemHandling
-
+    from execution.config_parser import ConfigParser
+    if not ConfigParser.is_existing_abs_path(ConfigParser(),encryption_command.KEY_FILE):
+        print 'You need a key file to encrypt: ' + str(encryption_command.KEY_FILE) \
+              + 'Does not seem to exist. Stopping execution'
+        exit(1)
     if encryption_command.DECRYPT is None \
             or encryption_command.DECRYPT == '-e' \
             or encryption_command.DECRYPT == False:
         if not isfile(encryption_command.KEY_FILE):
             print 'The encription key file was NOT found at: ' + encryption_command.KEY_FILE
+            exit(1)
+        print encryption_command.OBJECTIVES
+
+        if not ConfigParser.is_existing_abs_path(ConfigParser(), encryption_command.OBJECTIVES) \
+                or not ConfigParser.is_abs_path(ConfigParser(), encryption_command.DESTINATION):
+            print 'Please make sure OBJECTIVES exist and DESTINATION is absolute path, execution will not continue'
             exit(1)
         if encryption_command.OBJECTIVES and encryption_command.DESTINATION:
             FilesystemHandling.create_directory(encryption_command.DESTINATION)
@@ -180,8 +190,7 @@ if __name__ == "__main__":
                         EncryptionWorks.split_file(EncryptionWorks(), file_encrypted, encryption_command.FILE_SIZE)
                         FilesystemHandling.remove_files(out_file_str)
 
-
-                        # Compressed file is not a directory.
+        # Compressed file is not a directory.
         if encryption_command.REMOVE_OBJECTIVES == 'True':
             print 'Deleting files after objective files as per config option --REMOVE_OBJECTIVES: ' \
                   + encryption_command.OBJECTIVES
