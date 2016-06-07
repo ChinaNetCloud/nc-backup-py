@@ -83,15 +83,34 @@ class FileBackups:
                 print 'Successful execution: ' + str(execution_message[0]) + ', ' + str(execution_message[1]) + \
                       ', ' + str(execution_message[2])
 
+    def evaluate_file_or_folder(self, paths_string):
+        """
+        @rtype: bool
+        """
+
+        # print paths_string
+        for path_string in paths_string.split():
+            if not ConfigParser.is_existing_abs_path(ConfigParser(), path_string):
+                return False
+        return True
 
 if __name__ == "__main__":
-    # FileBackups.files_backup()
     command_object = FileBackups.file_backup_commands(FileBackups())
     if command_object.FILESET_INCLUDE:
         sys.path.append(command_object.HOME_FOLDER)
         from compression.zip_compression import ZipCompression
         from execution.subprocess_execution import SubprocessExecution
         from tools.os_works import OSInformation
+        from execution.config_parser import ConfigParser
+        if not FileBackups.evaluate_file_or_folder(FileBackups(), command_object.FILESET_INCLUDE):
+            print "At least one of the filesets (FILESET_INCLUDE variable from configs)" \
+                  " for files backup does not exist this script is terminating"
+            exit(1)
+        # print command_object.FILESET_EXCLUDE
+        if command_object.FILESET_EXCLUDE and not FileBackups.evaluate_file_or_folder(FileBackups(), command_object.FILESET_EXCLUDE):
+            print "At least one of the Excluded filesets (FILESET_EXCLUDE variable from configs) " \
+                  "for files backup does not exist this script is terminating"
+            exit(1)
         print "Parameters in use, Fileset: " + command_object.FILESET_INCLUDE
         print 'Work Folder: ' + command_object.WORK_FOLDER
         print 'Files and folders to exclude:' + str(command_object.FILESET_EXCLUDE)
