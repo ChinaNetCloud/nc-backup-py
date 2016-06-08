@@ -59,8 +59,6 @@ class mydump:
                                    , help='Script home folder required(from where the master script runs)',
                                    required=True)
         parser_object.add_argument('--DESTINATION', type=str, help='Local backup folder', required=True,action="store")
-        parser_object.add_argument('--CONF_PATH', type=str, help='Configuration file path',
-                                   required=True,action="store")
         parser_object.add_argument('--CREDENTIAL_PATH', type=str, help='Credential file path',
                                    required=True,action="store")
         parser_object.add_argument('--DATA_DIR', type=str, help='Data dir path', required=True,action="store")
@@ -162,7 +160,6 @@ class mydump:
                  + "_" + str(MY_INSTANCE_NAME) +".bin-log.gz " + BINLOG_PATH + "/" + BINLOG_FILE_PREFIX + '.*'
         print command7
         logbak_stdout,logbak_stderr=Popen(command7, shell=True, stdout=PIPE, stderr=PIPE).communicate()
-
         return logbak_stdout,logbak_stderr
 
 
@@ -187,7 +184,7 @@ def main():
 
     for MY_INSTANCE_NAME in mydump_object.args_list.MY_INSTANCES.split(','):
 
-        print "---- Processing instance: "+MY_INSTANCE_NAME+" ----"
+        print "---- Processing instance: " + MY_INSTANCE_NAME + " ----"
 
         MYSQL_DATA_DIR,mysql_dump_and_credentials,mysql_and_credentials=mydump_object.get_instanceinfo(MY_INSTANCE_NAME)
         rotate_stdout,rotate_stderr=mydump_object.log_rotate(mysql_and_credentials)

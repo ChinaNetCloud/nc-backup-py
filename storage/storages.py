@@ -132,7 +132,7 @@ class AliyunOSS(Storage):
 
         sys.path.append(self.__home_path)
         from execution.subprocess_execution import SubprocessExecution
-        if remove_objective == 'True':
+        if remove_objective == 'True' or  remove_objective == True:
             execution_message.append(SubprocessExecution.main_execution_function(SubprocessExecution(),
                                                                                  'rm -rf ' + mypath_to_dir))
 

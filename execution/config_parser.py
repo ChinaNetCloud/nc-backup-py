@@ -102,7 +102,6 @@ class ConfigParser:
         return True
 
     def is_abs_path(self, path_to_check):
-        # print path_to_check
         return os.path.isabs(path_to_check)
 
     def is_existing_abs_path(self, path_to_check):
@@ -121,8 +120,6 @@ class ConfigParser:
         return text_string
 
     def remove_backslash_from_path(self, path, logger=None):
-        # print path + 'AAAAAAA'
-        # print path[-1]
         if path[-1] == '/':
             log_message = 'Ending backslash from configs ' + path + \
                           ' it will be removed for execution to be: ' + path[:-1]

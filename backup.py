@@ -147,7 +147,6 @@ if type(json_dict) is not str:
             logger.critical(attempt_failed_notification)
             exit(1)
 
-            # else:
 elif type(json_dict) is str:
     logger.critical('Execution Error with: ' + json_dict + command_object.config)
 else:

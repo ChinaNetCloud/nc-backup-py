@@ -78,7 +78,7 @@ if __name__ == "__main__":
         print 'OBJECTIVES and DESTINATION need to be present in compression module, execution will not continue'
         exit(1)
 
-    if command_compression.REMOVE_OBJECTIVES == True:
+    if command_compression.REMOVE_OBJECTIVES == True or command_compression.REMOVE_OBJECTIVES == 'True':
         print 'Deleting files after objective files as per config option --REMOVE_OBJECTIVES: ' \
               + command_compression.OBJECTIVES
         FilesystemHandling.remove_files(command_compression.OBJECTIVES)
