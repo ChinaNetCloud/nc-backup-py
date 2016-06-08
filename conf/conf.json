@@ -18,7 +18,7 @@
     "EXECUTE_WITH": "python",
     "EXECUTABLE": "",
     "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc /vagrant/",
+      "FILESET_INCLUDE": "/etc /vagrant",
       "FILESET_EXCLUDE": "/etc/yum.repos.d",
       "TAR_COMMAND": "sudo /bin/tar czCf /"
     }
@@ -30,7 +30,6 @@
     "EXECUTE_WITH": "python",
     "PARAMETERS": {
       "CREDENTIAL_PATH": "/etc/nc-backup-py/mysql.credentials",
-      "CONF_PATH": "/etc/my.cnf",
       "DATA_DIR": "/var/lib/mysql",
       "MY_INSTANCES": "3306",
       "BINLOG_PATH": "/var/lib/mysql",
@@ -45,17 +44,17 @@
     }
   },
   "MONGODB":{
-    "ACTION": "",
+    "ACTION": "load",
     "FROM": "mongo",
     "FILENAME": "mongo",
-    "CLASS": "MongoDump",
+    "CLASS": "MongoBackup",
     "PARAMETERS":{
       "MONGO_USER": "",
       "MONGO_PWD": "",
       "MONGO_HOST": "127.0.0.1",
       "MONGODUMP_BIN": "/usr/bin/mongodump",
-      "PREFIX_FOLDER": "mongodump",
       "TAR_COMMAND": "sudo /bin/tar czf",
+      "PREFIX_FOLDER": "mongodump",
       "DESTINATION": "/opt/backup"
     }
   }
@@ -67,9 +66,9 @@
     "EXECUTE_WITH": "",
     "PARAMETERS": {
       "TAR_COMMAND": "sudo /bin/tar czCf /",
-      "OBJECTIVES": "/opt/backup/files /opt/backup/mydump",
+      "OBJECTIVES": "/opt/backup/files /opt/backup/mydump /opt/backup/mongodump",
       "DESTINATION": "/opt/backup/compressed",
-      "REMOVE_OBJECTIVES": "True"
+      "REMOVE_OBJECTIVES": "False"
     }
   },
   "ENCRYPTION": {

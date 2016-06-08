@@ -120,8 +120,6 @@ class ConfigParser:
         return text_string
 
     def remove_backslash_from_path(self, path, logger=None):
-        # print path + 'AAAAAAA'
-        # print path[-1]
         if path[-1] == '/':
             log_message = 'Ending backslash from configs ' + path + \
                           ' it will be removed for execution to be: ' + path[:-1]

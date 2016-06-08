@@ -66,11 +66,6 @@ class EncryptionWorks:
                     finished = True
                 out_file.write(cipher.encrypt(chunk))
         else:
-            # (echo 08df2cecc643985e7c274de03a819b21;
-            # cat / opt / test / compressed / filesbackup_20160526_212715.tar.gz) | / usr / bin / gpg - agent - -daemon
-            # gpg2 - -batch - -yes - -no - tty - -quiet - c - -passphrase - fd
-            # 0 > / opt / test / encrypted / 20160526
-            # _212844.tar.gz.crypt
             command_encrypt = 'cat '+ password +' '+ in_file.name +\
                               ' | /usr/bin/gpg-agent --daemon gpg2 --batch --yes --no-tty ' \
                               '--quiet -c --passphrase-fd 0 > ' + out_file.name
@@ -197,17 +192,21 @@ if __name__ == "__main__":
             FilesystemHandling.remove_files(encryption_command.OBJECTIVES)
 
     elif encryption_command.DECRYPT == '-d' or encryption_command.DECRYPT is True:
+        print 'You have chosen to decrypt with -d option'
         if encryption_command.OBJECTIVES and encryption_command.DESTINATION:
             datetime_string = time.strftime("%Y%m%d_%H%M%S")
             if not encryption_command.OBJECTIVES.endswith('000'):
                 cat_execution_result = EncryptionWorks.cat_files(EncryptionWorks(), encryption_command.OBJECTIVES)
+                if cat_execution_result[0] != 0:
+                    print 'Error:Cat retuned a non zero exit code.'
+                    exit(1)
                 with open(encryption_command.OBJECTIVES, 'rb') as in_file:
-                    with open(cat_execution_result, 'wb') as out_file:
+                    with open(encryption_command.DESTINATION, 'wb') as out_file:
                         with open(encryption_command.KEY_FILE, 'r') as key_file:
                             key_from_file = key_file.read().replace('\n', '')
                             EncryptionWorks.decrypt(EncryptionWorks(), in_file, out_file, key_from_file, 32,
                                                     encryption_command.HOME_FOLDER)
-                        # Compressed file is not a directory.
+
             else:
                 result_name = encryption_command.OBJECTIVES.replace('.000', '')
                 cat_execution_result = SubprocessExecution.main_execution_function(SubprocessExecution(),
@@ -218,5 +217,3 @@ if __name__ == "__main__":
                         with open(encryption_command.KEY_FILE, 'r') as key_file:
                             key_from_file =key_file.read().replace('\n', '')
                             EncryptionWorks.decrypt(EncryptionWorks(), in_file, out_file, key_from_file, 32, encryption_command.HOME_FOLDER)
-                            # Compressed file is not a directory.
-
