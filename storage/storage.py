@@ -50,7 +50,7 @@ if __name__ == "__main__":
         print 'Not supported storage destination: ' + str(storage_cmd.DESTINATION)
         exit(1)
     if not ConfigParser.is_existing_abs_path(ConfigParser(), storage_cmd.OBJECTIVES):
-        print 'OBJECTIVES hast to exist for storage to work, stopping execution'
+        print 'OBJECTIVES has to exist for storage to work, stopping execution'
         exit(1)
 
     print 'Executing backup files type: ' + storage_cmd.DESTINATION

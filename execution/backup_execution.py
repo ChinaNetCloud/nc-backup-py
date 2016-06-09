@@ -59,7 +59,7 @@ class BackupExecutionLogic:
                 logger.info(module_call_message)
 
             log_string = "List of parameters passed to script: " + module_to_call
-            print log_string
+            # print log_string
             logger.info(log_string)
 
             out_put_exec = SubprocessExecution.main_execution_function(SubprocessExecution(),
@@ -79,7 +79,6 @@ class BackupExecutionLogic:
             loaded_scripts = {'external':{'message': out_put_exec}}
             return loaded_scripts
 
-
         # Load plugins dynamically
         elif section == 'ACTION' and json_dict[scripts_modules][section] == "load":
             path_to_import = json_dict[scripts_modules]['FROM'] + '.' + json_dict[scripts_modules]['FILENAME']
@@ -93,12 +92,15 @@ class BackupExecutionLogic:
                 instanciated_plugin = plugin_object.create_object(logger)
             instanciated_plugin.config_plugin()
             works_execution = instanciated_plugin.works_execution()
-            logger.info('Works: ' + str(works_execution))
+            logger.info('Plugin works_execution function output: ' + str(works_execution))
             output = instanciated_plugin.output()
             print output
-            logger.info('Output: ' + str(output))
-            loaded_scripts = {'plugin':{'size': output}}
-        return loaded_scripts
+            if json_dict[scripts_modules]['FILENAME'] == 'size_calculation':
+                logger.info('Output: ' + str(output))
+                loaded_scripts = {'plugin':{'size': output}}
+                return loaded_scripts
+            else:
+                return {'plugin': {'message': output}}
 
     def __prepare_configs_for_execution(self, json_dict,scripts_modules,home_folder, logger=None):
         """Prepare configurations for execution create path, get parameters, etc"""
