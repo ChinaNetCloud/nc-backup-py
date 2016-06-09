@@ -55,15 +55,18 @@ class MongoBackup(ModuleFrame):
             mongo_host = self.__parameters_dict['MONGO_HOST']
         else:
             mongo_host = '127.0.0.1'
+
         mongo_dump_command += ' -h ' + mongo_host + ' -o ' + dir_mongo_backup + '/dump_' + datetime_string
-        if self.__parameters_dict['MONGO_USER'] != '' and self.__parameters_dict['MONGO_USER'] is not None:
+        if self.__parameters_dict.get('MONGO_USER') and self.__parameters_dict['MONGO_USER'] != '' \
+                and self.__parameters_dict['MONGO_USER'] is not None:
             mongo_dump_command += ' --username ' + self.__parameters_dict['MONGO_USER']
-        if self.__parameters_dict['MONGO_PWD'] != '' and self.__parameters_dict['MONGO_PWD'] is not None:
+        if self.__parameters_dict.get('MONGO_PWD') and self.__parameters_dict['MONGO_PWD'] != '' \
+                and self.__parameters_dict['MONGO_PWD'] is not None:
             mongo_dump_command += ' --password ' + self.__parameters_dict['MONGO_PWD']
         result_mongo_dump_execution = SubprocessExecution.main_execution_function(SubprocessExecution(),
                                                                                     mongo_dump_command,
                                                                                     True, self.__logger)
-        # print result_mongo_dump_execution
+
         if result_mongo_dump_execution[0] != 0 and result_mongo_dump_execution[0] is not None:
             self.__logger.warning('MongoDB backup failed')
             self.__logger.warning('Error code: ' + str(result_mongo_dump_execution[0]))
