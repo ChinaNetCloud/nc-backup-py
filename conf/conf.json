@@ -58,6 +58,19 @@
       "DESTINATION": "/opt/backup"
     }
   },
+  "POSTGRESS":{
+    "ACTION": "load",
+    "FROM": "postgres",
+    "FILENAME": "postgres",
+    "CLASS": "PostgresBackup",
+    "PARAMETERS": {
+      "PREFIX_FOLDER": "pgdump",
+      "PSQLDUMP": "/usr/bin/pg_dump",
+      "PSQL": "/usr/bin/psql",
+      "DESTINATION": "/opt/backup",
+      "EXCLUDE_DB": "postgres"
+    }
+  },
   "COMPRESSION": {
     "ACTION": "execute",
     "NAME": "compression",
