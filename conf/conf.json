@@ -68,7 +68,7 @@
       "PSQLDUMP": "/usr/bin/pg_dump",
       "PSQL": "/usr/bin/psql",
       "DESTINATION": "/opt/backup",
-      "EXCLUDE_DB": "postgres"
+      "EXCLUDE_DB": ""
     }
   },
   "COMPRESSION": {
