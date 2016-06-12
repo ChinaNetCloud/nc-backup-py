@@ -150,13 +150,15 @@ class mydump:
     def backup_logs(self,MYSQL_DATA_DIR,DESTINATION, script_prefix, MY_INSTANCE_NAME,
                     BINLOG_PATH='/var/lib/mysql/data', BINLOG_FILE_PREFIX='mysql-bin'):
         j=""
-        command6="ls -l "+MYSQL_DATA_DIR+"| grep 'mysql-bin' | awk '{ print $NF }'"
+        bin_log_files_list = [BINLOG_PATH + '/' + name for name in os.listdir(BINLOG_PATH) if 'mysql-bin.' in name]
+        now = time.time()
 
-        stdout6, stderr6 = Popen(command6, shell=True, stdout=PIPE, stderr=PIPE).communicate()
-        for i in stdout6.split('\n')[:-1]:
-            j=j+" "+MYSQL_DATA_DIR+i
+        bin_log_files_list = [file_log for file_log in bin_log_files_list if os.stat(file_log).st_mtime > now - (3 * 86400)]
+        for i in bin_log_files_list:
+            j =  j + ' ' + i
+        print j
         command7=self.tar_command + ' ' + str(DESTINATION) + "/" + str(script_prefix) \
-                 + "_" + str(MY_INSTANCE_NAME) +".bin-log.gz " + BINLOG_PATH + "/" + BINLOG_FILE_PREFIX + '.*'
+                 + "_" + str(MY_INSTANCE_NAME) +".bin-log.gz" + j
         print command7
         logbak_stdout,logbak_stderr=Popen(command7, shell=True, stdout=PIPE, stderr=PIPE).communicate()
         return logbak_stdout,logbak_stderr

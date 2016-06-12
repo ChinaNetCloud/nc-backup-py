@@ -18,7 +18,7 @@
     "EXECUTE_WITH": "python",
     "EXECUTABLE": "",
     "PARAMETERS": {
-      "FILESET_INCLUDE": "/etchgg /vagrant",
+      "FILESET_INCLUDE": "/etc /vagrant",
       "FILESET_EXCLUDE": "/etc/yum.repos.d",
       "TAR_COMMAND": "sudo /bin/tar czCf /"
     }
