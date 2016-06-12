@@ -68,7 +68,11 @@ class PostgresBackup(ModuleFrame):
                         # print result_dump[2]
                         return 'Execution failed while executing: ' + 'pg_dump ' + n_db + ' | gzip -c > ' + save_dir + n_db + '.gz'
                     # os.popen('pg_dump ' + n_db + ' | gzip -c > ' + save_dir + n_db + '.gz')
-
+            result_dump = \
+                SubprocessExecution.main_execution_function(SubprocessExecution(),
+                                                        'pg_dumpall -r | gzip -c > ' + save_dir + 'roles' + '.gz'
+                                                        , True, self.__logger)
+            print result_dump
         else:
             self.__execution_result = False
     # def __log_critical_error(self):

@@ -30,7 +30,16 @@ if type(json_dict) is str:
     print 'Unexpected error, the config file was supposed to be loaded in a dictionary. Got this instead:'
     print json_dict
     exit(1)
-logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', 10,
+if not command_object.logging_level \
+        or command_object.logging_level == 'WARINIG' \
+        or command_object.logging_level == 'warning':
+    logging_level = logging.WARNING
+elif command_object.logging_level == 'INFO' or  command_object.logging_level == 'info':
+    logging_level = logging.INFO
+elif  command_object.logging_level == 'CRITICAL' or  command_object.logging_level == 'critical':
+    logging_level = logging.CRITICAL
+
+logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', logging_level,
                                       json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 json_dict = ConfigParser.validator_basic(ConfigParser(), json_dict, logger)
