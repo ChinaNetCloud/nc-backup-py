@@ -93,6 +93,23 @@
 }
 
 
+ /opt/backup/mongodump
+,
+  "MONGODB":{
+    "ACTION": "load",
+    "FROM": "mongo",
+    "FILENAME": "mongo",
+    "CLASS": "MongoBackup",
+    "PARAMETERS":{
+      "MONGO_USER": "",
+      "MONGO_PWD": "",
+      "MONGO_HOST": "127.0.0.1",
+      "MONGODUMP_BIN": "/usr/bin/mongodump",
+      "TAR_COMMAND": "sudo /bin/tar czf",
+      "PREFIX_FOLDER": "mongodump",
+      "DESTINATION": "/opt/backup"
+    }
+  }
 ,
   "DBSBACKUP": {
     "ACTION": "execute",

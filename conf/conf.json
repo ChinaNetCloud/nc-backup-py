@@ -11,14 +11,14 @@
     "LOCAL_BACKUP": "/opt/backup/local",
     "HOME_FOLDER": "/vagrant/nc-backup-py",
     "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log"
-    },
+  },
   "FILESET":{
     "ACTION": "execute",
     "NAME": "filesbackup",
     "EXECUTE_WITH": "python",
     "EXECUTABLE": "",
     "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc /vagrant",
+      "FILESET_INCLUDE": "/etchgg /vagrant",
       "FILESET_EXCLUDE": "/etc/yum.repos.d",
       "TAR_COMMAND": "sudo /bin/tar czCf /"
     }
@@ -57,8 +57,20 @@
       "PREFIX_FOLDER": "mongodump",
       "DESTINATION": "/opt/backup"
     }
-  }
-  ,
+  },
+  "POSTGRES":{
+    "ACTION": "load",
+    "FROM": "postgres",
+    "FILENAME": "postgres",
+    "CLASS": "PostgresBackup",
+    "PARAMETERS": {
+      "PREFIX_FOLDER": "pgdump",
+      "PSQLDUMP": "/usr/bin/pg_dump",
+      "PSQL": "/usr/bin/psql",
+      "DESTINATION": "/opt/backup",
+      "EXCLUDE_DB": ""
+    }
+  },
   "COMPRESSION": {
     "ACTION": "execute",
     "NAME": "compression",
@@ -66,7 +78,7 @@
     "EXECUTE_WITH": "",
     "PARAMETERS": {
       "TAR_COMMAND": "sudo /bin/tar czCf /",
-      "OBJECTIVES": "/opt/backup/files /opt/backup/mydump /opt/backup/mongodump",
+      "OBJECTIVES": "/opt/backup/files /opt/backup/mydump /opt/backup/mongodump /opt/backup/pgdump",
       "DESTINATION": "/opt/backup/compressed",
       "REMOVE_OBJECTIVES": "False"
     }
@@ -76,7 +88,7 @@
     "NAME": "encryption",
     "PARAMETERS": {
       "KEY_FILE": "/vagrant/nc-backup-py/conf/key_file",
-      "FILE_SIZE": "4000",
+      "FILE_SIZE": "5",
       "OBJECTIVES": "/opt/backup/compressed",
       "DESTINATION":"/opt/backup/encrypted",
       "REMOVE_OBJECTIVES": "True"

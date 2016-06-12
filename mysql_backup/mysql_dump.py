@@ -15,7 +15,6 @@ and make improvements in:
 -Coding standards
 -Decopling code
 -Bug fixes
--Binary independence.
 -Command independence from script (Exclude)
 -bing log not active should not make backup fiale, just warn.
 '''

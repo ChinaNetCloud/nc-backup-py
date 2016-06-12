@@ -30,7 +30,16 @@ if type(json_dict) is str:
     print 'Unexpected error, the config file was supposed to be loaded in a dictionary. Got this instead:'
     print json_dict
     exit(1)
-logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', 10,
+if not command_object.logging_level \
+        or command_object.logging_level == 'WARINIG' \
+        or command_object.logging_level == 'warning':
+    logging_level = logging.WARNING
+elif command_object.logging_level == 'INFO' or  command_object.logging_level == 'info':
+    logging_level = logging.INFO
+elif  command_object.logging_level == 'CRITICAL' or  command_object.logging_level == 'critical':
+    logging_level = logging.CRITICAL
+
+logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', logging_level,
                                       json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 json_dict = ConfigParser.validator_basic(ConfigParser(), json_dict, logger)
@@ -70,14 +79,29 @@ if type(json_dict) is not str:
     # the size checkups should be removed from here in the future. Ned to think if a less decoupled way.
     size_final = 'N/A' # Not aplicable, means the script does not have size.
     for script_result in execution_scripts_result:
-        # print type(script_result[0])
         if type(script_result[0]) is dict:
-            if 'plugin' in script_result[0] and 'size' in script_result[0]['plugin']:
-                size_final = script_result[0]['plugin']['size']
-                successful_execution = True
+            if 'plugin' in script_result[0]:
+                if 'size' in script_result[0]['plugin']:
+                    size_final = script_result[0]['plugin']['size']
+                    successful_execution = True
+                elif 'message' in script_result[0]['plugin'] and script_result[0]['plugin']['message'] is not None:
+                    if script_result[0]['plugin'].get('message'):
+                        if script_result[0]['plugin']['message'][0] == 0:
+                            successful_execution = True
+                        else:
+                            successful_execution = False
+                            break
+                    else:
+                        successful_execution = False
+                        break
+                else:
+                    pass
+            elif script_result[0].get('plugin')  and not script_result[0]['plugin'].get('message')\
+                    or script_result[0].get('plugin') and not script_result[0]['plugin'].get('size'):
+                pass
             elif 'external' in script_result[0] and \
                             'message' in script_result[0]['external'] and \
-                            script_result[0]['external']['message'][0] is 0:
+                            script_result[0]['external']['message'][0] == 0:
                 successful_execution = True
             else:
                 successful_execution = False
@@ -157,7 +181,12 @@ logger = logging.getLogger('ncbackup')
 
 
 from execution.subprocess_execution import SubprocessExecution
+
+command_rotatelogs = 'mv ' + json_dict['GENERAL']['LOG_FOLDER'] + '1 ' + \
+                     json_dict['GENERAL']['LOG_FOLDER'] + '2'
+execution_rotation_result = SubprocessExecution.main_execution_function(SubprocessExecution(), command_rotatelogs, True)
+# print execution_rotation_result
 command_rotatelogs = 'mv ' + json_dict['GENERAL']['LOG_FOLDER'] + ' ' + \
                      json_dict['GENERAL']['LOG_FOLDER'] +'1'
 execution_rotation_result = SubprocessExecution.main_execution_function(SubprocessExecution(), command_rotatelogs, True)
-print execution_rotation_result
+# print execution_rotation_result
