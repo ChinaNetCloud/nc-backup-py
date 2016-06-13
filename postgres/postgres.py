@@ -65,9 +65,15 @@ class PostgresBackup(ModuleFrame):
                         self.__logger.critical('Error code: ' + str(result_dump[0]))
                         self.__logger.critical('StdOut: ' + result_dump[1])
                         self.__logger.critical('StdErr: ' + result_dump[2])
-                        # print result_dump[2]
                         return 'Execution failed while executing: ' + 'pg_dump ' + n_db + ' | gzip -c > ' + save_dir + n_db + '.gz'
-                    # os.popen('pg_dump ' + n_db + ' | gzip -c > ' + save_dir + n_db + '.gz')
+            # if DB backup ROLES.
+            # https://www.postgresql.org/docs/8.1/static/app-pg-dumpall.html
+            # option: --globals-only
+            # this is before 8.3
+            # on 8.3 they added --roles-only
+            # https://www.postgresql.org/docs/8.3/static/app-pg-dumpall.html
+            # but still have --globals-only
+            # Need to add condition for older versions of postgress.
             result_dump = \
                 SubprocessExecution.main_execution_function(SubprocessExecution(),
                                                         'pg_dumpall -r | gzip -c > ' + save_dir + 'roles' + '.gz'

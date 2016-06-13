@@ -34,6 +34,7 @@
       "MY_INSTANCES": "3306",
       "BINLOG_PATH": "/var/lib/mysql",
       "BINLOG_FILE_PREFIX": "mysql-bin",
+      "BINLOG_DAYS": "1",
       "DESTINATION": "/opt/backup",
       "TAR_COMMAND": "sudo /bin/tar czf",
       "MYSQL_DUMP_BINARY": "/bin/mysqldump",
@@ -80,7 +81,7 @@
       "TAR_COMMAND": "sudo /bin/tar czCf /",
       "OBJECTIVES": "/opt/backup/files /opt/backup/mydump /opt/backup/mongodump /opt/backup/pgdump",
       "DESTINATION": "/opt/backup/compressed",
-      "REMOVE_OBJECTIVES": "False"
+      "REMOVE_OBJECTIVES": "True"
     }
   },
   "ENCRYPTION": {
@@ -88,7 +89,7 @@
     "NAME": "encryption",
     "PARAMETERS": {
       "KEY_FILE": "/vagrant/nc-backup-py/conf/key_file",
-      "FILE_SIZE": "5",
+      "FILE_SIZE": "100",
       "OBJECTIVES": "/opt/backup/compressed",
       "DESTINATION":"/opt/backup/encrypted",
       "REMOVE_OBJECTIVES": "True"
@@ -111,6 +112,17 @@
       "DESTINATION":"s3",
       "BUCKET_NAME": "cncbackup",
       "UPLOAD_COMMAND": "aws s3 cp",
+      "REMOVE_OBJECTIVES": "True"
+    }
+  },
+  "STORAGE_OSS": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "DESTINATION":"oss",
+      "BUCKET_NAME": "cncbackup",
+      "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
       "REMOVE_OBJECTIVES": "True"
     }
   },

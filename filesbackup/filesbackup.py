@@ -65,7 +65,6 @@ class FileBackups:
             else:
                 tar_command = tar_command + ' ' + destination + '/files/filesbackup_' \
                               + datetime_string + '.tar.gz ' + filesets + excluded_files
-                # print tar_command
                 if not os.path.isdir(destination + '/files'):
                     create_dir_cmd = 'mkdir ' + destination + '/files'
                     execution_mkdir = SubprocessExecution.main_execution_function(SubprocessExecution(), create_dir_cmd, True)
