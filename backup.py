@@ -23,7 +23,6 @@ else:
         config_file_location = command_object.config
 
 json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig(), config_file_location)
-#parse dictionaty.
 
 
 if type(json_dict) is str:
@@ -38,10 +37,13 @@ elif command_object.logging_level == 'INFO' or  command_object.logging_level == 
     logging_level = logging.INFO
 elif  command_object.logging_level == 'CRITICAL' or  command_object.logging_level == 'critical':
     logging_level = logging.CRITICAL
+else:
+    logging_level = logging.WARNING
 
 logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', logging_level,
                                       json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# Parse dictionary.
 json_dict = ConfigParser.validator_basic(ConfigParser(), json_dict, logger)
 
 # Set the backup as failed by default.
@@ -52,7 +54,6 @@ if (os_name):
 else:
     # Allow only one process to run at the time
     pid_file = json_dict['GENERAL']['HOME_FOLDER'] + '/backup.pid'
-    # pid_file = '/var/log/nc-backup-py/backup.pid'
     fp = open(pid_file, 'w')
     try:
         fcntl.lockf(fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -69,11 +70,9 @@ if type(json_dict) is not str:
         nc_backup_py_home = json_dict['GENERAL']['HOME_FOLDER']
         logger.info('Backups execution...')
         logger.info('Loading and executing modules from configuration sections')
-        # try:
         logger.info('Iterating configs')
         execution_scripts_result = BackupExecutionLogic.iterate_config_script(BackupExecutionLogic(), json_dict,
                                                                       nc_backup_py_home, logger)
-        # print execution_scripts_result
         logger.info('Config itaration done')
         successful_execution = True
     # the size checkups should be removed from here in the future. Ned to think if a less decoupled way.
@@ -185,8 +184,6 @@ from execution.subprocess_execution import SubprocessExecution
 command_rotatelogs = 'mv ' + json_dict['GENERAL']['LOG_FOLDER'] + '1 ' + \
                      json_dict['GENERAL']['LOG_FOLDER'] + '2'
 execution_rotation_result = SubprocessExecution.main_execution_function(SubprocessExecution(), command_rotatelogs, True)
-# print execution_rotation_result
 command_rotatelogs = 'mv ' + json_dict['GENERAL']['LOG_FOLDER'] + ' ' + \
                      json_dict['GENERAL']['LOG_FOLDER'] +'1'
 execution_rotation_result = SubprocessExecution.main_execution_function(SubprocessExecution(), command_rotatelogs, True)
-# print execution_rotation_result

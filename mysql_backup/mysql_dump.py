@@ -14,7 +14,6 @@ Abel Guzman is supposed to make it work with his help
 and make improvements in:
 -Coding standards
 -Decopling code
--Bug fixes
 -Command independence from script (Exclude)
 -bing log not active should not make backup fiale, just warn.
 '''
@@ -63,6 +62,7 @@ class mydump:
         parser_object.add_argument('--DATA_DIR', type=str, help='Data dir path', required=True,action="store")
         parser_object.add_argument('--MY_INSTANCES', type=str, help='Instance port', required=True,action="store")
         parser_object.add_argument('--BINLOG_PATH', type=str, help='Bin Log folder', required=True, action="store")
+        parser_object.add_argument('--BINLOG_DAYS', type=str, help='Bin Log folder', required=False)
         parser_object.add_argument('--BINLOG_FILE_PREFIX', type=str, help='Bin Log file prefix',
                                    required=True, action='store')
         parser_object.add_argument('--MYSQL_DUMP_BINARY',type=str, help='MySQL Dump Binarey',  required=False)
@@ -148,15 +148,16 @@ class mydump:
         return backup_stdout,backup_stderr
 
     def backup_logs(self,MYSQL_DATA_DIR,DESTINATION, script_prefix, MY_INSTANCE_NAME,
-                    BINLOG_PATH='/var/lib/mysql/data', BINLOG_FILE_PREFIX='mysql-bin'):
-        j=""
-        command6="ls -l "+MYSQL_DATA_DIR+"| grep 'mysql-bin' | awk '{ print $NF }'"
+                    BINLOG_PATH='/var/lib/mysql/data', BINLOG_FILE_PREFIX='mysql-bin', days=1.5):
+        files_strig_list=""
+        bin_log_files_list = [BINLOG_PATH + '/' + name for name in os.listdir(BINLOG_PATH) if 'mysql-bin.' in name]
+        now = time.time()
 
-        stdout6, stderr6 = Popen(command6, shell=True, stdout=PIPE, stderr=PIPE).communicate()
-        for i in stdout6.split('\n')[:-1]:
-            j=j+" "+MYSQL_DATA_DIR+i
+        bin_log_files_list = [file_log for file_log in bin_log_files_list if os.stat(file_log).st_mtime > now - (float(days) * 86400)]
+        for i in bin_log_files_list:
+            files_strig_list =  files_strig_list + ' ' + i
         command7=self.tar_command + ' ' + str(DESTINATION) + "/" + str(script_prefix) \
-                 + "_" + str(MY_INSTANCE_NAME) +".bin-log.gz " + BINLOG_PATH + "/" + BINLOG_FILE_PREFIX + '.*'
+                 + "_" + str(MY_INSTANCE_NAME) +".bin-log.gz" + files_strig_list
         print command7
         logbak_stdout,logbak_stderr=Popen(command7, shell=True, stdout=PIPE, stderr=PIPE).communicate()
         return logbak_stdout,logbak_stderr
@@ -202,7 +203,8 @@ def main():
                                                               mydump_object.script_prefix,
                                                               MY_INSTANCE_NAME,
                                                               mydump_object.args_list.BINLOG_PATH,
-                                                              mydump_object.args_list.BINLOG_FILE_PREFIX)
+                                                              mydump_object.args_list.BINLOG_FILE_PREFIX,
+                                                              mydump_object.args_list.BINLOG_DAYS)
         print logbak_stdout
         print logbak_stderr
 
