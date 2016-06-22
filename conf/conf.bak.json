@@ -40,6 +40,7 @@
       "MYSQL_BINARY": "/bin/mysql",
       "PREFIX_FOLDER": "mydump",
       "EXCLUDE_DB": "",
+      "BINLOG_DAYS": "3",
       "EXCLUDE_TABLE": "mysql.user mysql.func mysql.event"
     }
   },
@@ -125,105 +126,28 @@
   }
 }
 
-
-
-{
-  "GENERAL": {
-    "HOSTNAME": "srv-nc-test1",
-    "WORK_FOLDER": "/opt/backup",
-    "LOCAL_BACKUP": "/opt/backup/local",
-    "HOME_FOLDER": "/var/www/py/nc-backup-py",
-    "LOG_FOLDER": "/var/www/py/nc-backup-py/log/ncbackup.log"
-  },
-  "FILESET": {
-    "ACTION": "execute",
-    "NAME": "filesbackup",
-    "EXECUTE_WITH": "python",
-    "EXECUTABLE": "",
-    "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc /var/www/py/nc-backup-py/ /var/spool/cron",
-      "FILESET_EXCLUDE": "/etc/yum.d/ /etc/yum.conf /etc/yum.repos.d/ /etc/grub.d"
-    }
-  },
-  "COMPRESSION": {
-    "ACTION": "execute",
-    "NAME": "compression",
-    "EXECUTABLE": "",
-    "EXECUTE_WITH": "",
-    "PARAMETERS": {
-      "OBJECTIVES": "/opt/backup/files",
-      "DESTINATION": "/opt/backup/compressed",
-      "REMOVE_OBJECTIVES": "True"
-    }
-  },
-  "ENCRYPTION": {
-    "ACTION": "execute",
-    "NAME": "encryption",
-    "PARAMETERS": {
-      "KEY_FILE": "/var/www/py/nc-backup-py/conf/key_file",
-      "FILE_SIZE": "5M",
-      "OBJECTIVES": "/opt/backup/compressed",
-      "DESTINATION": "/opt/backup/encrypted",
-      "REMOVE_OBJECTIVES": "True"
-    }
-  },
-  "STORAGE": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS": {
-      "OBJECTIVES": "/opt/backup/encrypted",
-      "DESTINATION": "local",
-      "__options": "local,s3,ssh,oss",
-      "OBJECTIVES": "/opt/backup/encrypted",
-      "REMOVE_OBJECTIVES": "True"
-    }
-  },
-  "STORAGE": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS": {
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
-      "DESTINATION": "s3",
-      "__options": "local,s3,ssh,oss",
-      "REMOVE_OBJECTIVES": "True",
-      "BUCKET_NAME": "cncbackup",
-      "UPLOAD_COMMAND": "aws s3 cp"
-    }
-  },
-  "DBSBACKUP": {
+,
+  "MYSQL": {
     "ACTION": "execute",
     "NAME": "mysql_backup",
     "EXECUTABLE": "mysql_dump.py",
     "EXECUTE_WITH": "python",
     "PARAMETERS": {
-      "CONF_PATH": "/etc/my.cnf",
-      "CREDENTIAL_PATH": "/root/.mycrendential",
-      "DATA_DIR": "/var/lib/mysql/data",
+      "CREDENTIAL_PATH": "/etc/nc-backup-py/mysql.credentials",
+      "DATA_DIR": "/var/lib/mysql",
       "MY_INSTANCES": "3306",
-      "LOG": "/var/log/mysql.log"
+      "BINLOG_PATH": "/var/lib/mysql",
+      "BINLOG_FILE_PREFIX": "mysql-bin",
+      "BINLOG_DAYS": "1",
+      "DESTINATION": "/opt/backup",
+      "TAR_COMMAND": "sudo /bin/tar czf",
+      "MYSQL_DUMP_BINARY": "/bin/mysqldump",
+      "MYSQL_BINARY": "/bin/mysql",
+      "PREFIX_FOLDER": "mydump",
+      "EXCLUDE_DB": "",
+      "EXCLUDE_TABLE": "mysql.user mysql.func mysql.event"
     }
   },
-  "STORAGE_OSS": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
-      "DESTINATION":"oss",
-      "BUCKET_NAME": "cncbackup",
-      "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
-      "REMOVE_OBJECTIVES": "True"
-    }
-  },
-    "SCHEDULE": {
-      "RUN1": "mon-sat",
-      "RUN2": "2nd-5th sun",
-      "RUN3": "1st sun"
-    }
-}
-
-
- /opt/backup/mongodump
-,
   "MONGODB":{
     "ACTION": "load",
     "FROM": "mongo",
@@ -238,17 +162,17 @@
       "PREFIX_FOLDER": "mongodump",
       "DESTINATION": "/opt/backup"
     }
-  }
-,
-  "DBSBACKUP": {
-    "ACTION": "execute",
-    "NAME": "mysql_backup",
-    "EXECUTABLE": "mysql_dump.py",
-    "EXECUTE_WITH": "python",
+  },
+  "POSTGRES":{
+    "ACTION": "load",
+    "FROM": "postgres",
+    "FILENAME": "postgres",
+    "CLASS": "PostgresBackup",
     "PARAMETERS": {
-      "CREDENTIAL_PATH": "/Users/cncuser/Documents/py/nc-backup-py/conf/mysql.credentials",
-      "DATA_DIR": "/usr/local/var/mysql",
-      "MY_INSTANCES": "3306",
-      "LOG": "/usr/local/var/mysql/Abel-Guzman-Sanchezs-MacBook-Air.local.err"
+      "PREFIX_FOLDER": "pgdump",
+      "PSQLDUMP": "/usr/bin/pg_dump",
+      "PSQL": "/usr/bin/psql",
+      "DESTINATION": "/opt/backup",
+      "EXCLUDE_DB": ""
     }
   }
