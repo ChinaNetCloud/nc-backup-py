@@ -39,7 +39,7 @@
     "EXECUTE_WITH": "",
     "PARAMETERS": {
       "TAR_COMMAND": "sudo /bin/tar czCf /",
-      "OBJECTIVES": "/opt/backup/files /usr/bin/mongodump",
+      "OBJECTIVES": "/opt/backup/files /opt/backup/mongodump",
       "DESTINATION": "/opt/backup/compressed",
       "REMOVE_OBJECTIVES": "True"
     }
@@ -73,15 +73,6 @@
       "BUCKET_NAME": "cncbackup",
       "UPLOAD_COMMAND": "aws s3 cp",
       "REMOVE_OBJECTIVES": "True"
-    }
-  },
-  "CLEANUP":{
-    "BUCKET": "cncbackup",
-    "PREFIX": "srv-nc-backup-py-test1/",
-    "KEEP": {
-      "DAILY": {"NUMBER": "7"},
-      "WEEKLY": {"NUMBER": "2", "DAY": "1"},
-      "MONTHLY": {"NUMBER": "2", "DAY": "1"}
     }
   }
 }

@@ -127,3 +127,9 @@ class ConfigParser:
             print log_message
             path = path[:-1]
         return path
+
+    @staticmethod
+    def check_dict_read_is_str(self, json_dict):
+        if type(json_dict) is str:
+            return False
+        return True

@@ -11,6 +11,7 @@ from communications.communications import Communications
 from tools.os_works import OSInformation
 from execution.config_parser import ConfigParser
 
+
 command_object = backupCommands.feature_commands(backupCommands())
 os_name = OSInformation.isWindows()
 if (os_name):
@@ -24,11 +25,11 @@ else:
 
 json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig(), config_file_location)
 
-
-if type(json_dict) is str:
+if not ConfigParser.check_dict_read_is_str(ConfigParser(),json_dict):
     print 'Unexpected error, the config file was supposed to be loaded in a dictionary. Got this instead:'
     print json_dict
-    exit(1)
+
+
 if not command_object.logging_level \
         or command_object.logging_level == 'WARINIG' \
         or command_object.logging_level == 'warning':
