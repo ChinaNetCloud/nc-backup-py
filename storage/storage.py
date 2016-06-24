@@ -7,7 +7,7 @@ class StorageExecution:
 
     def storage_commands(self):
         parser_object = argparse.ArgumentParser()
-        parser_object.add_argument('-o', '--OBJECTIVES', type=str
+        parser_object.add_argument('-o', '--OBJECTIVES', '--TARGETS', type=str
                                    , help='Objectives to encrypt', required=True)
         parser_object.add_argument('-l', '--LOCAL_BACKUP', type=str
                                    , help='Objectives to encrypt', required=True)

@@ -23,12 +23,12 @@ class EncryptionWorks:
     """OpenSSL encryption"""
     def encryption_commands(self):
         parser_object = argparse.ArgumentParser()
-        parser_object.add_argument('-o', '--OBJECTIVES', type=str
+        parser_object.add_argument('-o', '--OBJECTIVES', '--TARGETS', type=str
                                    , help='Objectives to encrypt', required=True)
         parser_object.add_argument('-D', '--DESTINATION', type=str
                                    , help='Destination folder of the output', required=True)
         parser_object.add_argument('-k','--KEY_FILE', type=str
-                                   , help='Compression key file', required=True)
+                                   , help='Compression key file', required=False)
         parser_object.add_argument('-H','--HOME_FOLDER', type=str
                                    , help='Include the main forder to syspath so we '
                                           'can include other libraries', required=True)
@@ -143,6 +143,7 @@ if __name__ == "__main__":
     from execution.subprocess_execution import SubprocessExecution
     from tools.filesystem_handling import FilesystemHandling
     from execution.config_parser import ConfigParser
+
     if not ConfigParser.is_existing_abs_path(ConfigParser(),encryption_command.KEY_FILE):
         print 'You need a key file to encrypt: ' + str(encryption_command.KEY_FILE) \
               + 'Does not seem to exist. Stopping execution'

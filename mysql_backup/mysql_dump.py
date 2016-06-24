@@ -148,11 +148,12 @@ class mydump:
         return backup_stdout,backup_stderr
 
     def backup_logs(self,MYSQL_DATA_DIR,DESTINATION, script_prefix, MY_INSTANCE_NAME,
-                    BINLOG_PATH='/var/lib/mysql/data', BINLOG_FILE_PREFIX='mysql-bin', days=1.5):
+                    BINLOG_PATH='/var/lib/mysql/data', BINLOG_FILE_PREFIX='mysql-bin', days=2):
         files_strig_list=""
         bin_log_files_list = [BINLOG_PATH + '/' + name for name in os.listdir(BINLOG_PATH) if 'mysql-bin.' in name]
         now = time.time()
-
+        if days is None:
+            days = 2
         bin_log_files_list = [file_log for file_log in bin_log_files_list if os.stat(file_log).st_mtime > now - (float(days) * 86400)]
         for i in bin_log_files_list:
             files_strig_list =  files_strig_list + ' ' + i
