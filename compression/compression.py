@@ -12,10 +12,10 @@ class CompressionWorks:
 
     def compression_commands(self):
         parser_object = argparse.ArgumentParser()
-        parser_object.add_argument('-o', '--OBJECTIVES', type=str
+        parser_object.add_argument('-o', '--OBJECTIVES', '--TARGETS', type=str
                                    , help='Included fileset to compress', required=True)
         parser_object.add_argument('-d', '--DESTINATION', type=str
-                                   , help='Compress files to folder', required=True)
+                                   , help='Compress files to folder', required=False)
         parser_object.add_argument('-r', '--REMOVE_OBJECTIVES', type=str
                                    , help='Remove/Delete objective folders', required=False)
         parser_object.add_argument('-H', '--HOME_FOLDER', type=str
@@ -46,34 +46,48 @@ class CompressionWorks:
 
         return execution_message
 
+    @staticmethod
+    def check_exists(self, variable_to_check):
+        if not variable_to_check or \
+                        variable_to_check is None or \
+                        variable_to_check == '':
+            return False
+        return True
+
 if __name__ == "__main__":
     command_compression = CompressionWorks.compression_commands(CompressionWorks())
-    if command_compression.OBJECTIVES and command_compression.DESTINATION:
+    if not CompressionWorks.check_exists(CompressionWorks(),command_compression.TAR_COMMAND):
+        command_compression.TAR_COMMAND = 'sudo /bin/tar czCf /'
+    if not CompressionWorks.check_exists(CompressionWorks(),command_compression.DESTINATION):
+        command_compression.DESTINATION = '/opt/backup/compressed'
+    if not CompressionWorks.check_exists(CompressionWorks(),command_compression.REMOVE_OBJECTIVES):
+        command_compression.REMOVE_OBJECTIVES = 'True'
+
+    if command_compression.OBJECTIVES:
         sys.path.append(command_compression.HOME_FOLDER)
         from execution.subprocess_execution import SubprocessExecution
-        # from tools.os_works import OSInformation
         from tools.filesystem_handling import FilesystemHandling
         from execution.config_parser import ConfigParser
 
-        print command_compression.OBJECTIVES
         # print ConfigParser.is_existing_abs_path(ConfigParser(), command_compression.OBJECTIVES)
         # print ConfigParser.is_abs_path(ConfigParser(), command_compression.DESTINATION)
         execute = False
+        # print command_compression.OBJECTIVES
         for objectives_paths in str(command_compression.OBJECTIVES).split():
             if not ConfigParser.is_existing_abs_path(ConfigParser(), objectives_paths):
                 execute = False
                 break
             execute = True
-        if execute and ConfigParser.is_abs_path(ConfigParser(), command_compression.DESTINATION):
-            print 'Files to compress: ' + command_compression.OBJECTIVES + '. This files will be compressed to: '\
-                  + command_compression.DESTINATION
+        # if execute and ConfigParser.is_abs_path(ConfigParser(), command_compression.DESTINATION):
+        #     print 'Files to compress: ' + command_compression.OBJECTIVES + '. This files will be compressed to: '\
+        #           + command_compression.DESTINATION
             tar_execution = CompressionWorks.compression_execution(CompressionWorks(command_compression.TAR_COMMAND),
                                                                    command_compression.OBJECTIVES,
                                                                    command_compression.DESTINATION)
             print tar_execution
-        else:
-            print 'Please make sure OBJECTIVES exist and DESTINATION is absolute path, execution will not continue'
-            exit(1)
+        # else:
+        #     print 'Please make sure OBJECTIVES exist and DESTINATION is absolute path, execution will not continue'
+        #     exit(1)
     else:
         print 'OBJECTIVES and DESTINATION need to be present in compression module, execution will not continue'
         exit(1)

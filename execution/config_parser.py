@@ -133,3 +133,12 @@ class ConfigParser:
         if type(json_dict) is str:
             return False
         return True
+
+
+    @staticmethod
+    def check_exists(self, variable_to_check):
+        if not variable_to_check or \
+                        variable_to_check is None or \
+                        variable_to_check == '':
+            return False
+        return True

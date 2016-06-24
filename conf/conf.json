@@ -8,13 +8,7 @@
   },
   "FILESET":{
     "ACTION": "execute",
-    "NAME": "filesbackup",
-    "EXECUTABLE": "",
-    "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc /vagrant/nc-backup-py ",
-      "FILESET_EXCLUDE": "/etc/yum.repos.d",
-      "TAR_COMMAND": "sudo /bin/tar czCf /"
-    }
+    "NAME": "filesbackup"
   },
   "MONGODB":{
     "ACTION": "load",
@@ -34,13 +28,8 @@
   "COMPRESSION": {
     "ACTION": "execute",
     "NAME": "compression",
-    "EXECUTABLE": "",
-    "EXECUTE_WITH": "",
     "PARAMETERS": {
-      "TAR_COMMAND": "sudo /bin/tar czCf /",
-      "OBJECTIVES": "/opt/backup/files /opt/backup/mongodump",
-      "DESTINATION": "/opt/backup/compressed",
-      "REMOVE_OBJECTIVES": "True"
+      "TARGETS": "/opt/backup/files /opt/backup/mongodump"
     }
   },
   "ENCRYPTION": {
@@ -49,7 +38,7 @@
     "PARAMETERS": {
       "KEY_FILE": "/vagrant/nc-backup-py/conf/key_file",
       "FILE_SIZE": "100",
-      "OBJECTIVES": "/opt/backup/compressed",
+      "TARGETS": "/opt/backup/compressed",
       "DESTINATION":"/opt/backup/encrypted",
       "REMOVE_OBJECTIVES": "True"
     }
@@ -60,14 +49,14 @@
     "FILENAME": "size_calculation",
     "CLASS": "SizeCalculation",
     "PARAMETERS": {
-      "OBJECTIVES": "/opt/backup/encrypted"
+      "TARGETS": "/opt/backup/encrypted"
     }
   },
   "STORAGE": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
-      "OBJECTIVES": "/opt/backup/encrypted",
+      "TARGETS": "/opt/backup/encrypted",
       "DESTINATION":"s3",
       "BUCKET_NAME": "cncbackup",
       "UPLOAD_COMMAND": "aws s3 cp",

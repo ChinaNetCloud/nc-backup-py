@@ -8,13 +8,13 @@ class FileBackups:
 
     def file_backup_commands(self):
         parser_object = argparse.ArgumentParser()
-        parser_object.add_argument('-i', '--FILESET_INCLUDE', type=str
-                                   , help='Included fileset to backup', required=True)
         parser_object.add_argument('-H', '--HOME_FOLDER', type=str,
                                    help='Script home folder required(from where the master script runs)',
                                    required=True)
         parser_object.add_argument('-w', '--WORK_FOLDER', type=str
                                    , help='This is the folder to use for temporary files works', required=True)
+        parser_object.add_argument('-i', '--FILESET_INCLUDE', type=str
+                                   , help='Included fileset to backup', required=False)
         parser_object.add_argument('-C', '--COMPRESSION_CMD_CHAIN', type=str
                                    , help='This is the compression command software and it''s parameters', required=False)
         parser_object.add_argument('-T', '--TAR_COMMAND', type=str
@@ -95,29 +95,32 @@ class FileBackups:
 
 if __name__ == "__main__":
     command_object = FileBackups.file_backup_commands(FileBackups())
-    if command_object.FILESET_INCLUDE:
-        sys.path.append(command_object.HOME_FOLDER)
-        from compression.zip_compression import ZipCompression
-        from execution.subprocess_execution import SubprocessExecution
-        from tools.os_works import OSInformation
-        from execution.config_parser import ConfigParser
-        if not FileBackups.evaluate_file_or_folder(FileBackups(), command_object.FILESET_INCLUDE):
-            print "At least one of the filesets (FILESET_INCLUDE variable from configs)" \
-                  " for files backup does not exist this script is terminating"
-            exit(1)
-        # print command_object.FILESET_EXCLUDE
-        if command_object.FILESET_EXCLUDE and not FileBackups.evaluate_file_or_folder(FileBackups(), command_object.FILESET_EXCLUDE):
-            print "At least one of the Excluded filesets (FILESET_EXCLUDE variable from configs) " \
-                  "for files backup does not exist this script is terminating"
-            exit(1)
-        print "Parameters in use, Fileset: " + command_object.FILESET_INCLUDE
-        print 'Work Folder: ' + command_object.WORK_FOLDER
-        print 'Files and folders to exclude:' + str(command_object.FILESET_EXCLUDE)
-        if command_object.TAR_COMMAND:
-            tar_command = command_object.TAR_COMMAND
-        else:
-            tar_command = 'sudo /bin/tar czCf /'
-        FileBackups.file_backup_execution(FileBackups(),
-                                          command_object.FILESET_INCLUDE,
-                                          command_object.WORK_FOLDER,
-                                          command_object.FILESET_EXCLUDE, tar_command)
+    if not command_object.FILESET_INCLUDE or \
+                    command_object.FILESET_INCLUDE is None or \
+                    command_object.FILESET_INCLUDE == '':
+        command_object.FILESET_INCLUDE = '/etc /opt/ncscripts /var/spool/cron'
+    sys.path.append(command_object.HOME_FOLDER)
+    from compression.zip_compression import ZipCompression
+    from execution.subprocess_execution import SubprocessExecution
+    from tools.os_works import OSInformation
+    from execution.config_parser import ConfigParser
+    if not FileBackups.evaluate_file_or_folder(FileBackups(), command_object.FILESET_INCLUDE):
+        print "At least one of the filesets (FILESET_INCLUDE variable from configs)" \
+              " for files backup does not exist this script is terminating"
+        exit(1)
+    # print command_object.FILESET_EXCLUDE
+    if command_object.FILESET_EXCLUDE and not FileBackups.evaluate_file_or_folder(FileBackups(), command_object.FILESET_EXCLUDE):
+        print "At least one of the Excluded filesets (FILESET_EXCLUDE variable from configs) " \
+              "for files backup does not exist this script is terminating"
+        exit(1)
+    print "Parameters in use, Fileset: " + command_object.FILESET_INCLUDE
+    print 'Work Folder: ' + command_object.WORK_FOLDER
+    print 'Files and folders to exclude:' + str(command_object.FILESET_EXCLUDE)
+    if command_object.TAR_COMMAND:
+        tar_command = command_object.TAR_COMMAND
+    else:
+        tar_command = 'sudo /bin/tar czCf /'
+    FileBackups.file_backup_execution(FileBackups(),
+                                      command_object.FILESET_INCLUDE,
+                                      command_object.WORK_FOLDER,
+                                      command_object.FILESET_EXCLUDE, tar_command)

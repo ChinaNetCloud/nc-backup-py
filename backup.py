@@ -87,7 +87,7 @@ if type(json_dict) is not str:
         logger.info('Loading and executing modules from configuration sections')
         logger.info('Iterating configs')
 
-        # This is the actual execution of the different scripts and plugin modules
+        # This is the ACTUAL execution of the different scripts and plugin modules
         # but also executes the preparations for it
         execution_scripts_result = BackupExecutionLogic.iterate_config_script(BackupExecutionLogic(), json_dict,
                                                                       nc_backup_py_home, logger)

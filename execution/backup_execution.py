@@ -12,7 +12,6 @@ class BackupExecutionLogic:
         c = 1
         result = []
         start_time = time.time()
-
         for scripts_modules in json_dict:
             log_sring = "Section " + str(c) + ": " + scripts_modules + '.'
             print log_sring
@@ -124,26 +123,29 @@ class BackupExecutionLogic:
 
     def __organize_parameters_for_custom_script(self, dict_parameters, dict_general, logger=None):
         """Arrange parameters to pass"""
+        parameters_str = ''
         if dict_parameters.get('PARAMETERS') == None \
                 or dict_parameters.get('PARAMETERS') == '':
             logger.info('No specific parameters found for this module')
-            return None
+            # return None
         else:
-            parameters_str = ''
             for parameter in dict_parameters['PARAMETERS']:
                 if dict_parameters['PARAMETERS'].get(parameter) != None \
                         and dict_parameters['PARAMETERS'].get(parameter) != '':
                     if dict_parameters.get('PARAMETERS_MODE') != 'flat':
+                        if parameter == 'TARGETS':
+                            dict_parameters['PARAMETERS']['OBJECTIVES'] = dict_parameters['PARAMETERS'].pop(parameter)
+                            parameter = 'OBJECTIVES'
                         parameters_str += '--' + parameter + ' "' + dict_parameters['PARAMETERS'][parameter] +'" '
                         logger.info('Module specific parameters iteration: ' + parameters_str)
                     else:
                         parameters_str += '"' + dict_parameters['PARAMETERS'][parameter] +'" '
-            for general_parameters in dict_general:
-                if dict_general.get(general_parameters)!= None \
-                        and general_parameters  != '':
-                    parameters_str += '--' + general_parameters + ' "' + dict_general[general_parameters] +'" '
-            logger.info('General parameters iteration: ' + parameters_str)
-            return parameters_str
+        for general_parameters in dict_general:
+            if dict_general.get(general_parameters)!= None \
+                    and general_parameters  != '':
+                parameters_str += '--' + general_parameters + ' "' + dict_general[general_parameters] +'" '
+        logger.info('General parameters iteration: ' + parameters_str)
+        return parameters_str
 
 
 class DynamicImporter:
@@ -154,6 +156,9 @@ class DynamicImporter:
 
     def create_object(self, parameters=None, logger=None):
         my_class = getattr(self.__module, self.__class_name)
+        for parameter in parameters:
+            if parameter == 'TARGETS':
+                parameters['OBJECTIVES'] = parameters.pop(parameter)
         if parameters and not logger:
             instance = my_class(parameters)
         elif parameters and logger:
