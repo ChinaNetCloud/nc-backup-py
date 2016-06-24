@@ -3,6 +3,7 @@ import time
 import sys
 
 
+# My own Includes.
 from logs_script.log_handler import LoggerHandlers
 from backupcmd.commands import backupCommands
 from configs.load_json_configs import LoadJsonConfig
@@ -12,7 +13,10 @@ from tools.os_works import OSInformation
 from execution.config_parser import ConfigParser
 
 
+# Read execution parameters
 command_object = backupCommands.feature_commands(backupCommands())
+
+# Determine if running on windows or Linux and sed the default path to configs.
 os_name = OSInformation.isWindows()
 if (os_name):
     config_file_location = 'conf\\confw.json'
@@ -23,25 +27,32 @@ else:
     else:
         config_file_location = command_object.config
 
+#Read configurations from JSON
 json_dict = LoadJsonConfig.read_config_file(LoadJsonConfig(), config_file_location)
 
+#Check that the Configuration execution does not return an error string.
 if not ConfigParser.check_dict_read_is_str(ConfigParser(),json_dict):
     print 'Unexpected error, the config file was supposed to be loaded in a dictionary. Got this instead:'
     print json_dict
 
+# Set logging level of the whole execution. CRITICAL, WARINIG, INFO
+def determine_log_level_this_run(command_object):
+    if not command_object.logging_level \
+            or command_object.logging_level == 'WARINIG' \
+            or command_object.logging_level == 'warning':
+        logging_level = logging.WARNING
+    elif command_object.logging_level == 'INFO' or  command_object.logging_level == 'info':
+        logging_level = logging.INFO
+    elif  command_object.logging_level == 'CRITICAL' or  command_object.logging_level == 'critical':
+        logging_level = logging.CRITICAL
+    else:
+        logging_level = logging.WARNING
+    return logging_level
 
-if not command_object.logging_level \
-        or command_object.logging_level == 'WARINIG' \
-        or command_object.logging_level == 'warning':
-    logging_level = logging.WARNING
-elif command_object.logging_level == 'INFO' or  command_object.logging_level == 'info':
-    logging_level = logging.INFO
-elif  command_object.logging_level == 'CRITICAL' or  command_object.logging_level == 'critical':
-    logging_level = logging.CRITICAL
-else:
-    logging_level = logging.WARNING
 
-logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', logging_level,
+
+# Logger object creation.
+logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', determine_log_level_this_run(command_object),
                                       json_dict['GENERAL']['LOG_FOLDER'],
                                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 # Parse dictionary.
@@ -50,6 +61,8 @@ json_dict = ConfigParser.validator_basic(ConfigParser(), json_dict, logger)
 # Set the backup as failed by default.
 successful_execution = False
 
+
+# Section to permit only a single instance of the process
 if (os_name):
     print 'is windows'
 else:
@@ -65,18 +78,25 @@ else:
         print not_multi_thread
         sys.exit(0)
 
-
+# Check dict and start execution
 if type(json_dict) is not str:
+    # start the execution
     if json_dict is not None or type(json_dict) is not str:
         nc_backup_py_home = json_dict['GENERAL']['HOME_FOLDER']
         logger.info('Backups execution...')
         logger.info('Loading and executing modules from configuration sections')
         logger.info('Iterating configs')
+
+        # This is the actual execution of the different scripts and plugin modules
+        # but also executes the preparations for it
         execution_scripts_result = BackupExecutionLogic.iterate_config_script(BackupExecutionLogic(), json_dict,
                                                                       nc_backup_py_home, logger)
         logger.info('Config itaration done')
         successful_execution = True
+
     # the size checkups should be removed from here in the future. Ned to think if a less decoupled way.
+    # this code takes the execution results and iterates it to find ot problems with all the return codes and messages.
+    # this needs A LOT OF WORK still.
     size_final = 'N/A' # Not aplicable, means the script does not have size.
     for script_result in execution_scripts_result:
         if type(script_result[0]) is dict:
@@ -129,7 +149,8 @@ if type(json_dict) is not str:
         storage_name = json_dict['STORAGE']['PARAMETERS']['DESTINATION']
     else:
         storage_name = 'Other Snapshot, private, etc, custom'
-    # Send report.
+
+    # Send report to BRT this section needs more decoupling of code.
     report_attempt_message = 'Trying to send report to BRT'
     logger.info(report_attempt_message)
     print report_attempt_message
@@ -176,10 +197,8 @@ elif type(json_dict) is str:
 else:
     logger.critical('Execution Error with: ' + command_object.config)
 
-logger.info('Execution ends here.')
-logger = logging.getLogger('ncbackup')
 
-
+# provissional logging feature
 from execution.subprocess_execution import SubprocessExecution
 
 command_rotatelogs = 'mv ' + json_dict['GENERAL']['LOG_FOLDER'] + '1 ' + \
@@ -188,3 +207,7 @@ execution_rotation_result = SubprocessExecution.main_execution_function(Subproce
 command_rotatelogs = 'mv ' + json_dict['GENERAL']['LOG_FOLDER'] + ' ' + \
                      json_dict['GENERAL']['LOG_FOLDER'] +'1'
 execution_rotation_result = SubprocessExecution.main_execution_function(SubprocessExecution(), command_rotatelogs, True)
+
+# End of execution
+logger.info('Execution ends here.')
+logger = logging.getLogger('ncbackup')

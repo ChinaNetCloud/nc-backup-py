@@ -9,7 +9,6 @@
   "FILESET":{
     "ACTION": "execute",
     "NAME": "filesbackup",
-    "EXECUTE_WITH": "python",
     "EXECUTABLE": "",
     "PARAMETERS": {
       "FILESET_INCLUDE": "/etc /vagrant/nc-backup-py ",
