@@ -34,14 +34,7 @@
   },
   "ENCRYPTION": {
     "ACTION": "execute",
-    "NAME": "encryption",
-    "PARAMETERS": {
-      "KEY_FILE": "/vagrant/nc-backup-py/conf/key_file",
-      "FILE_SIZE": "100",
-      "TARGETS": "/opt/backup/compressed",
-      "DESTINATION":"/opt/backup/encrypted",
-      "REMOVE_OBJECTIVES": "True"
-    }
+    "NAME": "encryption"
   },
   "SIZE":{
     "ACTION": "load",
