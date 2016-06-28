@@ -49,11 +49,9 @@
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
-      "TARGETS": "/opt/backup/encrypted",
       "DESTINATION":"s3",
       "BUCKET_NAME": "cncbackup",
-      "UPLOAD_COMMAND": "aws s3 cp",
-      "REMOVE_OBJECTIVES": "True"
+      "UPLOAD_COMMAND": "aws s3 cp"
     }
   }
 }

@@ -8,7 +8,7 @@ class StorageExecution:
     def storage_commands(self):
         parser_object = argparse.ArgumentParser()
         parser_object.add_argument('-o', '--OBJECTIVES', '--TARGETS', type=str
-                                   , help='Objectives to encrypt', required=True)
+                                   , help='Objectives to encrypt', required=False)
         parser_object.add_argument('-l', '--LOCAL_BACKUP', type=str
                                    , help='Objectives to encrypt', required=True)
         parser_object.add_argument('-H', '--HOME_FOLDER', type=str
@@ -49,10 +49,13 @@ if __name__ == "__main__":
     if str(storage_cmd.DESTINATION) not in ['s3', 'oss', 'ssh', 'local', 'azure']:
         print 'Not supported storage destination: ' + str(storage_cmd.DESTINATION)
         exit(1)
-    if not ConfigParser.is_existing_abs_path(ConfigParser(), storage_cmd.OBJECTIVES):
-        print 'OBJECTIVES has to exist for storage to work, stopping execution'
-        exit(1)
-
+    # if not ConfigParser.is_existing_abs_path(ConfigParser(), storage_cmd.OBJECTIVES):
+    #     print 'OBJECTIVES has to exist for storage to work, stopping execution'
+    #     exit(1)
+    if not ConfigParser.check_exists(ConfigParser(), storage_cmd.REMOVE_OBJECTIVES):
+        storage_cmd.REMOVE_OBJECTIVES = 'True'
+    if not ConfigParser.check_exists(ConfigParser(), storage_cmd.OBJECTIVES):
+        storage_cmd.OBJECTIVES = '/opt/backup/encrypted'
     print 'Executing backup files type: ' + storage_cmd.DESTINATION
     if storage_cmd.DESTINATION == 'local':
         command_move = 'mv ' + storage_cmd.OBJECTIVES + '/* ' + storage_cmd.LOCAL_BACKUP

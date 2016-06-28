@@ -106,12 +106,12 @@ if __name__ == "__main__":
     from execution.config_parser import ConfigParser
     if not FileBackups.evaluate_file_or_folder(FileBackups(), command_object.FILESET_INCLUDE):
         print "At least one of the filesets (FILESET_INCLUDE variable from configs)" \
-              " for files backup does not exist this script is terminating"
+              " for files backup does not exist this script is terminating: " + str(command_object.FILESET_INCLUDE)
         exit(1)
-    # print command_object.FILESET_EXCLUDE
+    #
     if command_object.FILESET_EXCLUDE and not FileBackups.evaluate_file_or_folder(FileBackups(), command_object.FILESET_EXCLUDE):
         print "At least one of the Excluded filesets (FILESET_EXCLUDE variable from configs) " \
-              "for files backup does not exist this script is terminating"
+              "for files backup does not exist this script is terminating: " + str(command_object.FILESET_EXCLUDE)
         exit(1)
     print "Parameters in use, Fileset: " + command_object.FILESET_INCLUDE
     print 'Work Folder: ' + command_object.WORK_FOLDER
