@@ -34,7 +34,7 @@ class EncryptionWorks:
                                           'can include other libraries', required=True)
         parser_object.add_argument('-s', '--FILE_SIZE', type=str
                                    , help='Output File size', required=False)
-        parser_object.add_argument('-r', '--REMOVE_OBJECTIVES', type=str
+        parser_object.add_argument('-r', '--REMOVE_OBJECTIVES', '--REMOVE_TARGETS', type=str
                            , help='Remove/Delete objective folders', required=False)
         parser_object.add_argument('-d', '--DECRYPT', help='Decrypt file', action="store_true")
         args_list, unknown = parser_object.parse_known_args()

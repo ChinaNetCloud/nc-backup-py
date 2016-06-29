@@ -22,8 +22,8 @@ class StorageExecution:
                                    , help='Server name (client Host Name) e.g: nc-backup-kr', required=True)
         parser_object.add_argument('-u', '--UPLOAD_COMMAND', type=str
                                    , help='AWS upload command', required=False)
-        parser_object.add_argument('-R', '--REMOVE_OBJECTIVES', type=str
-                                   , help='Remove Encrypted files and folder', required=False)
+        parser_object.add_argument('-R', '--REMOVE_OBJECTIVES', '--REMOVE_TARGETS', type=str
+                                   , help='Remove Encrypted files and folder after execution', required=False)
         parser_object.add_argument('-A', '--ALIYUN_CREDENTIALS', type=str
                                    , help='Remove Encrypted files and folder', required=False)
         args_list, unknown = parser_object.parse_known_args()

@@ -29,7 +29,7 @@
     "ACTION": "execute",
     "NAME": "compression",
     "PARAMETERS": {
-      "TARGETS": "/opt/backup/files /opt/backup/mongodump"
+      "TARGETS": "/opt/backup/files /usr/bin/mongodump"
     }
   },
   "ENCRYPTION": {
@@ -50,8 +50,7 @@
     "NAME": "storage",
     "PARAMETERS":{
       "DESTINATION":"s3",
-      "BUCKET_NAME": "cncbackup",
-      "UPLOAD_COMMAND": "aws s3 cp"
+      "BUCKET_NAME": "cncbackup"
     }
   }
 }

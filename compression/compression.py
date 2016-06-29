@@ -16,7 +16,7 @@ class CompressionWorks:
                                    , help='Included fileset to compress', required=True)
         parser_object.add_argument('-d', '--DESTINATION', type=str
                                    , help='Compress files to folder', required=False)
-        parser_object.add_argument('-r', '--REMOVE_OBJECTIVES', type=str
+        parser_object.add_argument('-r', '--REMOVE_OBJECTIVES', '--REMOVE_TARGETS', type=str
                                    , help='Remove/Delete objective folders', required=False)
         parser_object.add_argument('-H', '--HOME_FOLDER', type=str
                                    , help='home folder for the modules to include', required=True)
