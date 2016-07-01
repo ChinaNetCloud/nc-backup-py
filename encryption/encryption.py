@@ -24,9 +24,9 @@ class EncryptionWorks:
     def encryption_commands(self):
         parser_object = argparse.ArgumentParser()
         parser_object.add_argument('-o', '--OBJECTIVES', '--TARGETS', type=str
-                                   , help='Objectives to encrypt', required=True)
+                                   , help='Objectives to encrypt', required=False)
         parser_object.add_argument('-D', '--DESTINATION', type=str
-                                   , help='Destination folder of the output', required=True)
+                                   , help='Destination folder of the output', required=False)
         parser_object.add_argument('-k','--KEY_FILE', type=str
                                    , help='Compression key file', required=False)
         parser_object.add_argument('-H','--HOME_FOLDER', type=str
@@ -34,7 +34,7 @@ class EncryptionWorks:
                                           'can include other libraries', required=True)
         parser_object.add_argument('-s', '--FILE_SIZE', type=str
                                    , help='Output File size', required=False)
-        parser_object.add_argument('-r', '--REMOVE_OBJECTIVES', type=str
+        parser_object.add_argument('-r', '--REMOVE_OBJECTIVES', '--REMOVE_TARGETS', type=str
                            , help='Remove/Delete objective folders', required=False)
         parser_object.add_argument('-d', '--DECRYPT', help='Decrypt file', action="store_true")
         args_list, unknown = parser_object.parse_known_args()
@@ -143,7 +143,18 @@ if __name__ == "__main__":
     from execution.subprocess_execution import SubprocessExecution
     from tools.filesystem_handling import FilesystemHandling
     from execution.config_parser import ConfigParser
-
+    if not ConfigParser.check_exists(ConfigParser(), encryption_command.OBJECTIVES) \
+            and not ConfigParser.check_exists(ConfigParser(), encryption_command.DECRYPT):
+        encryption_command.OBJECTIVES = '/opt/backup/compressed'
+    if not ConfigParser.check_exists(ConfigParser(), encryption_command.DESTINATION) \
+            and not ConfigParser.check_exists(ConfigParser(), encryption_command.DECRYPT):
+        encryption_command.DESTINATION = '/opt/backup/encrypted'
+    if not ConfigParser.check_exists(ConfigParser(), encryption_command.FILE_SIZE) \
+            and not ConfigParser.check_exists(ConfigParser(), encryption_command.DECRYPT):
+        encryption_command.FILE_SIZE = '4000'
+    if not ConfigParser.check_exists(ConfigParser(), encryption_command.KEY_FILE) \
+            and not ConfigParser.check_exists(ConfigParser(), encryption_command.DECRYPT):
+            encryption_command.KEY_FILE = '/etc/nc-backup-py/key_file'
     if not ConfigParser.is_existing_abs_path(ConfigParser(),encryption_command.KEY_FILE):
         print 'You need a key file to encrypt: ' + str(encryption_command.KEY_FILE) \
               + 'Does not seem to exist. Stopping execution'
@@ -187,7 +198,8 @@ if __name__ == "__main__":
                         FilesystemHandling.remove_files(out_file_str)
 
         # Compressed file is not a directory.
-        if encryption_command.REMOVE_OBJECTIVES == 'True' or  encryption_command.REMOVE_OBJECTIVES == True:
+        if not ConfigParser.check_exists(ConfigParser(), encryption_command.REMOVE_OBJECTIVES) \
+                or encryption_command.REMOVE_OBJECTIVES == 'True' or  encryption_command.REMOVE_OBJECTIVES == True:
             print 'Deleting files after objective files as per config option --REMOVE_OBJECTIVES: ' \
                   + encryption_command.OBJECTIVES
             FilesystemHandling.remove_files(encryption_command.OBJECTIVES)

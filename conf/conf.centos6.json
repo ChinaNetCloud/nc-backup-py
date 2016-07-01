@@ -82,5 +82,17 @@
       "BUCKET_NAME": "cncbackup",
       "UPLOAD_COMMAND": "/usr/bin/aws s3 cp"
     }
+  },
+  "STORAGE_ALIL": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "OBJECTIVES": "/opt/test/encrypted",
+      "DESTINATION":"oss",
+      "__options": "local,s3,ssh,oss",
+      "REMOVE_OBJECTIVES": "True",
+      "BUCKET_NAME": "cncbackup",
+      "UPLOAD_COMMAND": "/usr/bin/aws s3 cp"
+    }
   }
 }

@@ -31,8 +31,8 @@ class AWSS3(Storage):
 
     def upload_content(self, mypath_to_dir, bucket, client_host_name, upload_command='aws s3 cp',
                        remove_objective='False'):
-        # aws_bin = upload_command.split()
-        # if aws_bin
+        if upload_command is None:
+            upload_command = 'aws s3 cp'
         print 'Uploading to storage S3'
         files_to_upload = [f for f in listdir(mypath_to_dir) if isfile(join(mypath_to_dir, f))]
         sys.path.append(self.__home_path)
