@@ -50,7 +50,6 @@ class FileBackups:
             result_file_name = destination + '\\files\\compressed\\filebackup_' + datetime_string
             filesets = filesets.split()
             ZipCompression(result_file_name + '.zip', filesets)
-
         else:
             if filesets != '' and filesets is not None:
                 filesets = filesets.replace(' /', ' ')
@@ -86,8 +85,6 @@ class FileBackups:
         """
         @rtype: bool
         """
-
-        # print paths_string
         for path_string in paths_string.split():
             if not ConfigParser.is_existing_abs_path(ConfigParser(), path_string):
                 return False
@@ -108,7 +105,6 @@ if __name__ == "__main__":
         print "At least one of the filesets (FILESET_INCLUDE variable from configs)" \
               " for files backup does not exist this script is terminating: " + str(command_object.FILESET_INCLUDE)
         exit(1)
-    #
     if command_object.FILESET_EXCLUDE and not FileBackups.evaluate_file_or_folder(FileBackups(), command_object.FILESET_EXCLUDE):
         print "At least one of the Excluded filesets (FILESET_EXCLUDE variable from configs) " \
               "for files backup does not exist this script is terminating: " + str(command_object.FILESET_EXCLUDE)

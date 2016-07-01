@@ -10,27 +10,9 @@
     "ACTION": "execute",
     "NAME": "filesbackup"
   },
-  "MONGODB":{
-    "ACTION": "load",
-    "FROM": "mongo",
-    "FILENAME": "mongo",
-    "CLASS": "MongoBackup",
-    "PARAMETERS":{
-      "MONGO_USER": "",
-      "MONGO_PWD": "",
-      "MONGO_HOST": "127.0.0.1",
-      "MONGODUMP_BIN": "/usr/bin/mongodump",
-      "TAR_COMMAND": "sudo /bin/tar czf",
-      "PREFIX_FOLDER": "mongodump",
-      "DESTINATION": "/opt/backup"
-    }
-  },
   "COMPRESSION": {
     "ACTION": "execute",
-    "NAME": "compression",
-    "PARAMETERS": {
-      "TARGETS": "/opt/backup/files /usr/bin/mongodump"
-    }
+    "NAME": "compression"
   },
   "ENCRYPTION": {
     "ACTION": "execute",
