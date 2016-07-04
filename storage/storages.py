@@ -57,7 +57,7 @@ class AWSS3(Storage):
                           + client_host_name + '/' + file_to_upload
             count = 1
             time_retry = 60
-            while count <= 4:
+            while count <= 5:
                 print 'Trying upload attempt number: ' + str(count)
                 # try:
                 tmp_execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), aws_command)
@@ -120,7 +120,7 @@ class AliyunOSS(Storage):
             # print local_file
             count = 1
             time_retry = 60
-            while count <= 4:
+            while count <= 5:
                 try:
                     tmp_result_execution = bucket.put_object_from_file (client_host_name + '/' + file_to_upload, local_file)
                 except:
