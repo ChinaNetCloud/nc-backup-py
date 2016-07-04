@@ -30,22 +30,35 @@ class AWSS3(Storage):
         print "Listing directory content"
 
     @staticmethod
-    def test_aws_connectivity(home_path):
+    def test_aws_connectivity(home_path, bucket_name):
         aws_s3_ls_command = 'aws s3 ls'
         sys.path.append(home_path)
         from execution.subprocess_execution import SubprocessExecution
         result_aws_s3_ls = SubprocessExecution.main_execution_function(SubprocessExecution(), aws_s3_ls_command)
+        # print result_aws_s3_ls
+        # print type(result_aws_s3_ls[1])
+        # print bucket_name
+        # print result_aws_s3_ls[1].find(bucket_name)
+        # print type(result_aws_s3_ls[1].find(bucket_name))
+        # print result_aws_s3_ls[0]
         if result_aws_s3_ls[0] == 255:
             return 'No credentials'
+        elif result_aws_s3_ls[0] == 0 and result_aws_s3_ls[1].find(bucket_name) is -1:
+            return 'Bucket not Found'
         return 'Ok'
 
     def upload_content(self, mypath_to_dir, bucket, client_host_name, upload_command='aws s3 cp',
                        remove_objective='False', aws_s3_test=True):
         if upload_command is None:
             upload_command = 'aws s3 cp'
-        if aws_s3_test == True and self.test_aws_connectivity(self.__home_path) == 'No credentials':
+        aws_and_bucket_test = self.test_aws_connectivity(self.__home_path, bucket)
+        print aws_and_bucket_test
+        if aws_s3_test == True and aws_and_bucket_test == 'No credentials':
             print 'The can not execute AWS CLI test; please check installation and credentials. ' \
                   'Stopping execution of AWS upload'
+            exit(1)
+        elif aws_s3_test == True and aws_and_bucket_test == 'Bucket not Found':
+            print 'Can not find the AWS bucket name:'+ bucket +' Please check configs and try again'
             exit(1)
         print 'Uploading to storage S3'
         files_to_upload = [f for f in listdir(mypath_to_dir) if isfile(join(mypath_to_dir, f))]
