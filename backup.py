@@ -127,6 +127,8 @@ if type(json_dict) is not str:
                 successful_execution = False
                 script_warning = 'Warning:' + str(script_result)
                 print script_warning
+                print '\nFAILED: Please check the logs for more troubleshooting information or run with ' \
+                      '-l INFO enabled to get Full logs\n'
                 logger.warning(script_warning)
                 break
         else:

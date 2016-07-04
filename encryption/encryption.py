@@ -182,7 +182,7 @@ if __name__ == "__main__":
         EncryptionWorks.create_key_file(EncryptionWorks(), encryption_command.KEY_FILE)
     if not ConfigParser.is_existing_abs_path(ConfigParser(),encryption_command.KEY_FILE):
         print 'You need a key file to encrypt: ' + str(encryption_command.KEY_FILE) \
-              + 'Does not seem to exist. Stopping execution'
+              + ' Does not seem to exist. Stopping execution'
         exit(1)
 
     # Encryption
