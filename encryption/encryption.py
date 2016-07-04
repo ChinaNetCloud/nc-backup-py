@@ -1,6 +1,7 @@
 import argparse
 import time
 import sys
+import random
 
 
 from os import listdir
@@ -75,7 +76,6 @@ class EncryptionWorks:
             if execution_encrytion[0] == 0:
                 return out_file.name
 
-
     def decrypt(self, in_file, out_file, password, key_length=32, home_folder=''):
         bs = AES.block_size
         salt = in_file.read(bs)[len('Salted__'):]
@@ -129,20 +129,43 @@ class EncryptionWorks:
                     break
                 chapters += 1
 
-    def cat_files (self,path_to_file):
+
+    def cat_files (self, path_to_file):
         command_cat = 'cat ' + path_to_file + '* > ' + path_to_file
         print command_cat
         cat_execution = SubprocessExecution.main_execution_function(SubprocessExecution(), command_cat)
         # SubprocessExecution.print_output(SubprocessExecution(), cat_execution)
         return cat_execution
 
+    def create_key_file(self,path_to_new_key_file):
+        print 'Creating a key file as the was not in the path'
+        # self.my_hash()
+        key_word = self.hash_key_generator()
+        with open(path_to_new_key_file, 'a') as key_file:
+            key_file.write(key_word)
+            print 'New key file creation done'
+            key_file.close()
+
+    @staticmethod
+    def hash_key_generator(bits=256):
+        assert bits % 8 == 0
+        required_length = bits / 8 * 2
+        s = hex(random.getrandbits(bits)).lstrip('0x').rstrip('L')
+        return s
+
+
 if __name__ == "__main__":
     print "Encrypting/Decrypting files"
+    # Object of encryption class
     encryption_command = EncryptionWorks.encryption_commands(EncryptionWorks())
+
+    # Dynamic imporst using HOME_FOLDER as default value.
     sys.path.append(encryption_command.HOME_FOLDER)
     from execution.subprocess_execution import SubprocessExecution
     from tools.filesystem_handling import FilesystemHandling
     from execution.config_parser import ConfigParser
+
+    # Validate some Parameters and pass default values if absent
     if not ConfigParser.check_exists(ConfigParser(), encryption_command.OBJECTIVES) \
             and not ConfigParser.check_exists(ConfigParser(), encryption_command.DECRYPT):
         encryption_command.OBJECTIVES = '/opt/backup/compressed'
@@ -154,11 +177,15 @@ if __name__ == "__main__":
         encryption_command.FILE_SIZE = '4000'
     if not ConfigParser.check_exists(ConfigParser(), encryption_command.KEY_FILE) \
             and not ConfigParser.check_exists(ConfigParser(), encryption_command.DECRYPT):
-            encryption_command.KEY_FILE = '/etc/nc-backup-py/key_file'
+        encryption_command.KEY_FILE = '/etc/nc-backup-py/key_file'
+    if not ConfigParser.is_existing_abs_path(ConfigParser(), encryption_command.KEY_FILE):
+        EncryptionWorks.create_key_file(EncryptionWorks(), encryption_command.KEY_FILE)
     if not ConfigParser.is_existing_abs_path(ConfigParser(),encryption_command.KEY_FILE):
         print 'You need a key file to encrypt: ' + str(encryption_command.KEY_FILE) \
               + 'Does not seem to exist. Stopping execution'
         exit(1)
+
+    # Encryption
     if encryption_command.DECRYPT is None \
             or encryption_command.DECRYPT == '-e' \
             or encryption_command.DECRYPT == False:
@@ -204,12 +231,13 @@ if __name__ == "__main__":
                   + encryption_command.OBJECTIVES
             FilesystemHandling.remove_files(encryption_command.OBJECTIVES)
 
+    # Decryption
     elif encryption_command.DECRYPT == '-d' or encryption_command.DECRYPT is True:
         print 'You have chosen to decrypt with -d option'
         if encryption_command.OBJECTIVES and encryption_command.DESTINATION:
             datetime_string = time.strftime("%Y%m%d_%H%M%S")
             if not encryption_command.OBJECTIVES.endswith('000'):
-                cat_execution_result = EncryptionWorks.cat_files(EncryptionWorks(), encryption_command.OBJECTIVES)
+                cat_execution_result = EncryptionWorks.cat_files(encryption_command.OBJECTIVES)
                 if cat_execution_result[0] != 0:
                     print 'Error:Cat retuned a non zero exit code.'
                     exit(1)
@@ -219,7 +247,6 @@ if __name__ == "__main__":
                             key_from_file = key_file.read().replace('\n', '')
                             EncryptionWorks.decrypt(EncryptionWorks(), in_file, out_file, key_from_file, 32,
                                                     encryption_command.HOME_FOLDER)
-
             else:
                 result_name = encryption_command.OBJECTIVES.replace('.000', '')
                 cat_execution_result = SubprocessExecution.main_execution_function(SubprocessExecution(),
