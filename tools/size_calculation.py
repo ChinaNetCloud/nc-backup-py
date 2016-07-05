@@ -28,3 +28,4 @@ class SizeCalculation:
                 size += os.path.getsize(os.path.join(path, f))
         self.__size_final = size
         return 'Size calculation Done for ' + directory_objective +', get results from output'
+

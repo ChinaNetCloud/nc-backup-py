@@ -4,7 +4,8 @@ import time
 from os import path
 
 from subprocess_execution import SubprocessExecution
-# from logs_script.log_handler import LoggerHandlers
+from tools.os_works import OSInformation
+
 
 class BackupExecutionLogic:
     """Scripts execution logic"""
@@ -19,10 +20,37 @@ class BackupExecutionLogic:
             start_time = time.time()
             result_message = []
             if scripts_modules != 'GENERAL':
+                # Check disk space OSInformation
+                if not json_dict['GENERAL'].get('DISK_SPACE_CHECK') or json_dict['GENERAL']['DISK_SPACE_CHECK'] != 'False':
+                    mounting_point = OSInformation.find_mount_point_linux(OSInformation(),
+                                                                          json_dict['GENERAL']['WORK_FOLDER'])
+                    # print mounting_point
+                    space_before_execution = OSInformation.get_disk_usage(OSInformation(), mounting_point)
+                    average_calculation = 100 * space_before_execution[2] / space_before_execution[0]
+                    space_string_before_execution = 'Parition size: {0}, Used: {1}, Avail: {2}, this is {3}% available'\
+                        .format(
+                        str(OSInformation.human_readable_size(space_before_execution[0])),
+                        str(OSInformation.human_readable_size(space_before_execution[1])),
+                        str(OSInformation.human_readable_size(space_before_execution[2])),
+                        str(average_calculation))
+                    print space_string_before_execution
+                    if 20 > average_calculation >= 10:
+                        logger.warning(space_string_before_execution)
+                    elif average_calculation < 10:
+                        logger.critical(space_string_before_execution)
+                        if average_calculation <= 1:
+                            logger.critical('Less than one percent space available, Stopping execution')
+                            result_message.append({'external':
+                                                       {'message':
+                                                            (1, space_string_before_execution, 'stderr: No space left')
+                                                        }
+                                                   })
+                            break;
+                    else:
+                        logger.info(space_string_before_execution)
                 for section in json_dict[scripts_modules]:
                     external_execution = self.__execute_selection_of_external_script(section,json_dict,scripts_modules,
                                                                                      home, logger)
-                    # print external_execution
                     if external_execution:
                         result_message.append(external_execution)
             c += 1
@@ -57,9 +85,9 @@ class BackupExecutionLogic:
                 print module_call_message
                 logger.info(module_call_message)
 
-            log_string = "List of parameters passed to script: " + module_to_call
+            # log_string = "List of parameters passed to script: " + module_to_call
             # print log_string
-            logger.info(log_string)
+            # logger.info(log_string)
 
             out_put_exec = SubprocessExecution.main_execution_function(SubprocessExecution(),
                                                                             module_to_call, True, logger)
@@ -137,14 +165,14 @@ class BackupExecutionLogic:
                             dict_parameters['PARAMETERS']['OBJECTIVES'] = dict_parameters['PARAMETERS'].pop(parameter)
                             parameter = 'OBJECTIVES'
                         parameters_str += '--' + parameter + ' "' + dict_parameters['PARAMETERS'][parameter] +'" '
-                        logger.info('Module specific parameters iteration: ' + parameters_str)
+                        # logger.info('Module specific parameters iteration: ' + parameters_str)
                     else:
                         parameters_str += '"' + dict_parameters['PARAMETERS'][parameter] +'" '
         for general_parameters in dict_general:
             if dict_general.get(general_parameters)!= None \
                     and general_parameters  != '':
                 parameters_str += '--' + general_parameters + ' "' + dict_general[general_parameters] +'" '
-        logger.info('General parameters iteration: ' + parameters_str)
+        # logger.info('General parameters iteration: ' + parameters_str)
         return parameters_str
 
 
