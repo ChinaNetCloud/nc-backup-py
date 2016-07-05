@@ -37,6 +37,12 @@ class mydump:
             self.tar_command = self.args_list.TAR_COMMAND
         else:
             self.tar_command = 'sudo /bin/tar czf'
+        sys.path.append(self.args_list.HOME_FOLDER)
+        from execution.config_parser import ConfigParser
+        if not ConfigParser.check_exists(ConfigParser(), self.args_list.MY_INSTANCES):
+            self.args_list.MY_INSTANCES = '3306'
+        if not ConfigParser.check_exists(ConfigParser(), self.args_list.DESTINATION):
+            self.args_list.DESTINATION = '/opt/backup'
         self.DESTINATION = self.args_list.DESTINATION + '/'+self.script_prefix
         self.PREFIX_BACKUP = time.strftime('%Y%m%d',time.localtime(time.time())) + "_"+self.args_list.HOSTNAME
         if self.DESTINATION:
@@ -56,11 +62,11 @@ class mydump:
         parser_object.add_argument('-H', '--HOME_FOLDER', type=str
                                    , help='Script home folder required(from where the master script runs)',
                                    required=True)
-        parser_object.add_argument('--DESTINATION', type=str, help='Local backup folder', required=True,action="store")
+        parser_object.add_argument('--DESTINATION', type=str, help='Local backup folder', required=False, action="store")
         parser_object.add_argument('--CREDENTIAL_PATH', type=str, help='Credential file path',
                                    required=True,action="store")
         parser_object.add_argument('--DATA_DIR', type=str, help='Data dir path', required=True,action="store")
-        parser_object.add_argument('--MY_INSTANCES', type=str, help='Instance port', required=True,action="store")
+        parser_object.add_argument('--MY_INSTANCES', type=str, help='Instance port', required=False, action="store")
         parser_object.add_argument('--BINLOG_PATH', type=str, help='Bin Log folder', required=True, action="store")
         parser_object.add_argument('--BINLOG_DAYS', type=str, help='Bin Log folder', required=False)
         parser_object.add_argument('--BINLOG_FILE_PREFIX', type=str, help='Bin Log file prefix',
@@ -109,7 +115,7 @@ class mydump:
             chain_exclude_tables = ""
         
         command1=mysql_and_credentials + " -e 'show databases' | sed '/Database/d' | grep -v 'information_schema' " \
-                                         "| grep -v 'performance_schema'"
+                                         "| grep -v 'performance_schema' | grep -v 'sys'"
         stdout, stderr = Popen(command1, shell=True, stdout=PIPE, stderr=PIPE).communicate()
         db_all = stdout.split('\n')[:-1]
         chain_exclude_dbs = ""
@@ -168,7 +174,6 @@ def main():
     mydump_object=mydump()
     sys.path.append(mydump_object.args_list.HOME_FOLDER)
     from execution.config_parser import ConfigParser
-
     if not mydump_object.args_list.MY_INSTANCES or mydump_object.args_list.MY_INSTANCES == '':
         mydump_object.args_list.MY_INSTANCES = '3306'
     if mydump_object.args_list.BINLOG_PATH and mydump_object.args_list.BINLOG_PATH != '':
