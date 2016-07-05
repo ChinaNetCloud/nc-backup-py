@@ -20,11 +20,16 @@ class BackupExecutionLogic:
             start_time = time.time()
             result_message = []
             if scripts_modules != 'GENERAL':
+
                 # Check disk space OSInformation
-                if not json_dict['GENERAL'].get('DISK_SPACE_CHECK') or json_dict['GENERAL']['DISK_SPACE_CHECK'] != 'False':
+                if not json_dict['GENERAL'].get('DISK_SPACE_CHECK') or \
+                                json_dict['GENERAL']['DISK_SPACE_CHECK'] != 'False':
                     mounting_point = OSInformation.find_mount_point_linux(OSInformation(),
                                                                           json_dict['GENERAL']['WORK_FOLDER'])
-                    # print mounting_point
+                    if not json_dict['GENERAL'].get('DISK_SPACE_THRESHOLD'):
+                        json_dict['GENERAL']['DISK_SPACE_THRESHOLD'] = 20
+                    else:
+                        json_dict['GENERAL']['DISK_SPACE_THRESHOLD'] = float(json_dict['GENERAL']['DISK_SPACE_THRESHOLD'])
                     space_before_execution = OSInformation.get_disk_usage(OSInformation(), mounting_point)
                     average_calculation = 100 * space_before_execution[2] / space_before_execution[0]
                     space_string_before_execution = 'Parition size: {0}, Used: {1}, Avail: {2}, this is {3}% available'\
@@ -34,18 +39,26 @@ class BackupExecutionLogic:
                         str(OSInformation.human_readable_size(space_before_execution[2])),
                         str(average_calculation))
                     print space_string_before_execution
-                    if 20 > average_calculation >= 10:
+                    if json_dict['GENERAL']['DISK_SPACE_THRESHOLD'] > \
+                            average_calculation >= json_dict['GENERAL']['DISK_SPACE_THRESHOLD']/2:
                         logger.warning(space_string_before_execution)
-                    elif average_calculation < 10:
+                    elif json_dict['GENERAL']['DISK_SPACE_THRESHOLD']/2 > average_calculation <= json_dict['GENERAL']['DISK_SPACE_THRESHOLD']/6:
                         logger.critical(space_string_before_execution)
-                        if average_calculation <= 1:
-                            logger.critical('Less than one percent space available, Stopping execution')
-                            result_message.append({'external':
-                                                       {'message':
-                                                            (1, space_string_before_execution, 'stderr: No space left')
-                                                        }
-                                                   })
-                            break;
+                    elif average_calculation <= json_dict['GENERAL']['DISK_SPACE_THRESHOLD']/6 and space_before_execution[2] >100:
+                        logger.critical('Less than one percent space available, Stopping execution')
+                        result_message.append({'external':
+                                                   {'message':
+                                                        (1, space_string_before_execution, 'stderr: No space left')
+                                                    }
+                                               })
+                        return result_message
+                    elif space_before_execution[2] < 100:
+                        result_message.append({'external':
+                                                   {'message':
+                                                        (1, space_string_before_execution, 'stderr: No space left')
+                                                    }
+                                               })
+                        return result_message
                     else:
                         logger.info(space_string_before_execution)
                 for section in json_dict[scripts_modules]:
@@ -93,7 +106,6 @@ class BackupExecutionLogic:
                                                                             module_to_call, True, logger)
             # print 'AAAA'
             # print out_put_exec
-
             if out_put_exec[0] is not 0:
                 logger.critical('Error executing external script')
                 logger.critical('Eddor Code: ' + str(out_put_exec[0]) + \
@@ -171,7 +183,7 @@ class BackupExecutionLogic:
         for general_parameters in dict_general:
             if dict_general.get(general_parameters)!= None \
                     and general_parameters  != '':
-                parameters_str += '--' + general_parameters + ' "' + dict_general[general_parameters] +'" '
+                parameters_str += '--' + general_parameters + ' "' + str(dict_general[general_parameters]) +'" '
         # logger.info('General parameters iteration: ' + parameters_str)
         return parameters_str
 
