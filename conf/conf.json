@@ -1,9 +1,9 @@
 {
   "GENERAL": {
-    "HOSTNAME": "srv-nc-py27-vbox-vagrant-db1",
+    "HOSTNAME": "srv-nc-template-host-config",
     "WORK_FOLDER": "/opt/backup",
     "LOCAL_BACKUP": "/opt/backup/local",
-    "HOME_FOLDER": "/vagrant/nc-backup-py",
+    "HOME_FOLDER": "/var/lib/nc-backup-py",
     "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log"
   },
   "FILESET":{
