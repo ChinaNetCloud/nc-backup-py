@@ -91,7 +91,7 @@ if type(json_dict) is not str:
         # but also executes the preparations for it
         execution_scripts_result = BackupExecutionLogic.iterate_config_script(BackupExecutionLogic(), json_dict,
                                                                       nc_backup_py_home, logger)
-        logger.info('Config itaration done')
+        # logger.info('Config itaration done')
         successful_execution = True
 
     # the size checkups should be removed from here in the future. Ned to think if a less decoupled way.
@@ -123,6 +123,12 @@ if type(json_dict) is not str:
                             'message' in script_result[0]['external'] and \
                             script_result[0]['external']['message'][0] == 0:
                 successful_execution = True
+            elif 'external' in script_result[0] and \
+                            'message' in script_result[0]['external'] and \
+                            script_result[0]['external']['message'][0] == 1 and \
+                            script_result[0]['external']['message'][2] == 'stderr: No space left':
+                successful_execution = False
+                print 'No Space left for backups'
             else:
                 successful_execution = False
                 script_warning = 'Warning:' + str(script_result)
