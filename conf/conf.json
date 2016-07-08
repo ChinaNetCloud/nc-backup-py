@@ -10,23 +10,6 @@
     "ACTION": "execute",
     "NAME": "filesbackup"
   },
-  "MYSQL": {
-    "ACTION": "execute",
-    "NAME": "mysql_backup",
-    "EXECUTABLE": "mysql_dump.py",
-    "EXECUTE_WITH": "python",
-    "PARAMETERS": {
-      "CREDENTIAL_PATH": "/etc/nc-backup-py/mysql.credentials",
-      "DATA_DIR": "/var/lib/mysql",
-      "BINLOG_PATH": "/var/lib/mysql",
-      "BINLOG_FILE_PREFIX": "mysql-bin",
-      "MYSQL_DUMP_BINARY": "/usr/bin/mysqldump",
-      "MYSQL_BINARY": "/usr/bin/mysql",
-      "PREFIX_FOLDER": "mydump",
-      "EXCLUDE_DB": "brt",
-      "BINLOG_DAYS": "3"
-    }
-  },
   "COMPRESSION": {
     "ACTION": "execute",
     "NAME": "compression"
