@@ -17,12 +17,13 @@
     "EXECUTE_WITH": "python",
     "PARAMETERS": {
       "CREDENTIAL_PATH": "/etc/nc-backup-py/mysql.credentials",
-      "DATA_DIR": "/var/lib/mysql",
-      "BINLOG_PATH": "/var/lib/mysql",
+      "DATA_DIR": "/var/lib/mysql/data",
+      "BINLOG_PATH": "/var/lib/mysql/data",
       "BINLOG_FILE_PREFIX": "mysql-bin",
       "MYSQL_DUMP_BINARY": "/usr/bin/mysqldump",
       "MYSQL_BINARY": "/usr/bin/mysql",
       "PREFIX_FOLDER": "mydump",
+      "EXCLUDE_DB": "",
       "BINLOG_DAYS": "3"
     }
   },

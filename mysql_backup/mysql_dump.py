@@ -2,11 +2,11 @@ import argparse
 import time
 import sys
 import os
+import re
 
 
 from subprocess import Popen
 from subprocess import PIPE
-
 
 '''
 This code file was developed originally  by Randy Yang.
@@ -125,21 +125,41 @@ class mydump:
             list_dbs = []
         i = None
         db_include = [ i for i in db_all if i not in list_dbs ]
-        # print db_include
+        # get Mysql Version.
+        mysql_version_command = mysql_and_credentials + " --version"
+        stdout_mysql_version, stderr_mysql_version = Popen(mysql_version_command, shell=True, stdout=PIPE, stderr=PIPE).communicate()
+        # print type(stdout_mysql_version)
+        if re.findall('^(\d+\.)?(\d+\.)?(\*|\d+)$',str(stdout_mysql_version)):
+            print 'found some versioning'
+        if '5.7' in stdout_mysql_version:
+            mysql_version = '5.7'
+        elif '5.6' in stdout_mysql_version:
+            mysql_version = '5.6'
+        elif '5.5' in stdout_mysql_version:
+            mysql_version = '5.5'
+        else:
+            mysql_version = 'legacy'
         for DB_NAME in db_include:
             _SQL2="\"USE information_schema; SELECT TABLE_NAME FROM TABLES WHERE TABLE_SCHEMA='" + \
                   DB_NAME + "' AND TABLE_TYPE= 'BASE TABLE' AND ENGINE NOT like 'innodb';\""
-            command3=mysql_dump_and_credentials+" --opt --routines --triggers --events --flush-privileges " \
-                                         "--skip-add-drop-table --master-data=2 --dump-date --databases " + \
+            initial_command = " --opt --routines --triggers --events --flush-privileges " \
+                                         "--skip-add-drop-table"
+            if mysql_version == '5.7':
+                set_specific_parameters = ' --set-gtid-purged = OFF'
+            else:
+                set_specific_parameters = ''
+            if mysql_version == '5.5' or mysql_version == '5.6' or mysql_version == '5.7':
+                set_specific_parameters += ' --single-transaction'
+            # MYISAM Commanf without  --master-data=2
+            command3=mysql_dump_and_credentials + initial_command + set_specific_parameters + \
+                     " --dump-date --databases " + \
                      DB_NAME + chain_exclude_tables + "| gzip > " + DESTINATION + "/" + PREFIX + "_" + script_prefix + \
                      "_" + MY_INSTANCE_NAME + "_" + DB_NAME+".sql.gz"
-            print command3
-            command4=mysql_dump_and_credentials+" --opt --routines --triggers --events --flush-privileges " \
-                                                "--skip-add-drop-table --master-data=2 --single-transaction  " \
-                                                "--skip-add-locks --skip-lock-tables --dump-date --databases "\
-                     + DB_NAME + chain_exclude_tables + " | gzip > " + DESTINATION + "/" + PREFIX + "_" + script_prefix + "_" + \
-                     MY_INSTANCE_NAME + "_" + DB_NAME + ".sql.gz"
-            # print command4
+            # InnoDB command with --master-data=2
+            command4=mysql_dump_and_credentials + initial_command + set_specific_parameters + \
+                     " --master-data=2 --skip-add-locks --skip-lock-tables --dump-date " \
+                     "--databases " + DB_NAME + chain_exclude_tables + " | gzip > " \
+                     + DESTINATION + "/" + PREFIX + "_" + script_prefix + "_" + MY_INSTANCE_NAME + "_" + DB_NAME + ".sql.gz"
             print "---- Backing up Instance: "+MY_INSTANCE_NAME+" Database : "+DB_NAME+" ---- "
             command5=mysql_and_credentials + " -e "+_SQL2+"|grep -v TABLE|wc -l"
             # print command5
@@ -156,7 +176,7 @@ class mydump:
     def backup_logs(self,MYSQL_DATA_DIR,DESTINATION, script_prefix, MY_INSTANCE_NAME,
                     BINLOG_PATH='/var/lib/mysql/data', BINLOG_FILE_PREFIX='mysql-bin', days=2):
         files_strig_list=""
-        bin_log_files_list = [BINLOG_PATH + '/' + name for name in os.listdir(BINLOG_PATH) if 'mysql-bin.' in name]
+        bin_log_files_list = [BINLOG_PATH + '/' + name for name in os.listdir(BINLOG_PATH) if BINLOG_FILE_PREFIX + '.' in name]
         now = time.time()
         if days is None:
             days = 2
@@ -174,6 +194,8 @@ def main():
     mydump_object=mydump()
     sys.path.append(mydump_object.args_list.HOME_FOLDER)
     from execution.config_parser import ConfigParser
+
+
     if not mydump_object.args_list.MY_INSTANCES or mydump_object.args_list.MY_INSTANCES == '':
         mydump_object.args_list.MY_INSTANCES = '3306'
     if mydump_object.args_list.BINLOG_PATH and mydump_object.args_list.BINLOG_PATH != '':
@@ -197,6 +219,7 @@ def main():
         print rotate_stdout
         print rotate_stderr
         if rotate_stderr:
+            print 'There was an error executing get MySQL Instance function'
             exit(1)
         backup_stdout,backup_stderr=mydump_object.run_backup(mysql_and_credentials,mysql_dump_and_credentials,
                                                              mydump_object.DESTINATION,mydump_object.PREFIX_BACKUP,
@@ -204,6 +227,7 @@ def main():
         print backup_stdout
         print backup_stderr
         if backup_stderr:
+            print 'There was an error running the dump of the DBs'
             exit(1)
         logbak_stdout,logbak_stderr=mydump_object.backup_logs(MYSQL_DATA_DIR,mydump_object.DESTINATION,
                                                               mydump_object.script_prefix,
