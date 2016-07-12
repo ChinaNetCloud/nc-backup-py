@@ -64,13 +64,13 @@ class mydump:
                                    required=True)
         parser_object.add_argument('--DESTINATION', type=str, help='Local backup folder', required=False, action="store")
         parser_object.add_argument('--CREDENTIAL_PATH', type=str, help='Credential file path',
-                                   required=True,action="store")
-        parser_object.add_argument('--DATA_DIR', type=str, help='Data dir path', required=True,action="store")
+                                   required=False,action="store")
+        parser_object.add_argument('--DATA_DIR', type=str, help='Data dir path', required=False,action="store")
         parser_object.add_argument('--MY_INSTANCES', type=str, help='Instance port', required=False, action="store")
-        parser_object.add_argument('--BINLOG_PATH', type=str, help='Bin Log folder', required=True, action="store")
+        parser_object.add_argument('--BINLOG_PATH', type=str, help='Bin Log folder', required=False, action="store")
         parser_object.add_argument('--BINLOG_DAYS', type=str, help='Bin Log folder', required=False)
         parser_object.add_argument('--BINLOG_FILE_PREFIX', type=str, help='Bin Log file prefix',
-                                   required=True, action='store')
+                                   required=False, action='store')
         parser_object.add_argument('--MYSQL_DUMP_BINARY',type=str, help='MySQL Dump Binarey',  required=False)
         parser_object.add_argument('--MYSQL_BINARY', type=str, help='MySQL Binarey', required=False)
         parser_object.add_argument('--PREFIX_FOLDER', type=str, help='Prefix or folder to use', required=False)
@@ -128,9 +128,6 @@ class mydump:
         # get Mysql Version.
         mysql_version_command = mysql_and_credentials + " --version"
         stdout_mysql_version, stderr_mysql_version = Popen(mysql_version_command, shell=True, stdout=PIPE, stderr=PIPE).communicate()
-        # print type(stdout_mysql_version)
-        if re.findall('^(\d+\.)?(\d+\.)?(\*|\d+)$',str(stdout_mysql_version)):
-            print 'found some versioning'
         if '5.7' in stdout_mysql_version:
             mysql_version = '5.7'
         elif '5.6' in stdout_mysql_version:
@@ -178,7 +175,7 @@ class mydump:
         files_strig_list=""
         bin_log_files_list = [BINLOG_PATH + '/' + name for name in os.listdir(BINLOG_PATH) if BINLOG_FILE_PREFIX + '.' in name]
         now = time.time()
-        if days is None:
+        if days is None or days == '':
             days = 2
         bin_log_files_list = [file_log for file_log in bin_log_files_list if os.stat(file_log).st_mtime > now - (float(days) * 86400)]
         for i in bin_log_files_list:
@@ -198,6 +195,16 @@ def main():
 
     if not mydump_object.args_list.MY_INSTANCES or mydump_object.args_list.MY_INSTANCES == '':
         mydump_object.args_list.MY_INSTANCES = '3306'
+    # Check if a path to credentials was provided or use the default path
+    if not ConfigParser.check_exists(ConfigParser(),mydump_object.args_list.CREDENTIAL_PATH):
+        mydump_object.args_list.CREDENTIAL_PATH = '/etc/nc-backup-py/mysql_backup.creds'
+    if not ConfigParser.check_exists(ConfigParser(),mydump_object.args_list.DATA_DIR):
+        mydump_object.args_list.DATA_DIR = '/var/lib/mysql/data'
+    if not ConfigParser.check_exists(ConfigParser(), mydump_object.args_list.BINLOG_PATH):
+        mydump_object.args_list.BINLOG_PATH = mydump_object.args_list.DATA_DIR
+    if not ConfigParser.check_exists(ConfigParser(), mydump_object.args_list.BINLOG_FILE_PREFIX):
+        mydump_object.args_list.BINLOG_FILE_PREFIX = 'mysql-bin'
+
     if mydump_object.args_list.BINLOG_PATH and mydump_object.args_list.BINLOG_PATH != '':
         if not ConfigParser.is_existing_abs_path(ConfigParser(),mydump_object.args_list.BINLOG_PATH):
             print 'The path to bin Log folder does not exits, execution will not contune'
