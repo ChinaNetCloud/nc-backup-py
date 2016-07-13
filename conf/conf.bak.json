@@ -32,7 +32,7 @@
       "CREDENTIAL_PATH": "/etc/nc-backup-py/mysql.credentials",
       "DATA_DIR": "/var/lib/mysql",
       "MY_INSTANCES": "3306",
-      "BINLOG_PATH": "/var/lib/mysql",
+      "BINLOG_PATH": "/var/lib/mysql/data",
       "BINLOG_FILE_PREFIX": "mysql-bin",
       "DESTINATION": "/opt/backup",
       "TAR_COMMAND": "sudo /bin/tar czf",
@@ -42,6 +42,7 @@
       "EXCLUDE_DB": "",
       "BINLOG_DAYS": "3",
       "EXCLUDE_TABLE": "mysql.user mysql.func mysql.event"
+      "EXCLUDE_DB": "brt"
     }
   },
   "MONGODB":{

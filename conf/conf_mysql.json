@@ -1,14 +1,19 @@
 {
   "GENERAL": {
-    "HOSTNAME": "srv-nc-template-host-config",
+    "HOSTNAME": "srv-nc-py27-vbox-vagrant-db1",
     "WORK_FOLDER": "/opt/backup",
     "LOCAL_BACKUP": "/opt/backup/local",
-    "HOME_FOLDER": "/var/lib/nc-backup-py",
+    "HOME_FOLDER": "/vagrant/nc-backup-py",
     "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log"
   },
   "FILESET":{
     "ACTION": "execute",
     "NAME": "filesbackup"
+  },
+  "MYSQL": {
+    "ACTION": "execute",
+    "NAME": "mysql_backup",
+    "EXECUTABLE": "mysql_dump.py"
   },
   "COMPRESSION": {
     "ACTION": "execute",
@@ -31,7 +36,7 @@
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
-      "DESTINATION":"local",
+      "DESTINATION":"s3",
       "BUCKET_NAME": "cncbackup"
     }
   }

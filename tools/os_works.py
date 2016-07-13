@@ -39,4 +39,6 @@ class OSInformation:
         f = ('%.2f' % nbytes).rstrip('0').rstrip('.')
         return '%s %s' % (f, suffixes[i])
 
-
+    @staticmethod
+    def human_readable_to_bits(human_readable_size):
+        suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']

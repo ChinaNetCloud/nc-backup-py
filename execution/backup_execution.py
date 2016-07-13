@@ -44,7 +44,7 @@ class BackupExecutionLogic:
                         logger.warning(space_string_before_execution)
                     elif json_dict['GENERAL']['DISK_SPACE_THRESHOLD']/2 > average_calculation <= json_dict['GENERAL']['DISK_SPACE_THRESHOLD']/6:
                         logger.critical(space_string_before_execution)
-                    elif average_calculation <= json_dict['GENERAL']['DISK_SPACE_THRESHOLD']/6 and space_before_execution[2] >100:
+                    elif average_calculation <= json_dict['GENERAL']['DISK_SPACE_THRESHOLD']/10 and space_before_execution[2] >100:
                         logger.critical('Less than one percent space available, Stopping execution')
                         result_message.append({'external':
                                                    {'message':

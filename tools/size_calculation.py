@@ -1,6 +1,7 @@
 import os
 
 
+from os_works import OSInformation
 from execution.config_parser import ConfigParser
 
 class SizeCalculation:
@@ -14,7 +15,7 @@ class SizeCalculation:
         return self.get_dir_size(self.__parameters_dict['OBJECTIVES'])
 
     def output(self):
-        return str("{0:.2f}".format(self.__size_final/1024.00/1024.00))+'M'
+        return OSInformation.human_readable_size(self.__size_final)
 
     def get_dir_size(self, directory_objective):
         size = 0
