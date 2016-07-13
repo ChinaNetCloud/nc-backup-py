@@ -175,7 +175,7 @@ class mydump:
         files_strig_list=""
         bin_log_files_list = [BINLOG_PATH + '/' + name for name in os.listdir(BINLOG_PATH) if BINLOG_FILE_PREFIX + '.' in name]
         now = time.time()
-        if days is None or days == '':
+        if days is None:
             days = 2
         bin_log_files_list = [file_log for file_log in bin_log_files_list if os.stat(file_log).st_mtime > now - (float(days) * 86400)]
         for i in bin_log_files_list:

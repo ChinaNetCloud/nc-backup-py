@@ -31,7 +31,7 @@
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
-      "DESTINATION":"s3",
+      "DESTINATION":"local",
       "BUCKET_NAME": "cncbackup"
     }
   }
