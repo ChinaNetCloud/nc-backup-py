@@ -50,10 +50,12 @@ class EncryptionWorks:
 
     def encrypt(self, in_file, out_file, password, key_length=32, python_version='2.7', home_folder=''):
         # print python_version
+        print password
         if python_version == '2.7':
-            bs = AES.block_size
             with open(password, 'r') as key_file:
                 password = key_file.read().replace('\n', '')
+            bs = AES.block_size
+
             salt = Random.new().read(bs - len('Salted__'))
             key, iv = self.__derive_key_and_iv(password, salt, key_length, bs)
             cipher = AES.new(key, AES.MODE_CBC, iv)
@@ -66,13 +68,12 @@ class EncryptionWorks:
                     chunk += padding_length * chr(padding_length)
                     finished = True
                 out_file.write(cipher.encrypt(chunk))
-        else:
-            command_encrypt = 'cat '+ password +' '+ in_file.name +\
-                              ' | /usr/bin/gpg-agent --daemon gpg2 --batch --yes --no-tty ' \
+        elif python_version == '2.6':
+            command_encrypt = 'cat ' + password + ' ' + in_file.name + \
+                              ' | /usr/bin/gpg-agent --daemon gpg2  --cipher-algo AES-128 --batch --yes --no-tty ' \
                               '--quiet -c --passphrase-fd 0 > ' + out_file.name
             execution_encrytion = SubprocessExecution.main_execution_function(SubprocessExecution(), command_encrypt, True)
-            print execution_encrytion
-
+            # print execution_encrytion
             if execution_encrytion[0] == 0:
                 return out_file.name
 
@@ -134,23 +135,33 @@ class EncryptionWorks:
         command_cat = 'cat ' + path_to_file + '* > ' + path_to_file
         print command_cat
         cat_execution = SubprocessExecution.main_execution_function(SubprocessExecution(), command_cat)
-        # SubprocessExecution.print_output(SubprocessExecution(), cat_execution)
         return cat_execution
 
-    def create_key_file(self,path_to_new_key_file):
+    def create_key_file(self,path_to_new_key_file,hash_size=None, python_version=None):
         print 'Creating a key file as the was not in the path'
-        # self.my_hash()
-        key_word = self.hash_key_generator()
+        if python_version == '2.7':
+            key_word = self.hash_key_generator_crypto(hash_size)
+        elif python_version == '2.6':
+            key_word = self.hash_key_generator_gpg(hash_size) + '\n'
+        print key_word
+        # exit(1)
         with open(path_to_new_key_file, 'a') as key_file:
             key_file.write(key_word)
             print 'New key file creation done'
             key_file.close()
 
     @staticmethod
-    def hash_key_generator(bits=256):
+    def hash_key_generator_gpg(chars=16):
+        return ''.join(random.choice('0123456789abcdef') for i in range(chars))
+
+    @staticmethod
+    def hash_key_generator_crypto(bits=256):
         assert bits % 8 == 0
-        required_length = bits / 8 * 2
-        s = hex(random.getrandbits(bits)).lstrip('0x').rstrip('L')
+        # required_length = bits / 8 * 2
+        s = hex(random.getrandbits(bits))
+        print s
+        s = s.lstrip('0x').rstrip('L')
+        print s
         return s
 
 
@@ -179,7 +190,11 @@ if __name__ == "__main__":
             and not ConfigParser.check_exists(ConfigParser(), encryption_command.DECRYPT):
         encryption_command.KEY_FILE = '/etc/nc-backup-py/key_file'
     if not ConfigParser.is_existing_abs_path(ConfigParser(), encryption_command.KEY_FILE):
-        EncryptionWorks.create_key_file(EncryptionWorks(), encryption_command.KEY_FILE)
+        print "Creating Key files it does not exists"
+        if python_version == '2.7':
+            EncryptionWorks.create_key_file(EncryptionWorks(), encryption_command.KEY_FILE, 256, python_version)
+        elif python_version == '2.6':
+            EncryptionWorks.create_key_file(EncryptionWorks(), encryption_command.KEY_FILE, 16, python_version)
     if not ConfigParser.is_existing_abs_path(ConfigParser(),encryption_command.KEY_FILE):
         print 'You need a key file to encrypt: ' + str(encryption_command.KEY_FILE) \
               + ' Does not seem to exist. Stopping execution'
@@ -245,6 +260,7 @@ if __name__ == "__main__":
                     with open(encryption_command.DESTINATION, 'wb') as out_file:
                         with open(encryption_command.KEY_FILE, 'r') as key_file:
                             key_from_file = key_file.read().replace('\n', '')
+                            # key_from_file = '473ab6adca7355f9cc70f71e784679ce'
                             EncryptionWorks.decrypt(EncryptionWorks(), in_file, out_file, key_from_file, 32,
                                                     encryption_command.HOME_FOLDER)
             else:

@@ -10,14 +10,6 @@
     "ACTION": "execute",
     "NAME": "filesbackup"
   },
-  "MYSQL": {
-    "ACTION": "execute",
-    "NAME": "mysql_backup",
-    "EXECUTABLE": "mysql_dump.py",
-    "PARAMETERS": {
-      "EXCLUDE_DB": "brt"
-    }
-  },
   "COMPRESSION": {
     "ACTION": "execute",
     "NAME": "compression"
@@ -35,12 +27,15 @@
       "TARGETS": "/opt/backup/encrypted"
     }
   },
-  "STORAGE": {
+  "STORAGE_OSS": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
-      "DESTINATION":"s3",
-      "BUCKET_NAME": "cncbackup"
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "DESTINATION":"oss",
+      "BUCKET_NAME": "ihehadatabackup",
+      "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
+      "REMOVE_OBJECTIVES": "True"
     }
   }
 }

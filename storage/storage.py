@@ -49,9 +49,7 @@ if __name__ == "__main__":
     if str(storage_cmd.DESTINATION) not in ['s3', 'oss', 'ssh', 'local', 'azure']:
         print 'Not supported storage destination: ' + str(storage_cmd.DESTINATION)
         exit(1)
-    # if not ConfigParser.is_existing_abs_path(ConfigParser(), storage_cmd.OBJECTIVES):
-    #     print 'OBJECTIVES has to exist for storage to work, stopping execution'
-    #     exit(1)
+
     if not ConfigParser.check_exists(ConfigParser(), storage_cmd.REMOVE_OBJECTIVES):
         storage_cmd.REMOVE_OBJECTIVES = 'True'
     if not ConfigParser.check_exists(ConfigParser(), storage_cmd.OBJECTIVES):
@@ -78,6 +76,7 @@ if __name__ == "__main__":
     elif storage_cmd.DESTINATION == 'oss':
         print "calling OSS storage upload functions"
         from storages import AliyunOSS
+        print storage_cmd.BUCKET_NAME
         uploads_to_oss = AliyunOSS.upload_content(AliyunOSS(storage_cmd.HOME_FOLDER), storage_cmd.ALIYUN_CREDENTIALS,
                                                   storage_cmd.OBJECTIVES, storage_cmd.BUCKET_NAME,
                                                   storage_cmd.HOSTNAME, storage_cmd.REMOVE_OBJECTIVES)

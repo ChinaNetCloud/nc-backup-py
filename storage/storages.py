@@ -117,11 +117,13 @@ class AliyunOSS(Storage):
         print "Listing directory content"
 
     def upload_content(self, credentials_file, mypath_to_dir, bucket='', client_host_name='', remove_objective='False'):
-        print 'Trying uploading to Aliyun OSS bucket: ' + bucket
+        print 'Trying uploading to Aliyun OSS bucket:'
+        if bucket is not None and bucket != '':
+            print bucket
         files_to_upload = [f for f in listdir(mypath_to_dir) if isfile(join(mypath_to_dir, f))]
         import oss2
         credential_dict = self.__read_credentials_from_file(credentials_file)
-        if bucket != '' and bucket is str:
+        if bucket is not None and bucket != '':
             credential_dict['bucket'] = bucket
         auth = oss2.Auth(credential_dict['access_id'], credential_dict['access_key'])
 
@@ -134,11 +136,11 @@ class AliyunOSS(Storage):
             count = 1
             time_retry = 60
             while count <= 5:
-                try:
-                    tmp_result_execution = bucket.put_object_from_file (client_host_name + '/' + file_to_upload, local_file)
-                except:
-                    print 'Attempt failed'
-                    # print('status={0}, request_id={1}'.format(e.status, e.request_id))
+                # try:
+                tmp_result_execution = bucket.put_object_from_file (client_host_name + '/' + file_to_upload, local_file)
+                # except:
+                #     print 'Attempt failed'
+                # print('status={0}, request_id={1}'.format(e.status, e.request_id))
                 time_retry = time_retry * count
                 if tmp_result_execution and tmp_result_execution.status == 200:
                     message_return = 'Status: ' + str(tmp_result_execution.status) + ' Request ID: ' + \
@@ -180,7 +182,7 @@ class AliyunOSS(Storage):
             for line in file_loaded:
                 if line  and line is not '' and '[' not in line and ']' not in line and not line.startswith('#'):
                     name, var = line.partition("=")[::2]
-                    myvars[name.strip()] = str(var)
+                    myvars[name.strip()] = str(var).strip().rstrip()
 
         return myvars
 
