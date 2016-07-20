@@ -181,7 +181,7 @@ class mydump:
         for i in bin_log_files_list:
             files_strig_list =  files_strig_list + ' ' + i
         command7=self.tar_command + ' ' + str(DESTINATION) + "/" + str(script_prefix) \
-                 + "_" + str(MY_INSTANCE_NAME) +".bin-log.gz" + files_strig_list
+                 + "_" + str(MY_INSTANCE_NAME) +".bin-log.tar.gz" + files_strig_list
         print command7
         logbak_stdout,logbak_stderr=Popen(command7, shell=True, stdout=PIPE, stderr=PIPE).communicate()
         return logbak_stdout,logbak_stderr
