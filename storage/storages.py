@@ -121,14 +121,16 @@ class AliyunOSS(Storage):
         if bucket is not None and bucket != '':
             print bucket
         files_to_upload = [f for f in listdir(mypath_to_dir) if isfile(join(mypath_to_dir, f))]
-        import oss2
-        credential_dict = self.__read_credentials_from_file(credentials_file)
-        if bucket is not None and bucket != '':
-            credential_dict['bucket'] = bucket
-        auth = oss2.Auth(credential_dict['access_id'], credential_dict['access_key'])
-
-        bucket = oss2.Bucket(auth, credential_dict['host'], credential_dict['bucket'])
+        # import oss2
+        # credential_dict = self.__read_credentials_from_file(credentials_file)
+        # if bucket is not None and bucket != '':
+        #     credential_dict['bucket'] = bucket
+        # auth = oss2.Auth(credential_dict['access_id'], credential_dict['access_key'])
+        #
+        # bucket = oss2.Bucket(auth, credential_dict['host'], credential_dict['bucket'])
         execution_message = []
+        sys.path.append(self.__home_path)
+        from execution.subprocess_execution import SubprocessExecution
         for file_to_upload in files_to_upload:
             tmp_result_execution = ''
             local_file = mypath_to_dir + '/' + file_to_upload
@@ -137,27 +139,49 @@ class AliyunOSS(Storage):
             time_retry = 60
             while count <= 5:
                 # try:
-                tmp_result_execution = bucket.put_object_from_file (client_host_name + '/' + file_to_upload, local_file)
+                # print client_host_name + '/' + file_to_upload
+                alicmd_string = 'alicmd -u ' + local_file
+                # tmp_result_execution = bucket.put_object_from_file (client_host_name + '/' + file_to_upload, local_file)
                 # except:
                 #     print 'Attempt failed'
                 # print('status={0}, request_id={1}'.format(e.status, e.request_id))
+                tmp_execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), alicmd_string)
+
                 time_retry = time_retry * count
-                if tmp_result_execution and tmp_result_execution.status == 200:
-                    message_return = 'Status: ' + str(tmp_result_execution.status) + ' Request ID: ' + \
-                                     str(tmp_result_execution.request_id) + tmp_result_execution.etag
-                    status_success = 0
+                if tmp_execution_message[0] == 0:
                     print 'Upload attempt ' + str(count) + ' successful.'
                     break
+                elif tmp_execution_message[0] == 127:
+                    print "Error with AWS CLI binary. Is it installed?"
+                    break
+                # NEED TO DETERMINE: is
+                # elif tmp_execution_message[0] == 1:
+                #     print "Error with AWS CLI binary. Is it installed?"
+                #     break
                 else:
-                    status_success = 1
-                    print 'Upload attempt number: ' + str(count) + ' FAILED for: ' + local_file
-                    print tmp_result_execution
-                    # print tmp_result_execution.headers
-                    print 'We will wait for: ' + str(time_retry / 60) + ' minute(s) before upload attempt number: ' + \
+                    print 'Upload attempt number: ' + str(count) + ' FAILED for: ' + aws_command
+                    print 'StdOut: ' + str(tmp_execution_message[0])
+                    print 'StdErr: ' + str(tmp_execution_message[0])
+                    print 'We will wait for: ' + str(time_retry/60) + ' minute(s) before upload attempt number: ' + \
                           str(count + 1)
                     time.sleep(time_retry)
+                # if tmp_result_execution and tmp_result_execution.status == 200:
+                #     message_return = 'Status: ' + str(tmp_result_execution.status) + ' Request ID: ' + \
+                #                      str(tmp_result_execution.request_id) + tmp_result_execution.etag
+                #     status_success = 0
+                #     print 'Upload attempt ' + str(count) + ' successful.'
+                #     break
+                # else:
+                #     status_success = 1
+                #     print 'Upload attempt number: ' + str(count) + ' FAILED for: ' + local_file
+                #     print tmp_result_execution
+                #     # print tmp_result_execution.headers
+                #     print 'We will wait for: ' + str(time_retry / 60) + ' minute(s) before upload attempt number: ' + \
+                #           str(count + 1)
+                #     time.sleep(time_retry)
                 count = count + 1
-            execution_message.append((status_success, message_return, ''))
+            # execution_message.append((status_success, message_return, ''))
+            execution_message.append(tmp_execution_message)
 
         sys.path.append(self.__home_path)
         from execution.subprocess_execution import SubprocessExecution
@@ -183,7 +207,7 @@ class AliyunOSS(Storage):
                 if line  and line is not '' and '[' not in line and ']' not in line and not line.startswith('#'):
                     name, var = line.partition("=")[::2]
                     myvars[name.strip()] = str(var).strip().rstrip()
-
+        # print myvars
         return myvars
 
 
