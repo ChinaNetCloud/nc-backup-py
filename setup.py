@@ -70,3 +70,24 @@ except:
 # Copy files...
 copy_files(path, destination_code_path, username)
 
+uid = pwd.getpwnam(username).pw_uid
+gid = grp.getgrnam(username).gr_gid
+
+# Logs path
+logs_path = '/var/log/nc-backup-py'
+try:
+    os.stat(logs_path)
+except:
+    os.mkdir(logs_path)
+
+os.chown(logs_path, uid, gid)
+
+
+# Backup folder
+backup_path = '/opt/backup'
+try:
+    os.stat(backup_path)
+except:
+    os.mkdir(backup_path)
+
+os.chown(backup_path, uid, gid)
