@@ -3,7 +3,7 @@
     "HOSTNAME": "srv-nc-py27-vbox-vagrant-db1",
     "WORK_FOLDER": "/opt/backup",
     "LOCAL_BACKUP": "/opt/backup/local",
-    "HOME_FOLDER": "/vagrant/nc-backup-py",
+    "HOME_FOLDER": "/vagrant",
     "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log"
   },
   "FILESET":{
@@ -33,7 +33,7 @@
     "PARAMETERS":{
       "OBJECTIVES": "/opt/backup/encrypted",
       "DESTINATION":"oss",
-      "BUCKET_NAME": "ihehadatabackup",
+      "BUCKET_NAME": "chinanetcloud",
       "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
       "REMOVE_OBJECTIVES": "True"
     }
