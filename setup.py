@@ -13,16 +13,14 @@ if os.geteuid() != 0:
 
 # Create ncbackup if it does not exists.
 username = 'ncbackup'
+print '************************************'
+print 'Creating ' + username + 'user...'
+try:
+    pwd.getpwnam(username)
+except KeyError:
+    os.system('useradd -m %s -s /sbin/nologin' % username)
+    print 'Done.'
 
-# try:
-#     pwd.getpwnam(username)
-#     print username + ' user already exists.'
-# except KeyError:
-#     print 'User ' + username + ' does not exist. Adding it now'
-os.system('useradd -m %s -s /sbin/nologin' % username)
-
-
-print 'Copy configs...'
 # Copy the files function
 def copy_files(source, destination, username):
     # Os chown of the config folder
@@ -38,13 +36,16 @@ def copy_files(source, destination, username):
         src = source + '/' + f
         dst = destination + '/' + f
         if os.path.isdir(src) == True:
+            print '+ ' + src
             try:
                 os.stat(dst)
                 os.chown(dst, uid, gid)
             except:
                 os.mkdir(dst)
                 os.chown(dst, uid, gid)
+            copy_files(src, dst, username)
         else:
+            print '|__' + src
             shutil.copy(src, dst)
             os.chown(dst, uid, gid)
 
@@ -54,6 +55,8 @@ path_with_conf = path + '/conf'
 
 # Move default config files to /etc.
 configs_path = '/etc/nc-backup-py'
+print '************************************'
+print 'Copy configs...'
 try:
     os.stat(configs_path)
 except:
@@ -63,6 +66,8 @@ copy_files(path_with_conf, configs_path, username)
 
 # Copy code to var/lib
 destination_code_path = '/var/lib/nc-backup-py'
+print '************************************'
+print 'Copying installer to ' + destination_code_path + '...'
 try:
     os.stat(destination_code_path)
 except:
@@ -75,6 +80,8 @@ gid = grp.getgrnam(username).gr_gid
 
 # Logs path
 logs_path = '/var/log/nc-backup-py'
+print '************************************'
+print 'Creating log foldel on ' + logs_path + '...'
 try:
     os.stat(logs_path)
 except:
@@ -85,6 +92,8 @@ os.chown(logs_path, uid, gid)
 
 # Backup folder
 backup_path = '/opt/backup'
+print '************************************'
+print 'Creating backup folder on ' + backup_path + '...'
 try:
     os.stat(backup_path)
 except:
