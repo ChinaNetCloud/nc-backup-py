@@ -22,7 +22,7 @@ except KeyError:
     print 'Done.'
 
 # Copy the files function
-def copy_files(source, destination, username):
+def copy_files(source, destination, username, space=''):
     # Os chown of the config folder
     """
     :rtype: object
@@ -36,16 +36,16 @@ def copy_files(source, destination, username):
         src = source + '/' + f
         dst = destination + '/' + f
         if os.path.isdir(src) == True:
-            print '+ ' + src
+            print space + '- ' + src
             try:
                 os.stat(dst)
                 os.chown(dst, uid, gid)
             except:
                 os.mkdir(dst)
                 os.chown(dst, uid, gid)
-            copy_files(src, dst, username)
+            copy_files(src, dst, username, '  ')
         else:
-            print '|__' + src
+            print space + '|__' + src
             shutil.copy(src, dst)
             os.chown(dst, uid, gid)
 
