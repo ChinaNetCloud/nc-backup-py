@@ -7,6 +7,7 @@ CONFIG_DIR="$HOME/nc-backup-py-configs"
 
 echo "Using python: $PYTHON"
 
+echo
 echo "Back up config dir $CONFIG_DIR"
 
 if [ ! -d "$CONFIG_DIR" ];then
@@ -16,6 +17,7 @@ fi
 
 tar -czvf $CONFIG_DIR/nc-backup-py.`date +%Y%m%d_%H%M%S`.bkp.tar /etc/nc-backup-py
 
+echo
 echo "Git: Pulling latest commit from $(git config --get remote.origin.url)"
 
 $GIT pull
@@ -26,6 +28,6 @@ if [ -z $BRANCH ];then
   BRANCH="master"
 fi
 
+echo
 echo "Installing latest update on branch $BRANCH"
-
 $PYTHON setup.py
