@@ -148,7 +148,7 @@ gid = grp.getgrnam(username).gr_gid
 # Logs path
 logs_path = '/var/log/nc-backup-py'
 print '************************************'
-print '* Creating log foldel on ' + logs_path + '...'
+print '* Creating log folder on ' + logs_path + '...'
 print '************************************'
 try:
     os.stat(logs_path)

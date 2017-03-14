@@ -90,10 +90,12 @@ if __name__ == "__main__":
                 break
             execute = True
 
-            tar_execution = CompressionWorks.compression_execution(CompressionWorks(command_compression.TAR_COMMAND),
-                                                                   command_compression.OBJECTIVES,
-                                                                   command_compression.DESTINATION)
-            print tar_execution
+        # The 4 lines follwing this comment were inside the for loop above
+        # Hence the files were compressed multiple times. Removed indent.
+        tar_execution = CompressionWorks.compression_execution(CompressionWorks(command_compression.TAR_COMMAND),
+                                                               command_compression.OBJECTIVES,
+                                                               command_compression.DESTINATION)
+        print tar_execution
 
     else:
         print 'OBJECTIVES and DESTINATION need to be present in compression module, execution will not continue'
@@ -103,4 +105,3 @@ if __name__ == "__main__":
         print 'Deleting files after objective files as per config option --REMOVE_OBJECTIVES: ' \
               + command_compression.OBJECTIVES
         FilesystemHandling.remove_files(command_compression.OBJECTIVES)
-

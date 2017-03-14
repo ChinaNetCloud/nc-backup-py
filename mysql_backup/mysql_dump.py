@@ -113,7 +113,7 @@ class mydump:
         else:
             list_tables = ""
             chain_exclude_tables = ""
-        
+
         command1=mysql_and_credentials + " -e 'show databases' | sed '/Database/d' | grep -v 'information_schema' " \
                                          "| grep -v 'performance_schema' | grep -v 'sys'"
         stdout, stderr = Popen(command1, shell=True, stdout=PIPE, stderr=PIPE).communicate()
@@ -142,7 +142,7 @@ class mydump:
             initial_command = " --opt --routines --triggers --events --flush-privileges " \
                                          "--skip-add-drop-table"
             if mysql_version == '5.7':
-                set_specific_parameters = ' --set-gtid-purged = OFF'
+                set_specific_parameters = ' --set-gtid-purged=OFF'
             else:
                 set_specific_parameters = ''
             if mysql_version == '5.5' or mysql_version == '5.6' or mysql_version == '5.7':
