@@ -12,9 +12,14 @@ import sys
 print '************************************'
 print '* General Cheks'
 print '************************************'
-if os.geteuid() != 0:
-    print "Error: The installer needs to be executed as superadmin"
-    exit(1)
+
+if sys.platform == 'cygwin':
+    pass
+elif sys.platform == 'linux2':
+    if os.geteuid() != 0:
+        print "Error: The installer needs to be executed as superadmin"
+        exit(1)
+
 print 'Done.'
 #########################
 # Software Requirements #
