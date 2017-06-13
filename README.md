@@ -1,5 +1,6 @@
 # nc-backup-py system installation
 
+<a name='test1/>
 ## Introduction:
 
 This is the wiki installation page of the new backups system currently in testing phase. In general the new system works similar to the current ncbackup, but with some differences. Let's get into it for you to start getting familiar with it.
@@ -12,7 +13,7 @@ This command is able to perform all the backup tasks in sequential order accordi
 
 ## Contents
 
-[1 Introduction][## Introduction]
+[1 Introduction](#test)
 
 1.1 Skills
 
