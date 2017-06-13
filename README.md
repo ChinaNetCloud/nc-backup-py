@@ -10,9 +10,9 @@ Let's start explaining by the with execution. The project has a main script that
 
 This command is able to perform all the backup tasks in sequential order according to the conf/conf.json configuration file order. As you might have already noticed the new system is developed using python and the configuration file is a JSON file. One of the main ideas behind the new software is to decouple code from configuration completely, so if at some point you find that you have to modify code then there is a bug in the system and it needs to be taken care of. So report it to abel.guzman at chinanetcloud.com and ops_backup at chinanetcloud.com.
 
-##Contents
+## Contents
 
-[1 Introduction][##Introduction]
+[1 Introduction][## Introduction]
 
 1.1 Skills
 
