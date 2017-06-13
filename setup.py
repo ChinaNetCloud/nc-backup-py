@@ -30,7 +30,6 @@ except ImportError:
     exit(1)
 
 
-python_version = '2.7'
 if sys.version_info[0] == 2 and sys.version_info[1] == 7:
     python_version = '2.7'
     try:
@@ -38,12 +37,14 @@ if sys.version_info[0] == 2 and sys.version_info[1] == 7:
         print 'Crypto.Ramdom present'
     except ImportError:
         print 'Error importing Ramdom from Crypto, this library is required for Python 2.7'
+        print 'The modules Crypto, hashlib are required.'
         exit(1)
     try:
         from hashlib import md5
         print 'hashlib.md5 present'
     except ImportError:
         print 'Error importing md5 from hashlib, this library is required for Python 2.7'
+        print 'The modules Crypto, hashlib are required.'
         exit(1)
     try:
         from Crypto.Cipher import AES
@@ -58,12 +59,14 @@ elif sys.version_info[0] == 2 and sys.version_info[1] < 7 and sys.version_info[1
         print 'Simplejson present'
     except ImportError:
         print 'Error importing simplejson, this library is required for Python 2.7'
+        print 'The modules simplejson, backport_collections are required.'
         exit(1)
     try:
         from backport_collections import OrderedDict
         print 'backport_collections.OrderedDict present'
     except ImportError:
-        print 'Error importing md5 from hashlib, this library is required for Python 2.7'
+        print 'Error importing OrderedDict from backport_collections, this library is required for Python 2.7'
+        print 'The modules simplejson, backport_collections are required.'
         exit(1)
 else:
     print 'Unsupported python version, you are on your own'
