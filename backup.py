@@ -173,8 +173,11 @@ if type(json_dict) is not str:
                  }
     count=1
     time_retry = 60
+    message_config_command = json_dict['GENERAL']['MESSAGE_CONFIG_COMMAND']
+    message_config_method = json_dict['GENERAL']['MESSAGE_CONFIG_METHOD']
     while count <= 5:
-        request_to_brt = Communications.send_post(Communications(), data_post)
+        request_to_brt = Communications.send_message(Communications(), data_post, message_config_command,
+                                                     message_config_method)
         logger.info('Report sent status: ' + str(request_to_brt.status_code) + ' <===> ' + request_to_brt.reason)
         print 'Response from server:'
         attempt_notification = 'Attempt: ' + str(count)
