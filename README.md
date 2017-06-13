@@ -1,6 +1,6 @@
-#nc-backup-py system installation
+# nc-backup-py system installation
 
-##Introduction
+## Introduction:
 
 This is the wiki installation page of the new backups system currently in testing phase. In general the new system works similar to the current ncbackup, but with some differences. Let's get into it for you to start getting familiar with it.
 Notice: If you are interested on leaning about the structure of the project go ahead and read the rest of the introduction, but you do not really need this information to be able to install the software. In that case you can jump straight to Quick setup; manual install (Quick Start Procedure) or installation instructions and try to follow them.
@@ -337,11 +337,16 @@ clean up scripts for local and remote files.
 Windows compatibility
 Active directory backup
 ms-sql backup.
-[edit] Road Map:
-Optimize HDD Usage
-File copy, DB Dump, Compression should be a single operation, i.e data should be piped from one to the other without temp files.
+
+##Road Map:
+1- Optimize HDD Usage
+
+2- File copy, DB Dump, Compression should be a single operation, i.e data should be piped from one to the other without temp files.
 Streaming compressed, encrypted data to the cloud with a small local cache (No large locally stored encrypted files).
 Implement incremental backups.
+3- Improve Documentation
+
+
 [edit]Plugins
 
 We also have available a module/plugin feature in the configs available through configuration as well. current modules:

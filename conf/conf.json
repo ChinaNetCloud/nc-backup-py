@@ -1,5 +1,5 @@
 {
-  "GENERAL": {
+  "GENERAL1": {
     "HOSTNAME": "srv-nc-template-host-config",
     "WORK_FOLDER": "/opt/backup",
     "LOCAL_BACKUP": "/opt/backup/local",
