@@ -20,9 +20,18 @@ This is the installation manual for nc-backup-py (Net Could Backups) system curr
 #### Optionally use or Not local drive to consolidate backup files (Direct Streaming to remote destination).
 #### SSH storage backup
 #### Send report messages using e-mail, sms, wechat
+#### Improve documentation.
 
 ### Features being evaluated for development:
 #### ionice and network nice management.
+
+### Pending Scripts:
+#### snapshots for different storages.
+#### clean up scripts for local and remote files.
+#### Windows Server compatibility
+#### Windows Server compatibility
+##### Active directory backup
+##### ms-sql backup.
 
 In general nc-backup-py works similar to many backups systems but it's objetives are to achive could and linux servers backups. Let's get into it for you to start getting familiar with it.
 
@@ -59,7 +68,7 @@ Execute the file called setup.py in the nc-backup-py folder. This file executes 
  
 `# python setup.py`
 
-This step should work correctly, if it does you can skip the following sub-section called "Create user to run backup":
+This step should work correctly, if it does you can skip the following sub-section called "Create user to run backup with out using the `setup.py`":
 
 #### How to contribute to the project and joing the team as volunteer:
 We appreciate all controbutions and need and are looking forward for your help.
@@ -84,10 +93,9 @@ We appreciate all controbutions and need and are looking forward for your help.
 
 3- If you think the project is useful or has potential, please add a star.
 
-#### Create user to run backup
+#### Create user to run backup with out using the setup.py
 
-Create basic folders structure and move files
-To be sure it worked or not you just need to check the files en folder in the two steps to be at the right place and with the right permissions.
+Create basic folders structure and move files. To be sure it worked or not you just need to check the files en folder in the two steps to be at the right place and with the right permissions.
 
 ##### Create user to run backup:
 
@@ -127,7 +135,6 @@ If what you want to achieve is exactly the same as in this sample guide, you jus
 
 `[~]$ sudo vim /etc/nc-backup-py/conf.json`
 
-And then change:
 And then change:
 
 `"HOSTNAME": "srv-nc-template-host-config",`
@@ -239,25 +246,6 @@ mysql_dump: MySQl backup.
 (Optional) storage.py:AWS and OSS storage connects and saves files to different storages.
 mongo
 Postgres
-
-## New features:
-Reporting improvements
-Retries for AWS, OSS uploads and post reports.
-
-## Pending Scripts:
-snapshots for different storages.
-clean up scripts for local and remote files.
-Windows compatibility
-Active directory backup
-ms-sql backup.
-
-## Road Map:
-1- Optimize HDD Usage
-2- File copy, DB Dump, Compression should be a single operation, i.e data should be piped from one to the other without temp files.
-Streaming compressed, encrypted data to the cloud with a small local cache (No large locally stored encrypted files).
-Implement incremental backups.
-3- Improve Documentation
-
 
 ## Plugins
 
