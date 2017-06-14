@@ -6,4 +6,3 @@ class Communications:
             command_line = 'http://localhost'
         if command_mode is None or command_mode == 'post':
             return RequestServer.send_post(command_line, data)
-
