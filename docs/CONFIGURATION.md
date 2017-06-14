@@ -20,13 +20,13 @@ A .json config file is the sole config for all modules and scripts used. This is
 #### The GENERAL section
 
 Basics of the .json file:
-HOSTNAME: is the China Net Cloud hostname e.g. srv-nc-zabbix-db1, it can actually be any name, but we should keep it like that to follow out standards.
-WORK_FOLDER: is a tmp folder that the system uses for temporary storage of files. This folder in some cases might at least need 2x the size of the backup of available space.
-HOME_FOLDER: Where the backups software installation files live
-(Optional) LOCAL_BACKUP: if the server needs to keep local backups, this is the folder where they will be kept.
-LOG_FOLDER: Folder or to store logs or specific file name where to store the logs.
-DISK_SPACE_CHECK: is and optional option to define if you want the system to check available space used on the partition where the work folder is mounted.
-DISK_SPACE_THRESHOLD: Is the average disk given in (%) that you want the backups system to trigger alerts. This is an optional statement and the default value is 20%.
+`HOSTNAME`: is the China Net Cloud hostname e.g. srv-nc-zabbix-db1, it can actually be any name, but we should keep it like that to follow out standards.
+`WORK_FOLDER`: is a tmp folder that the system uses for temporary storage of files. This folder in some cases might at least need 2x the size of the backup of available space.
+`HOME_FOLDER`: Where the backups software installation files live
+(Optional) `LOCAL_BACKUP`: if the server needs to keep local backups, this is the folder where they will be kept.
+`LOG_FOLDER`: Folder or to store logs or specific file name where to store the logs.
+`DISK_SPACE_CHECK`: is and optional option to define if you want the system to check available space used on the partition where the work folder is mounted.
+`DISK_SPACE_THRESHOLD`: Is the average disk given in (%) that you want the backups system to trigger alerts. This is an optional statement and the default value is 20%.
 
 #### General tips to keep present:
 
@@ -43,7 +43,7 @@ The credentials, configs and keyfiles is advisable to be added to /etc instead o
 #### Files backup section
 
 The following is a real working section that calls and executes external colde to compress a fileset.
-`     "FILESET":{
+     `"FILESET":{
        "ACTION": "execute",
        "NAME": "filesbackup",
        "EXECUTE_WITH": "python",
@@ -53,7 +53,7 @@ The following is a real working section that calls and executes external colde t
          "FILESET_EXCLUDE": ""
        }
      }`
-Notice: FILESET_INCLUDE can not be "/"
+Notice: `FILESET_INCLUDE` can not be "/"
 
 ##### Optional parameters
 This section as most of the others have most of it's parameters as optional. For a default Cent OS 6 or 7 configuration this section should work the same as the section before as it would assume default configurations according to our new standards.
@@ -62,15 +62,15 @@ This section as most of the others have most of it's parameters as optional. For
         "NAME": "filesbackup"
      }`
 ##### Line by line explanation
-"FILESET":{ Defines a section beginning, the name can be anything, but as a convention is good to give it a name according to it's content.
-"ACTION": "execute", The kay word ACTION says to the script the now I want to say what to do in the section, there are 2 possible options defined for now:
-execute: means an external code script is going to be executed.
-load: a dynamic module will be loaded. There is a slide but important difference between "execute" and "load", load is to execute native python code in the for of dynamic imports while the other executes external independent scripts that can be done using any programming language as long as it follows some basic rules.
-"NAME": "filesbackup", NAME is to specify the name of the folder where to find the plugin or script to load/execute. Is advised to call the modules the same name of the folder, but is not a requirement. Then "filesbackup" is the name of the external script to be executed in this case.
-(Optional) "EXECUTE_WITH": "python", Is to know what type of code you need to execute, if your code is python, then you do not need to specify.
-(Optional) "EXECUTABLE": "", is to know which one is the executable file in the module.
-(Optional) "PARAMETERS": { This subsection is to pass parameters to the module to be executed/loaded. Inside you add parameters that you want the plugin/script to receive.
-(Optional, specific to the plugin or script to load or execute) "FILESET_INCLUDE": "/etc /Users/cncuser/Documents/", The parameters are all depending on what you need to execute your code. Every section can have different parameters depending on the way it was programmed.
+`"FILESET":{` Defines a section beginning, the name can be anything, but as a convention is good to give it a name according to it's content.
+`"ACTION":` "execute", The kay word ACTION says to the script the now I want to say what to do in the section, there are 2 possible options defined for now:
+`execute:` means an external code script is going to be executed.
+`load:` a dynamic module will be loaded. There is a slide but important difference between "execute" and "load", load is to execute native python code in the for of dynamic imports while the other executes external independent scripts that can be done using any programming language as long as it follows some basic rules.
+`"NAME": "filesbackup"`, `NAME` is to specify the name of the folder where to find the plugin or script to load/execute. Is advised to call the modules the same name of the folder, but is not a requirement. Then "filesbackup" is the name of the external script to be executed in this case.
+(Optional) `"EXECUTE_WITH": "python",` Is to know what type of code you need to execute, if your code is python, then you do not need to specify.
+(Optional) `"EXECUTABLE": "",` is to know which one is the executable file in the module.
+(Optional) `"PARAMETERS": {` This subsection is to pass parameters to the module to be executed/loaded. Inside you add parameters that you want the plugin/script to receive.
+(Optional, specific to the plugin or script to load or execute) `"FILESET_INCLUDE": "/etc /Users/cncuser/Documents/",` The parameters are all depending on what you need to execute your code. Every section can have different parameters depending on the way it was programmed.
 
 ##### The plugins
 
@@ -130,24 +130,27 @@ This section executes a external script that executes a dump on the MySQL DB. So
 Notice: This is a plugin instead of an executable independent script.
 #### Postgresql
 Create backup user ncbackup in postgresql
-postgres=> create user ncbackup with password 'PASSWORD';
+`postgres=> create user ncbackup with password 'PASSWORD';`
 Details about how to create user in pgsql, please refer to Basic postgresql management procedure
-Grant select privilege on all user_created tables to ncbackup
-Customerdb=> grant select on $TABLE_NAME to ncbackup;
+`Grant select privilege on all user_created tables to ncbackup
+
+Customerdb=> grant select on $TABLE_NAME to ncbackup;`
+
 You have to grant privilege one by one, of cource, you could also create a batch scipt to do it.
-Create .pgpass file in /home/ncbackup with following contents, that is for backup script authenticaiton.
-localhost:*:*:ncbackup:$PASSWORD
-You should change the $PASSWORD part accordingly
+Create `.pgpass` file in `/home/ncbackup` with following contents, that is for backup script authenticaiton.
+`localhost:*:*:ncbackup:$PASSWORD`
+You should change the `$PASSWORD` part accordingly
+
 Setup ownership and privilge like the following:
 
 `[root@srv-xxx-xxx ~]# ls -l /home/ncbackup/.pgpass 
 -rw------- 1 ncbackup ncbackup 34 Jun 12 17:04 /home/ncbackup/.pgpass
 [root@srv-xxx-xxx ~]#`
 
-Be careful, 600 privilege is a must
-when the backup will be restored, before you do anything, you must create all the user and database related to the backup, or the restore will fail
+Be careful, `600` permisions is a must when the backup will be restored, before you do anything, you must create all the user and database related to the backup, or the restore will fail
 
 ##### Config file
+
   `"POSTGRES":{
     "ACTION": "load",
     "FROM": "postgres",
