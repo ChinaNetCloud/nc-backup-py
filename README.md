@@ -1,37 +1,79 @@
-# nc-backup-py system installation
+# nc-backup-py
 
-## Introduction:
+## Introduction
 
-This is the installation manual for nc-backup-py (Net Could Backups) system currently in testing and development phase as wel as used for some productions systems. 
+nc-backup-py intends to be a comprehensive one stop solution for backups.
 
-### Working Fetures:
-#### Backup to multiple clouds storages: AWS S3, Aliyun (Alibaba), Mounted writable drive.
-#### Compression, Encryption, Decryption, Split files
-#### Backup of regular files and Multiple Databases: MySQL Dump, Mongo DB dump, Postgres SQL dump.
-#### Send post message reports to custom URL. Report includes Success, size, server, log, etc.
-#### The solution accepts 2 ways to extend it:
-##### Run custom separate program on any programming language, 
-##### Accept integrated plugins; this are Python special clases that can be understood by nc-backup-py. 
-#### Retry failed uploads and report messages.
+## Requirements
+* Operating System
+  * Linux
+  * Windows (in development)
 
-### Planned or in development features:
-#### MySQL Xtrabackup
-#### Avoid multiple compreassion operations. This can actually be considered a bug.
-#### Optionally use or Not local drive to consolidate backup files (Direct Streaming to remote destination).
-#### SSH storage backup
-#### Send report messages using e-mail, sms, wechat
-#### Improve documentation.
+* Python >= 2.6 (Python 3 not supported)
 
-### Features being evaluated for development:
-#### ionice and network nice management.
+## Quick Start
 
-### Pending Scripts:
-#### snapshots for different storages.
-#### clean up scripts for local and remote files.
-#### Windows Server compatibility
-#### Windows Server compatibility
-##### Active directory backup
-##### ms-sql backup.
+* Clone or Download the git repository and change directory .
+  ```
+  $ git clone https://github.com/ChinaNetCloud/nc-backup-py.git
+  $ cd nc-backup-py
+  ```
+
+  or
+
+  ```
+  $ wget -O nc-backup-py.zip https://github.com/ChinaNetCloud/nc-backup-py/archive/master.zip
+  $ unzip nc-backup-py.zip
+  $ cd nc-backup-py-master
+  ```
+
+* Run setup
+```
+$ ./setup.py
+```
+
+* Edit configuration
+
+* Execute Backup manually
+```
+$ python /path/to/backup.py -r -c /path/to/conf.json -l WARNING
+```
+* Optionally add a cronjob
+```
+$ crontab -e
+00 03 * * * python /var/lib/nc-backup-py/backup.py -r -c /etc/nc-backup-py/conf.json
+```
+
+### Features
+
+#### Features Available
+* Backup to multiple clouds storages: AWS S3, Aliyun (Alibaba), Mounted writable drive.
+* Compression, Encryption, Decryption, Split files
+* Backup of regular files and Multiple Databases: MySQL Dump, Mongo DB dump, Postgres SQL dump.
+* Send POST message reports to custom URL. Report includes Success, size, server, log, etc.
+* Retry failed uploads and report messages.
+
+#### Features Planned
+* MySQL Xtrabackup
+* Avoid multiple compreassion operations. This can actually be considered a bug.
+* Optionally use or Not local drive to consolidate backup files (Direct Streaming to remote destination).
+* SSH storage backup
+* Send report messages using e-mail, sms, wechat
+* Improve documentation.
+
+#### Features under development
+* ionice and network nice management.
+* snapshots for different storages.
+* clean up scripts for local and remote files.
+* Windows Server compatibility
+* Windows Server compatibility
+* Active directory backup
+* ms-sql backup.
+
+#### Extending Features
+* The solution accepts 2 ways to extend it:
+  * Run custom separate program on any programming language,
+  * Accept integrated plugins; this are Python special classes that can be understood by nc-backup-py.
 
 In general nc-backup-py works similar to many backups systems but it's objetives are to achive could and linux servers backups. Let's get into it for you to start getting familiar with it.
 
@@ -43,32 +85,6 @@ Let's start explaining with execution. The project has a main script that is exe
 
 This command is able to perform all the backup tasks in sequential order according to the conf/conf.json configuration file order. As you might have already noticed nc-backup-py is developed using python and the configuration file is a JSON file. One of the main ideas behind the new software is to decouple code from configuration completely, so if at some point you find that you have to modify code then there is a bug in the system and it needs to be taken care of, we appreciate if you report it as an issue.
 
-## Required Skills
-
-Understand basics about JSON format.
-Linux commands and packages installation.
-
-## Quick setup (Quick Start Procedure)
-
-This quick setup guide is to install ONLY our default filesbackup configuration (/etc /opt/ncscripts /var/spool/cron) and upload to AWS S3. Before you start, please make sure you have the requirements installed.
-
-### Download the script to the server
-
-Let's use your home folder of a sudoer user as download folder:
-
-`
-[abel.guzman@xxx] cd ~
-
-[~]$ git clone https://gitlab.service.chinanetcloud.com/backup/nc-backup-py.git
-`
-
-### Use setup.py file to create user and other required tasks
-
-Execute the file called setup.py in the nc-backup-py folder. This file executes automatically all the following tasks until configuration. The configuration will need to be done by you manually or using other method. To execute get in the git cloned directory and execute:
- 
-`# python setup.py`
-
-This step should work correctly, if it does you can skip the following sub-section called "Create user to run backup with out using the `setup.py`":
 
 #### How to contribute to the project and joing the team as volunteer:
 We appreciate all controbutions and need and are looking forward for your help.
@@ -87,47 +103,12 @@ We appreciate all controbutions and need and are looking forward for your help.
 6- Iterate :P.
 
 ##### Use the product:
-1- Download and install `master` branch, 
+1- Download and install `master` branch,
 
 2- Provide feedback on [Issue](https://github.com/ChinaNetCloud/nc-backup-py/issues) for suport,
 
 3- If you think the project is useful or has potential, please add a star.
 
-#### Create user to run backup with out using the setup.py
-
-Create basic folders structure and move files. To be sure it worked or not you just need to check the files en folder in the two steps to be at the right place and with the right permissions.
-
-##### Create user to run backup:
-
-`[~]$ sudo useradd -m ncbackup -s /sbin/nologin`
-
-##### Create basic folders structure and move files
-`[~]$ sudo mkdir /etc/nc-backup-py/`
-
-##### Move the default configuration file from where the you downloaded to /etc/nc-backup-py/ and make ncbackup the owner e.g.:.
-
-`
-[~]$ sudo mv ~/nc-backup-py/conf/* /etc/nc-backup-py/
-
-[~]$ sudo chown ncbackup:ncbackup /etc/nc-backup-py/ -R
-`
-
-##### Create log folder:
-
-`[~]$ sudo  mkdir /var/log/nc-backup-py/
-[~]$ sudo  chown ncbackup:ncbackup -R /var/log/nc-backup-py/`
-
-##### Create code deployment directory, move code and make ncbackup the owner:
-
-`[~]$ sudo mv ~/nc-backup-py/ /var/lib/
-
-[~]$ sudo chown ncbackup:ncbackup -R /var/lib/nc-backup-py/`
-
-##### Create default backup folder:
-
-`[~]$ sudo mkdir /opt/backup/
-
-[~]$ sudo chown ncbackup:ncbackup -R /opt/backup/`
 
 #### Edit the configuration file and change parameters**
 
@@ -140,7 +121,7 @@ And then change:
 `"HOSTNAME": "srv-nc-template-host-config",`
 
 To:
- 
+
 `"HOSTNAME": "srv-your-hostname",`
 
 Also make sure you have the right bucket in storage section so change this to the real bucket name:
@@ -158,7 +139,7 @@ Change to ncbackup user
 
 `[~]$ sudo su - ncbackup -s /bin/bash
 Last login: Mon Jul  4 09:31:49 UTC 2016 on pts/0
-[~]$ whoami 
+[~]$ whoami
 ncbackup
 [~]$`
 
@@ -296,13 +277,13 @@ Get help information
 
 Check if this files exist (/etc/.alioss.conf), if does not exist, proceed with configure AliYun OSS, else (if exist), remove the old config file
 
-`rm -rf /etc/.alioss.conf` 
+`rm -rf /etc/.alioss.conf`
 
 Configure AliYun OSS
 
 `# alicmd --config`
 
-Then, edit the alioss config file. 
+Then, edit the alioss config file.
 `vim /etc/.alioss.conf ;`
 
 Content:
@@ -328,7 +309,7 @@ XXcloud 2012-06-19T07:05:33.000Z  # Should list all buckets we have`
 
 Login Web page for Aliyun:
 
-`URL: www.aliyun.com (username and password) Selete 
+`URL: www.aliyun.com (username and password) Selete
 用户中心 --> 管理控制台 --> 开放存储服务OSS --> OSS 管理 --> OSS体验站`
 `
 Check the backup files
@@ -403,7 +384,7 @@ Create MySQL login / pass file :
 user=ncbackupdb
 password=PASSWORD
 host=localhost
-socket=/var/lib/mysql/mysql.sock 
+socket=/var/lib/mysql/mysql.sock
 
 [mysql]
 user=ncbackupdb
@@ -440,16 +421,16 @@ The logs are vey useful for troubleshooting purposes. Let's take a look:
 2016-05-31 14:29:07,824 - ncbackup - INFO - Automatically selected python as execution method
 2016-05-31 14:29:07,824 - ncbackup - INFO - Preraring for execution as follows: python /Users/cncuser/Documents/py/nc-backup-py/storage/storage.py
 2016-05-31 14:29:07,824 - ncbackup - INFO - Prapare execution finised script. Now prepare parameters to pass is going to be executed
-2016-05-31 14:29:07,824 - ncbackup - INFO - Module specific parameters iteration: --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" 
-2016-05-31 14:29:07,824 - ncbackup - INFO - Module specific parameters iteration: --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss" 
-2016-05-31 14:29:07,824 - ncbackup - INFO - Module specific parameters iteration: --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss" --BUCKET_NAME "cncbackup" 
-2016-05-31 14:29:07,824 - ncbackup - INFO - Module specific parameters iteration: --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss" --BUCKET_NAME "cncbackup" --ALIYUN_CREDENTIALS "/etc/.alioss.conf" 
-2016-05-31 14:29:07,824 - ncbackup - INFO - Module specific parameters iteration: --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss" --BUCKET_NAME "cncbackup" --ALIYUN_CREDENTIALS "/etc/.alioss.conf" --REMOVE_OBJECTIVES "True" 
-2016-05-31 14:29:07,824 - ncbackup - INFO - General parameters iteration: --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss" --BUCKET_NAME "cncbackup" --ALIYUN_CREDENTIALS "/etc/.alioss.conf" --REMOVE_OBJECTIVES "True" --HOSTNAME "srv-nc-py27-abel-mac-db1" --WORK_FOLDER "/Users/cncuser/Downloads/backup" --LOCAL_BACKUP "/Users/cncuser/Downloads/backup/local" --HOME_FOLDER "/Users/cncuser/Documents/py/nc-backup-py" --LOG_FOLDER "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log" 
+2016-05-31 14:29:07,824 - ncbackup - INFO - Module specific parameters iteration: --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted"
+2016-05-31 14:29:07,824 - ncbackup - INFO - Module specific parameters iteration: --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss"
+2016-05-31 14:29:07,824 - ncbackup - INFO - Module specific parameters iteration: --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss" --BUCKET_NAME "cncbackup"
+2016-05-31 14:29:07,824 - ncbackup - INFO - Module specific parameters iteration: --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss" --BUCKET_NAME "cncbackup" --ALIYUN_CREDENTIALS "/etc/.alioss.conf"
+2016-05-31 14:29:07,824 - ncbackup - INFO - Module specific parameters iteration: --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss" --BUCKET_NAME "cncbackup" --ALIYUN_CREDENTIALS "/etc/.alioss.conf" --REMOVE_OBJECTIVES "True"
+2016-05-31 14:29:07,824 - ncbackup - INFO - General parameters iteration: --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss" --BUCKET_NAME "cncbackup" --ALIYUN_CREDENTIALS "/etc/.alioss.conf" --REMOVE_OBJECTIVES "True" --HOSTNAME "srv-nc-py27-abel-mac-db1" --WORK_FOLDER "/Users/cncuser/Downloads/backup" --LOCAL_BACKUP "/Users/cncuser/Downloads/backup/local" --HOME_FOLDER "/Users/cncuser/Documents/py/nc-backup-py" --LOG_FOLDER "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log"
 2016-05-31 14:29:07,824 - ncbackup - INFO - Finished parameters preparation for section
-2016-05-31 14:29:07,824 - ncbackup - INFO - Calling module: python /Users/cncuser/Documents/py/nc-backup-py/storage/storage.py --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss" --BUCKET_NAME "cncbackup" --ALIYUN_CREDENTIALS "/etc/.alioss.conf" --REMOVE_OBJECTIVES "True" --HOSTNAME "srv-nc-py27-abel-mac-db1" --WORK_FOLDER "/Users/cncuser/Downloads/backup" --LOCAL_BACKUP "/Users/cncuser/Downloads/backup/local" --HOME_FOLDER "/Users/cncuser/Documents/py/nc-backup-py" --LOG_FOLDER "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log" 
-2016-05-31 14:29:07,824 - ncbackup - INFO - List of parameters passed to script: python /Users/cncuser/Documents/py/nc-backup-py/storage/storage.py --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss" --BUCKET_NAME "cncbackup" --ALIYUN_CREDENTIALS "/etc/.alioss.conf" --REMOVE_OBJECTIVES "True" --HOSTNAME "srv-nc-py27-abel-mac-db1" --WORK_FOLDER "/Users/cncuser/Downloads/backup" --LOCAL_BACKUP "/Users/cncuser/Downloads/backup/local" --HOME_FOLDER "/Users/cncuser/Documents/py/nc-backup-py" --LOG_FOLDER "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log" 
-2016-05-31 14:29:07,825 - ncbackup - INFO - Executing system the system external command: python /Users/cncuser/Documents/py/nc-backup-py/storage/storage.py --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss" --BUCKET_NAME "cncbackup" --ALIYUN_CREDENTIALS "/etc/.alioss.conf" --REMOVE_OBJECTIVES "True" --HOSTNAME "srv-nc-py27-abel-mac-db1" --WORK_FOLDER "/Users/cncuser/Downloads/backup" --LOCAL_BACKUP "/Users/cncuser/Downloads/backup/local" --HOME_FOLDER "/Users/cncuser/Documents/py/nc-backup-py" --LOG_FOLDER "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log" 
+2016-05-31 14:29:07,824 - ncbackup - INFO - Calling module: python /Users/cncuser/Documents/py/nc-backup-py/storage/storage.py --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss" --BUCKET_NAME "cncbackup" --ALIYUN_CREDENTIALS "/etc/.alioss.conf" --REMOVE_OBJECTIVES "True" --HOSTNAME "srv-nc-py27-abel-mac-db1" --WORK_FOLDER "/Users/cncuser/Downloads/backup" --LOCAL_BACKUP "/Users/cncuser/Downloads/backup/local" --HOME_FOLDER "/Users/cncuser/Documents/py/nc-backup-py" --LOG_FOLDER "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log"
+2016-05-31 14:29:07,824 - ncbackup - INFO - List of parameters passed to script: python /Users/cncuser/Documents/py/nc-backup-py/storage/storage.py --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss" --BUCKET_NAME "cncbackup" --ALIYUN_CREDENTIALS "/etc/.alioss.conf" --REMOVE_OBJECTIVES "True" --HOSTNAME "srv-nc-py27-abel-mac-db1" --WORK_FOLDER "/Users/cncuser/Downloads/backup" --LOCAL_BACKUP "/Users/cncuser/Downloads/backup/local" --HOME_FOLDER "/Users/cncuser/Documents/py/nc-backup-py" --LOG_FOLDER "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log"
+2016-05-31 14:29:07,825 - ncbackup - INFO - Executing system the system external command: python /Users/cncuser/Documents/py/nc-backup-py/storage/storage.py --OBJECTIVES "/Users/cncuser/Downloads/backup/encrypted" --DESTINATION "oss" --BUCKET_NAME "cncbackup" --ALIYUN_CREDENTIALS "/etc/.alioss.conf" --REMOVE_OBJECTIVES "True" --HOSTNAME "srv-nc-py27-abel-mac-db1" --WORK_FOLDER "/Users/cncuser/Downloads/backup" --LOCAL_BACKUP "/Users/cncuser/Downloads/backup/local" --HOME_FOLDER "/Users/cncuser/Documents/py/nc-backup-py" --LOG_FOLDER "/Users/cncuser/Documents/py/nc-backup-py/log/ncbackup.log"
 2016-05-31 14:30:30,214 - ncbackup - INFO - the execution was succesfull
 2016-05-31 14:30:30,214 - ncbackup - INFO - StdOut: Executing backup files type: oss
 calling OSS storage upload functions
