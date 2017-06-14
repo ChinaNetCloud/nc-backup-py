@@ -7,7 +7,7 @@ This is the installation manual for nc-backup-py (Net Could Backups) system curr
 ### Working Fetures:
 #### Backup to multiple clouds storages: AWS S3, Aliyun (Alibaba), Mounted writable drive.
 #### Compression, Encryption, Decryption, Split files
-#### Backup Multiple Databases: MySQL Dump, Mongo DB dump, Postgres SQL dump.
+#### Backup of regular files and Multiple Databases: MySQL Dump, Mongo DB dump, Postgres SQL dump.
 #### Send post message reports to custom URL. Report includes Success, size, server, log, etc.
 #### The solution accepts 2 ways to extend it:
 ##### Run custom separate program on any programming language, 
@@ -16,8 +16,11 @@ This is the installation manual for nc-backup-py (Net Could Backups) system curr
 
 ### Planned or in development features:
 #### MySQL Xtrabackup
+#### Avoid multiple compreassion operations. This can actually be considered a bug.
 #### Optionally use or Not local drive to consolidate backup files (Direct Streaming to remote destination).
 #### SSH storage backup
+#### Send report messages using e-mail, sms, wechat
+
 
 
 In general nc-backup-py works similar to many backups systems but it's objetives are to achive could and linux servers backups. Let's get into it for you to start getting familiar with it.
