@@ -29,7 +29,9 @@ This quick setup guide is to install ONLY our default filesbackup configuration 
 
 let's use your home folder of a sudoer user as download folder:
 
-`[abel.guzman@xxx] cd ~
+`
+[abel.guzman@xxx] cd ~
+
 [~]$ git clone https://gitlab.service.chinanetcloud.com/backup/nc-backup-py.git
 `
 
@@ -46,38 +48,45 @@ This step should work correctly, if it does you can skip the following sub-secti
 Create basic folders structure and move files
 To be sure it worked or not you just need to check the files en folder in the two steps to be at the right place and with the right permissions.
 
-Create user to run backup:
+##### Create user to run backup:
 
-`[~]$ sudo useradd -m ncbackup -s /sbin/nologin
-[edit]Create basic folders structure and move files
-[~]$ sudo mkdir /etc/nc-backup-py/`
+`[~]$ sudo useradd -m ncbackup -s /sbin/nologin`
 
-Move the default configuration file from where the you downloaded to /etc/nc-backup-py/ and make ncbackup the owner e.g.:.
+##### Create basic folders structure and move files
+`[~]$ sudo mkdir /etc/nc-backup-py/`
 
-`[~]$ sudo mv ~/nc-backup-py/conf/* /etc/nc-backup-py/
-[~]$ sudo chown ncbackup:ncbackup /etc/nc-backup-py/ -R`
+##### Move the default configuration file from where the you downloaded to /etc/nc-backup-py/ and make ncbackup the owner e.g.:.
 
-Create log folder:
+`
+[~]$ sudo mv ~/nc-backup-py/conf/* /etc/nc-backup-py/
+
+[~]$ sudo chown ncbackup:ncbackup /etc/nc-backup-py/ -R
+`
+
+##### Create log folder:
 
 `[~]$ sudo  mkdir /var/log/nc-backup-py/
 [~]$ sudo  chown ncbackup:ncbackup -R /var/log/nc-backup-py/`
 
-Create code deployment directory, move code and make ncbackup the owner:
+##### Create code deployment directory, move code and make ncbackup the owner:
 
 `[~]$ sudo mv ~/nc-backup-py/ /var/lib/
+
 [~]$ sudo chown ncbackup:ncbackup -R /var/lib/nc-backup-py/`
 
-Create default backup folder:
+##### Create default backup folder:
 
 `[~]$ sudo mkdir /opt/backup/
+
 [~]$ sudo chown ncbackup:ncbackup -R /opt/backup/`
 
-### Edit the configuration file and change parameters**
+#### Edit the configuration file and change parameters**
 
 If what you want to achieve is exactly the same as in this sample guide, you just need to edit the configuration file and change the server name to yours own server name:
 
 `[~]$ sudo vim /etc/nc-backup-py/conf.json`
 
+And then change:
 And then change:
 
 `"HOSTNAME": "srv-nc-template-host-config",`
