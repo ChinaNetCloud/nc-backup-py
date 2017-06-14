@@ -12,6 +12,7 @@ This is the installation manual for nc-backup-py (Net Could Backups) system curr
 #### The solution accepts 2 ways to extend it:
 ##### Run custom separate program on any programming language, 
 ##### Accept integrated plugins; this are Python special clases that can be understood by nc-backup-py. 
+#### Retry failed uploads and report messages.
 
 ### Planned or in development features:
 #### MySQL Xtrabackup
@@ -398,7 +399,7 @@ python /path/to/backup.py -r -c /path/to/conf.json
 Notice: You might need to put the whole file path to backup.py and conf.json
 #### The logs
 The logs are vey useful for troubleshooting purposes. Let's take a look:
-2016-05-31 14:29:07,823 - ncbackup - INFO - Execution time in seconds: 4.38756585121
+`2016-05-31 14:29:07,823 - ncbackup - INFO - Execution time in seconds: 4.38756585121
 2016-05-31 14:29:07,823 - ncbackup - INFO - Section 8: STORAGE_OSS.
 2016-05-31 14:29:07,823 - ncbackup - INFO - Loading executable module: storage
 2016-05-31 14:29:07,824 - ncbackup - INFO - Automatically selected python as execution method
@@ -429,7 +430,8 @@ Upload attempt 2 successful.
 Executing system the system external command: rm -rf /Users/cncuser/Downloads/backup/encrypted
 [(0, 'Status: 200 Request ID: 574D2F34727EC395763E7B2BC5744FE5A7186F0175DEB0440B22619E', ''), (0, 'Status: 200 Request ID: 574D2F853DD1246111751CFD50140945BA676D8F7A0FC0B5D4F3F3A1', ''), (0, '', 'stderr: ')]
 
-2016-05-31 14:30:30,214 - ncbackup - INFO - Execution time in seconds: 82.3907568455
+2016-05-31 14:30:30,214 - ncbackup - INFO - Execution time in seconds: 82.3907568455`
+
 ## Configuration
 
 ### The JSON config file
