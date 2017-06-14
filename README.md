@@ -326,7 +326,8 @@ Verify OSS Configuration file:
 `# alicmd --show
 XXcloud 2012-06-19T07:05:33.000Z  # Should list all buckets we have`
 
-Login Web page for Aliyun
+Login Web page for Aliyun:
+
 `URL: www.aliyun.com (username and password) Selete 
 用户中心 --> 管理控制台 --> 开放存储服务OSS --> OSS 管理 --> OSS体验站`
 `
@@ -335,7 +336,9 @@ Check the backup files
 
 ### Testing Do not use in Production for now
 Install OSS SKD:
+
 `pip install OSS2`
+
 python 2.7 or 2.6
 
 ### Python modules
@@ -376,12 +379,15 @@ Notice: Check that you have the requirements installed (Check the requirements s
 Check that the user ncbackup exists and is the owner of the work folder as well as it can read the rest. You will have to create a dedicated user (eg. ncbackup).
 Notice: The script does not work as 'root'
 `# useradd -m ncbackup -s /sbin/nologin`
+
 ### Clone repository:
 git clone -b master https://gitlab.service.chinanetcloud.com/backup/nc-backup-py.git
 Call (cd) into the folder:
 cd nc-backup-py
 ### Configure JSON
+
 Follow the guide lines in the chapter called The JSON config file. The confign file is in conf/conf.json, but you can create your own with a custom name if wanted. The configuration can be anywhere, but out new standard is going to be inside /etc.
+
 ### Configure credentails accordingly
 If MySQL Db server, create credentials file, create encription key, etc.
 You need to create a MySQL user that can perform the dump of the database.
