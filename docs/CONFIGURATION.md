@@ -6,14 +6,14 @@
 A .json config file is the sole config for all modules and scripts used. This is standard JSON; with a few Keywords specific to the software and sections. Maybe at some point in the future we might need to implement being able to have more than one .json config file that can be included from a central file. Something like and include feature. The config only has one mandatory section It looks like this:
 
     `{
-      "GENERAL": {
-        "HOSTNAME": "WIN-G5AKB09AALD",
-        "WORK_FOLDER": "c:\\backup",
-        "LOCAL_BACKUP": "c:\\backup\\local",
-        "HOME_FOLDER": "c:\\backup\\nc-backup-py",
-        "LOG_FOLDER": "c:\\backup\\nc-backup-py\\log\\ncbackup.log",
-        "DISK_SPACE_CHECK": "False",
-        "DISK_SPACE_THRESHOLD": "20"
+        "GENERAL": {
+            "HOSTNAME": "WIN-G5AKB09AALD",
+            "WORK_FOLDER": "c:\\backup",
+            "LOCAL_BACKUP": "c:\\backup\\local",
+            "HOME_FOLDER": "c:\\backup\\nc-backup-py",
+            "LOG_FOLDER": "c:\\backup\\nc-backup-py\\log\\ncbackup.log",
+            "DISK_SPACE_CHECK": "False",
+            "DISK_SPACE_THRESHOLD": "20"
         },
     (...)
     }`
@@ -45,14 +45,14 @@ The credentials, configs and keyfiles is advisable to be added to /etc instead o
 The following is a real working section that calls and executes external colde to compress a fileset.
 
      `"FILESET":{
-       "ACTION": "execute",
-       "NAME": "filesbackup",
-       "EXECUTE_WITH": "python",
-       "EXECUTABLE": "",
-       "PARAMETERS": {
-         "FILESET_INCLUDE": "/etc /opt/ncscripts /var/spool/cron",
-         "FILESET_EXCLUDE": ""
-       }
+        "ACTION": "execute",
+        "NAME": "filesbackup",
+        "EXECUTE_WITH": "python",
+        "EXECUTABLE": "",
+        "PARAMETERS": {
+            "FILESET_INCLUDE": "/etc /opt/ncscripts /var/spool/cron",
+            "FILESET_EXCLUDE": ""
+        }
      }`
 Notice: `FILESET_INCLUDE` can not be "/"
 
@@ -85,7 +85,7 @@ Plugins also need a config section similar to this:
         "FILENAME": "size_calculation",
         "CLASS": "SizeCalculation",
         "PARAMETERS": {
-         "TARGETS": "/Users/cncuser/Downloads/backup/encrypted"
+            "TARGETS": "/Users/cncuser/Downloads/backup/encrypted"
         }
      }`
      
@@ -263,15 +263,15 @@ This section is to store the backup, in this case s3. S3 is the only current bac
 ##### Aliyun OSS
 
     `"STORAGE_OSS": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "TARGETS": "/Users/cncuser/Downloads/backup/encrypted",
-      "DESTINATION":"oss",
-      "BUCKET_NAME": "cncbackup",
-      "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
-      "REMOVE_TARGETS": "True"
-    }
+        "ACTION": "execute",
+        "NAME": "storage",
+        "PARAMETERS":{
+          "TARGETS": "/Users/cncuser/Downloads/backup/encrypted",
+          "DESTINATION":"oss",
+          "BUCKET_NAME": "cncbackup",
+          "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
+          "REMOVE_TARGETS": "True"
+        }
     }`
 
 ##### Combine storages
@@ -298,11 +298,10 @@ This section is to store the backup, in this case s3. S3 is the only current bac
 ##### QA
 
      `"QA":{
-       "ACTION": "load",
-       "FROM": "qa",
-       "FILENAME": "qa",
-       "CLASS": "QA"
-    
+        "ACTION": "load",
+        "FROM": "qa",
+        "FILENAME": "qa",
+        "CLASS": "QA"
      }`
 This feature is still under development in test conceptual phase, the idea is for the script to be able to detect the problems on it's own and at some point even auto-fix them. For now it's just included as a proof of concept module it only checks that the user running the script is ncbackup and logs a warning if the user is wrong. Please provide feedback on the things that the script is supposed to QA for so the development can be carried out following the best and more useful practices.
 
@@ -395,34 +394,34 @@ Use the same method as weth ncbackup bash script: https://wiki.service.chinanetc
 
 #### Other MySQL instructions to be documented
 
-  `"MONGODB":{
-    "ACTION": "load",
-    "FROM": "mongo",
-    "FILENAME": "mongo",
-    "CLASS": "MongoBackup",
-    "PARAMETERS":{
-      "MONGO_USER": "",
-      "MONGO_PWD": "",
-      "MONGO_HOST": "127.0.0.1",
-      "MONGODUMP_BIN": "/usr/bin/mongodump",
-      "TAR_COMMAND": "sudo /bin/tar czf",
-      "PREFIX_FOLDER": "mongodump",
-      "DESTINATION": "/opt/backup"
-    }
-  },
-  "POSTGRES":{
-    "ACTION": "load",
-    "FROM": "postgres",
-    "FILENAME": "postgres",
-    "CLASS": "PostgresBackup",
-    "PARAMETERS": {
-      "PREFIX_FOLDER": "pgdump",
-      "PSQLDUMP": "/usr/bin/pg_dump",
-      "PSQL": "/usr/bin/psql",
-      "DESTINATION": "/opt/backup",
-      "EXCLUDE_DB": ""
-    }
-  }`
+    `"MONGODB":{
+        "ACTION": "load",
+        "FROM": "mongo",
+        "FILENAME": "mongo",
+        "CLASS": "MongoBackup",
+        "PARAMETERS":{
+          "MONGO_USER": "",
+          "MONGO_PWD": "",
+          "MONGO_HOST": "127.0.0.1",
+          "MONGODUMP_BIN": "/usr/bin/mongodump",
+          "TAR_COMMAND": "sudo /bin/tar czf",
+          "PREFIX_FOLDER": "mongodump",
+          "DESTINATION": "/opt/backup"
+        }
+    },
+    "POSTGRES":{
+        "ACTION": "load",
+        "FROM": "postgres",
+        "FILENAME": "postgres",
+        "CLASS": "PostgresBackup",
+        "PARAMETERS": {
+          "PREFIX_FOLDER": "pgdump",
+          "PSQLDUMP": "/usr/bin/pg_dump",
+          "PSQL": "/usr/bin/psql",
+          "DESTINATION": "/opt/backup",
+          "EXCLUDE_DB": ""
+        }
+    }`
 
 
 ### Known issues 
