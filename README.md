@@ -2,7 +2,7 @@
 
 ## Introduction:
 
-This is the installation manual for nc-backup-py system currently in testing and development phase as wel as used for some productions systems. 
+This is the installation manual for nc-backup-py (Net Could Backups) system currently in testing and development phase as wel as used for some productions systems. 
 
 ### Working Fetures:
 #### Backup to multiple clouds storages: AWS S3, Aliyun (Alibaba), Mounted writable drive.
