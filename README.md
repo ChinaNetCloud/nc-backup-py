@@ -229,13 +229,9 @@ We have decided to change some of the parameters from the old ncbackup to the ne
 
 ### Filesystem and locations
 
-Backup folder should remain the same /opt/backup
-Recommended location and our new standard is /var/lib/nc-backup-py
-The configuration will all be under /etc/nc-backup-py the permits on the files should be maintained from the old system as well as the files standards. All configuration files should be under this folder.
-The longs will be in /var/log/nc-backup-py/nc-backup-py.log
-So make sure this folders exist and ncbackup is the owner:
+Backup folder default folder is /opt/backup. Default installation folder is /var/lib/nc-backup-py. The configuration default will all be under /etc/nc-backup-py the permits on the files should be maintained the the ncbackup user will be made owner by default. All configuration files should be under this folders but if you know what you are doing, you can change. The longs will be in /var/log/nc-backup-py/nc-backup-py.log
 
-### Executable Scripts and improvements
+### General other executable Scripts and improvements
 
 All python modules are Optional and among others we have the following:
 backup: Main script that can execute and control other scripts execution (needs arguments)
@@ -254,27 +250,34 @@ tools/size_calculation.py: Size calculation
 
 ### Tools also included
 
-every module or script include or make use of a set of tools included in tools folder. This scripts are supposed to be documented in details in the future, you do not need to to knw them to be able to install the software anyways.
+Every module or script include or make use of a set of tools included in tools folder. This scripts are supposed to be documented in details in the future, you do not need to to knw them to be able to install the software anyways.
 date_str_utils.py
 filesystem_handling
 os_works
 requests_utils
 size calculation (This is also a plugin)
 
-## Requirements
+# Requirements
 
 For now the system only supports python 2.6 and 2.7. You need to know the version of python where you are executing the script:
-~$ python
-Python 2.7.5 (default, Nov 20 2015, 02:00:19) 
+
+`~$ python
+
+Python 2.7.5 (default, Nov 20 2015, 02:00:19)
+
 [GCC 4.8.5 20150623 (Red Hat 4.8.5-4)] on linux2
+
 Type "help", "copyright", "credits" or "license" for more information.
+
 >>> exit()
-~$ 
+
+~$`
 
 ### For AWS backups:
 
 Install awscli:
-pip install awscli
+
+`pip install awscli`
 
 ### For Aliyun OSS
 
@@ -299,7 +302,11 @@ Configure AliYun OSS
 
 `# alicmd --config`
 
-Then, edit the alioss config file. vim /etc/.alioss.conf ;
+Then, edit the alioss config file. 
+`vim /etc/.alioss.conf ;`
+
+Content:
+
 `[options]
 retry_times = 15
 multi-upload = on        # if the backup file size is more than 100MB
