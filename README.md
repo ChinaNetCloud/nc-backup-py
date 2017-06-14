@@ -4,8 +4,20 @@
 
 This is the installation manual for nc-backup-py system currently in testing and development phase as wel as used for some productions systems. 
 
-### Fetures
-# NOTICE Need to add the features here
+### Working Fetures:
+#### Backup to multiple clouds storages: AWS S3, Aliyun (Alibaba), Mounted writable drive.
+#### Compression, Encryption, Decryption, Split files
+#### Backup Multiple Databases: MySQL Dump, Mongo DB dump, Postgres SQL dump.
+#### Send post message reports to custom URL. Report includes Success, size, server, log, etc.
+#### The solution accepts 2 ways to extend it:
+##### Run custom separate program on any programming language, 
+##### Accept integrated plugins; this are Python special clases that can be understood by nc-backup-py. 
+
+### Planned or in development features:
+#### MySQL Xtrabackup
+#### Optionally use or Not local driva to consolidate backup files (Streaming to remote).
+#### ssh storage backup
+
 
 In general the new system works similar to the current ncbackup, but with some differences. Let's get into it for you to start getting familiar with it.
 Notice: If you are interested on leaning about the structure of the project go ahead and read the rest of the introduction, but you do not really need this information to be able to install the software. In that case you can jump straight to Quick setup; manual install (Quick Start Procedure) or installation instructions and try to follow them.
