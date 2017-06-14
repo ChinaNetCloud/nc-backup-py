@@ -21,7 +21,8 @@ This is the installation manual for nc-backup-py (Net Could Backups) system curr
 #### SSH storage backup
 #### Send report messages using e-mail, sms, wechat
 
-
+### Features being evaluated for development:
+#### ionice and network nice management.
 
 In general nc-backup-py works similar to many backups systems but it's objetives are to achive could and linux servers backups. Let's get into it for you to start getting familiar with it.
 
@@ -44,7 +45,7 @@ This quick setup guide is to install ONLY our default filesbackup configuration 
 
 ### Download the script to the server
 
-let's use your home folder of a sudoer user as download folder:
+Let's use your home folder of a sudoer user as download folder:
 
 `
 [abel.guzman@xxx] cd ~
@@ -58,7 +59,21 @@ Execute the file called setup.py in the nc-backup-py folder. This file executes 
  
 `# python setup.py`
 
-This step should work correctly, if it does you can skip the following sub-section and go to "Edit the configuration file and change parameters":
+This step should work correctly, if it does you can skip the following sub-section called "Create user to run backup":
+
+#### How to contribute to the project and joing the team as volunteer:
+##### Developer:
+1- Install the `test-dev` branch and get it to work.
+2- Create an [Issue](https://github.com/ChinaNetCloud/nc-backup-py/issues) and start discussion providing as many details as possible, with maintainers team.
+3- Once the isue is accepted you will be addred to the team as contributor, then you can start development.
+4- Commit to your own branch.
+5- Send merge request to test test-dev once done with your feature and update on Issues.
+6- Iterate :P.
+
+##### Use the product:
+1- Download and install `master` branch, 
+2- Provide feedback on [Issue](https://github.com/ChinaNetCloud/nc-backup-py/issues) for suport,
+3- If you think the project is useful or has potential, please add a star.
 
 #### Create user to run backup
 
