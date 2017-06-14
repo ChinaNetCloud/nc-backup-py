@@ -398,6 +398,7 @@ flush privileges;
 localhost host only apply for local backup -- if you need to connect to a remote database, you will need to adapt accordingly (replace 'localhost' by '%')
 Create MySQL login / pass file :
 `# vim /etc/nc-backup-py/mysql_backup.creds
+
 [mysqldump]
 user=ncbackupdb
 password=PASSWORD
@@ -409,11 +410,14 @@ user=ncbackupdb
 password=PASSWORD
 host=localhost
 socket=/var/lib/mysql/mysql.sock`
+
 Notice: For mysql backups to work on Unbuntu and maybe other distrobutions but CentOS6, 7 AMI Linux, etc. you need to make sure the MySQL is readable by ncbackup. The best way to do this is to add ncbackup to mysql group and then make sure the group has read access.
+
 ####Create log directory
 No need to create the file, but you need to specify the path to the file in the configs). This needs to be fixed. E.g.:
 mkdir /var/log/nc-backup
 Notice: This should be the same path as in the JSON config file.
+
 #### Add sudo options
 The ncbackup user needs to be able to run some privileged commands.
 edit sudoers
@@ -422,11 +426,14 @@ add the following to sudoers configurations. Could be here: /etc/sodoers:
 Cmnd_Alias NCBACKUP = /bin/tar czCf / [A-z_/ ]*, /bin/tar czf [A-z_/ ]*
 ncbackup ALL = NOPASSWD: NCBACKUP
 Defaults:ncbackup   !requiretty`
+
 #### Run
 python /path/to/backup.py -r -c /path/to/conf.json
 Notice: You might need to put the whole file path to backup.py and conf.json
+
 #### The logs
 The logs are vey useful for troubleshooting purposes. Let's take a look:
+
 `2016-05-31 14:29:07,823 - ncbackup - INFO - Execution time in seconds: 4.38756585121
 2016-05-31 14:29:07,823 - ncbackup - INFO - Section 8: STORAGE_OSS.
 2016-05-31 14:29:07,823 - ncbackup - INFO - Loading executable module: storage
