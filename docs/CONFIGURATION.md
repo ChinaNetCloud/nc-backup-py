@@ -80,13 +80,13 @@ This section as most of the others have most of it's parameters as optional. For
 Plugins also need a config section similar to this:
 
      `"SIZE":{
-       "ACTION": "load",
-       "FROM": "tools",
-       "FILENAME": "size_calculation",
-       "CLASS": "SizeCalculation",
-       "PARAMETERS": {
+        "ACTION": "load",
+        "FROM": "tools",
+        "FILENAME": "size_calculation",
+        "CLASS": "SizeCalculation",
+        "PARAMETERS": {
          "TARGETS": "/Users/cncuser/Downloads/backup/encrypted"
-       }
+        }
      }`
      
 This is a working plugin that only calculates the size of the files to be backed up.
@@ -95,46 +95,46 @@ This is a working plugin that only calculates the size of the files to be backed
 
 #### MySQL Dump:
 
-  `"MYSQL": {
-    "ACTION": "execute",
-    "NAME": "mysql_backup",
-    "EXECUTABLE": "mysql_dump.py",
-    "EXECUTE_WITH": "python",
-    "PARAMETERS": {
-      "CREDENTIAL_PATH": "/etc/nc-backup-py/mysql_backup.creds",
-      "DATA_DIR": "/var/lib/mysql/data",
-      "MY_INSTANCES": "3306",
-      "BINLOG_PATH": "/var/lib/mysql/data",
-      "BINLOG_FILE_PREFIX": "mysql-bin",
-      "DESTINATION": "/opt/backup",
-      "TAR_COMMAND": "sudo /bin/tar czf",
-      "MYSQL_DUMP_BINARY": "/usr/bin/mysqldump",
-      "MYSQL_BINARY": "/usr/bin/mysql",
-      "PREFIX_FOLDER": "mydump",
-      "EXCLUDE_DB": "",
-      "BINLOG_DAYS": "3",
-      "EXCLUDE_TABLE": "mysql.user mysql.func mysql.event"
-    }
-  }`
+    `"MYSQL": {
+        "ACTION": "execute",
+        "NAME": "mysql_backup",
+        "EXECUTABLE": "mysql_dump.py",
+        "EXECUTE_WITH": "python",
+        "PARAMETERS": {
+          "CREDENTIAL_PATH": "/etc/nc-backup-py/mysql_backup.creds",
+          "DATA_DIR": "/var/lib/mysql/data",
+          "MY_INSTANCES": "3306",
+          "BINLOG_PATH": "/var/lib/mysql/data",
+          "BINLOG_FILE_PREFIX": "mysql-bin",
+          "DESTINATION": "/opt/backup",
+          "TAR_COMMAND": "sudo /bin/tar czf",
+          "MYSQL_DUMP_BINARY": "/usr/bin/mysqldump",
+          "MYSQL_BINARY": "/usr/bin/mysql",
+          "PREFIX_FOLDER": "mydump",
+          "EXCLUDE_DB": "",
+          "BINLOG_DAYS": "3",
+          "EXCLUDE_TABLE": "mysql.user mysql.func mysql.event"
+        }
+    }`
   
 This section executes a external script that executes a dump on the MySQL DB. Some parameters implementations are still pending or not completed.
 #### Mongo DB
 
-  `"MONGODB":{
-    "ACTION": "load",
-    "FROM": "mongo",
-    "FILENAME": "mongo",
-    "CLASS": "MongoBackup",
-    "PARAMETERS":{
-      "MONGO_USER": "",
-      "MONGO_PWD": "",
-      "MONGO_HOST": "127.0.0.1",
-      "MONGODUMP_BIN": "/usr/bin/mongodump",
-      "TAR_COMMAND": "sudo /bin/tar czf",
-      "PREFIX_FOLDER": "mongodump",
-      "DESTINATION": "/opt/backup"
-    }
-  }`
+    `"MONGODB":{
+        "ACTION": "load",
+        "FROM": "mongo",
+        "FILENAME": "mongo",
+        "CLASS": "MongoBackup",
+        "PARAMETERS":{
+          "MONGO_USER": "",
+          "MONGO_PWD": "",
+          "MONGO_HOST": "127.0.0.1",
+          "MONGODUMP_BIN": "/usr/bin/mongodump",
+          "TAR_COMMAND": "sudo /bin/tar czf",
+          "PREFIX_FOLDER": "mongodump",
+          "DESTINATION": "/opt/backup"
+        }
+    }`
   
 Notice: This is a plugin instead of an executable independent script.
 
@@ -146,9 +146,9 @@ Create backup user ncbackup in postgresql
 
 Details about how to create user in pgsql, please refer to Basic postgresql management procedure
 
-`Grant select privilege on all user_created tables to ncbackup
+`Grant select privilege on all user_created tables to ncbackup`
 
-Customerdb=> grant select on $TABLE_NAME to ncbackup;`
+`Customerdb=> grant select on $TABLE_NAME to ncbackup;`
 
 You have to grant privilege one by one, of cource, you could also create a batch scipt to do it.
 
@@ -166,100 +166,103 @@ Be careful, `600` permisions is a must when the backup will be restored, before 
 
 ##### Config file
 
-  `"POSTGRES":{
-    "ACTION": "load",
-    "FROM": "postgres",
-    "FILENAME": "postgres",
-    "CLASS": "PostgresBackup",
-    "PARAMETERS": {
-      "PREFIX_FOLDER": "pgdump",
-      "PSQLDUMP": "/usr/bin/pg_dump",
-      "PSQL": "/usr/bin/psql",
-      "DESTINATION": "/opt/backup",
-      "EXCLUDE_DB": ""
-    }
-  }`
+    `"POSTGRES":{
+        "ACTION": "load",
+        "FROM": "postgres",
+        "FILENAME": "postgres",
+        "CLASS": "PostgresBackup",
+        "PARAMETERS": {
+          "PREFIX_FOLDER": "pgdump",
+          "PSQLDUMP": "/usr/bin/pg_dump",
+          "PSQL": "/usr/bin/psql",
+          "DESTINATION": "/opt/backup",
+          "EXCLUDE_DB": ""
+        }
+    }`
+
 Notice: This is a plugin instead of an executable independent script.
 Notice: The script can exclude databases with EXCLUDE_DB, but is can not exclude tables yet.
 #### Compression
-  `"COMPRESSION": {
-    "ACTION": "execute",
-    "NAME": "compression",
-    "EXECUTABLE": "",
-    "EXECUTE_WITH": "",
-    "PARAMETERS": {
-      "TAR_COMMAND": "sudo /bin/tar czCf /",
-      "TARGETS": "/opt/backup/files /opt/backup/mongodump",
-      "DESTINATION": "/opt/backup/compressed",
-      "REMOVE_TARGETS": "True"
-    }
-  }`
+
+    `"COMPRESSION": {
+        "ACTION": "execute",
+        "NAME": "compression",
+        "EXECUTABLE": "",
+        "EXECUTE_WITH": "",
+        "PARAMETERS": {
+          "TAR_COMMAND": "sudo /bin/tar czCf /",
+          "TARGETS": "/opt/backup/files /opt/backup/mongodump",
+          "DESTINATION": "/opt/backup/compressed",
+          "REMOVE_TARGETS": "True"
+        }
+    }`
   
 This section takes a set of folders and compresses them. The parameters "REMOVE_TARGETS": "True" means that the script will remove the fileset passed as parameters. We are discussing the possibility of changing "OBJECTIVES" in all sections to some other candidate word like FILESETS. If this change is finally implemented the development changes are not a lot. Compression also has many optional parameters, so in a standard CentOS 6 or 7 configuration this configuration could look like this:
-  `"COMPRESSION": {
-    "ACTION": "execute",
-    "NAME": "compression",
-    "PARAMETERS": {
-      "TARGETS": "/opt/backup/files /opt/backup/mongodump"
-    }
-  }`
+
+    `"COMPRESSION": {
+        "ACTION": "execute",
+        "NAME": "compression",
+        "PARAMETERS": {
+          "TARGETS": "/opt/backup/files /opt/backup/mongodump"
+        }
+    }`
   
 The system will assume on it's own the default values as per the first compression configuration sample. You only need to change it if your parameters NEED to be different, even when we would not advise it unless strictly required.
 #### Encryption
 
-  `"ENCRYPTION": {
-    "ACTION": "execute",
-    "NAME": "encryption",
-    "PARAMETERS": {
-      "KEY_FILE": "/etc/nc-backup-py/key_file",
-      "FILE_SIZE": "100",
-      "TARGETS": "/opt/backup/compressed",
-      "DESTINATION":"/opt/backup/encrypted",
-      "REMOVE_TARGETS": "True"
-    }
-  }`
+    `"ENCRYPTION": {
+        "ACTION": "execute",
+        "NAME": "encryption",
+        "PARAMETERS": {
+          "KEY_FILE": "/etc/nc-backup-py/key_file",
+          "FILE_SIZE": "100",
+          "TARGETS": "/opt/backup/compressed",
+          "DESTINATION":"/opt/backup/encrypted",
+          "REMOVE_TARGETS": "True"
+        }
+    }`
 
 This section as the name indicates encrypts files, but also splits long files according to FILE_SIZE give in MB. "KEY_FILE" is the path to the key file.
 Regarding the optional end required parameters the same could be exported to the encryption configuration so the minimal working configuration for a standard system is as follows:
 
-  `"ENCRYPTION": {
-    "ACTION": "execute",
-    "NAME": "encryption"
-  }`
+    `"ENCRYPTION": {
+        "ACTION": "execute",
+        "NAME": "encryption"
+    }`
 
 Notice: Out standard for the configurations has changed so now all the configuration files have to be in /etc/nc-backup-py/ in this case the key file will be in /etc/nc-backup-py/key_file.
 
 #### Storage
 #####Local backup
 
-  `"STORAGE_LOCAL": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "DESTINATION":"local",
-      "TARGETS": "/opt/backup/encrypted"
-    }
-  }`
+    `"STORAGE_LOCAL": {
+        "ACTION": "execute",
+        "NAME": "storage",
+        "PARAMETERS":{
+          "DESTINATION":"local",
+          "TARGETS": "/opt/backup/encrypted"
+        }
+    }`
 
 ##### AWS s3
 
-  `"STORAGE": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "TARGETS": "/opt/backup/encrypted",
-      "DESTINATION":"s3",
-      "BUCKET_NAME": "cncbackup",
-      "UPLOAD_COMMAND": "aws s3 cp",
-      "REMOVE_TARGETS": "True"
-    }
-  }`
+    `"STORAGE": {
+        "ACTION": "execute",
+        "NAME": "storage",
+        "PARAMETERS":{
+          "TARGETS": "/opt/backup/encrypted",
+          "DESTINATION":"s3",
+          "BUCKET_NAME": "cncbackup",
+          "UPLOAD_COMMAND": "aws s3 cp",
+          "REMOVE_TARGETS": "True"
+        }
+    }`
 
 This section is to store the backup, in this case s3. S3 is the only current backend implemented, but the script is supposed to support various backends including OSS, SSH, etc.
 
 ##### Aliyun OSS
 
-  `"STORAGE_OSS": {
+    `"STORAGE_OSS": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
@@ -269,38 +272,38 @@ This section is to store the backup, in this case s3. S3 is the only current bac
       "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
       "REMOVE_TARGETS": "True"
     }
-  }`
+    }`
 
 ##### Combine storages
 
-  `"STORAGE_LOCAL": {
+    `"STORAGE_LOCAL": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
       "DESTINATION":"local",
       "TARGETS": "/opt/backup/encrypted"
     }
-  },
-  "STORAGE": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "DESTINATION":"s3",
-      "BUCKET_NAME": "bucketname",
-      "TARGETS": "/opt/backup/local",
-      "REMOVE_TARGETS": "False"
-    }
-  }`
+    },
+    "STORAGE": {
+        "ACTION": "execute",
+        "NAME": "storage",
+        "PARAMETERS":{
+          "DESTINATION":"s3",
+          "BUCKET_NAME": "bucketname",
+          "TARGETS": "/opt/backup/local",
+          "REMOVE_TARGETS": "False"
+        }
+    }`
 
 ##### QA
 
- `"QA":{
-   "ACTION": "load",
-   "FROM": "qa",
-   "FILENAME": "qa",
-   "CLASS": "QA"
-
- }`
+     `"QA":{
+       "ACTION": "load",
+       "FROM": "qa",
+       "FILENAME": "qa",
+       "CLASS": "QA"
+    
+     }`
 This feature is still under development in test conceptual phase, the idea is for the script to be able to detect the problems on it's own and at some point even auto-fix them. For now it's just included as a proof of concept module it only checks that the user running the script is ncbackup and logs a warning if the user is wrong. Please provide feedback on the things that the script is supposed to QA for so the development can be carried out following the best and more useful practices.
 
 #### AWS CLI integration
