@@ -146,9 +146,8 @@ Create backup user ncbackup in postgresql
 
 Details about how to create user in pgsql, please refer to Basic postgresql management procedure
 
-`Grant select privilege on all user_created tables to ncbackup`
-
-`Customerdb=> grant select on $TABLE_NAME to ncbackup;`
+`Grant select privilege on all user_created tables to ncbackup
+Customerdb=> grant select on $TABLE_NAME to ncbackup;`
 
 You have to grant privilege one by one, of cource, you could also create a batch scipt to do it.
 
