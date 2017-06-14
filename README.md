@@ -2,7 +2,12 @@
 
 ## Introduction:
 
-This is the wiki installation page of the nc-backup-py system currently in testing phase. In general the new system works similar to the current ncbackup, but with some differences. Let's get into it for you to start getting familiar with it.
+This is the installation manual for nc-backup-py system currently in testing and development phase as wel as used for some productions systems. 
+
+### Fetures
+# NOTICE Need to add the features here
+
+In general the new system works similar to the current ncbackup, but with some differences. Let's get into it for you to start getting familiar with it.
 Notice: If you are interested on leaning about the structure of the project go ahead and read the rest of the introduction, but you do not really need this information to be able to install the software. In that case you can jump straight to Quick setup; manual install (Quick Start Procedure) or installation instructions and try to follow them.
 Let's start explaining by the with execution. The project has a main script that is executed by calling the following command:
 
@@ -486,7 +491,7 @@ This is a working plugin that only calculates the size of the files to be backed
 #### Sections and modules specifics
 
 #### MySQL Dump:
-  "MYSQL": {
+  `"MYSQL": {
     "ACTION": "execute",
     "NAME": "mysql_backup",
     "EXECUTABLE": "mysql_dump.py",
@@ -506,7 +511,7 @@ This is a working plugin that only calculates the size of the files to be backed
       "BINLOG_DAYS": "3",
       "EXCLUDE_TABLE": "mysql.user mysql.func mysql.event"
     }
-  }
+  }`
 This section executes a external script that executes a dump on the MySQL DB. Some parameters implementations are still pending or not completed.
 #### Mongo DB
   "MONGODB":{
@@ -541,8 +546,8 @@ Setup ownership and privilge like the following:
 [root@srv-xxx-xxx ~]# 
 Be careful, 600 privilege is a must
 when the backup will be restored, before you do anything, you must create all the user and database related to the backup, or the restore will fail
-[edit]Config file
-  "POSTGRES":{
+##### Config file
+  `"POSTGRES":{
     "ACTION": "load",
     "FROM": "postgres",
     "FILENAME": "postgres",
@@ -554,11 +559,11 @@ when the backup will be restored, before you do anything, you must create all th
       "DESTINATION": "/opt/backup",
       "EXCLUDE_DB": ""
     }
-  }
+  }`
 Notice: This is a plugin instead of an executable independent script.
 Notice: The script can exclude databases with EXCLUDE_DB, but is can not exclude tables yet.
 #### Compression
-  "COMPRESSION": {
+  `"COMPRESSION": {
     "ACTION": "execute",
     "NAME": "compression",
     "EXECUTABLE": "",
@@ -569,18 +574,20 @@ Notice: The script can exclude databases with EXCLUDE_DB, but is can not exclude
       "DESTINATION": "/opt/backup/compressed",
       "REMOVE_TARGETS": "True"
     }
-  }
+  }`
+  
 This section takes a set of folders and compresses them. The parameters "REMOVE_TARGETS": "True" means that the script will remove the fileset passed as parameters. We are discussing the possibility of changing "OBJECTIVES" in all sections to some other candidate word like FILESETS. If this change is finally implemented the development changes are not a lot. Compression also has many optional parameters, so in a standard CentOS 6 or 7 configuration this configuration could look like this:
-  "COMPRESSION": {
+  `"COMPRESSION": {
     "ACTION": "execute",
     "NAME": "compression",
     "PARAMETERS": {
       "TARGETS": "/opt/backup/files /opt/backup/mongodump"
     }
-  }
+  }`
+  
 The system will assume on it's own the default values as per the first compression configuration sample. You only need to change it if your parameters NEED to be different, even when we would not advise it unless strictly required.
 #### Encryption
-  "ENCRYPTION": {
+  `"ENCRYPTION": {
     "ACTION": "execute",
     "NAME": "encryption",
     "PARAMETERS": {
@@ -590,26 +597,26 @@ The system will assume on it's own the default values as per the first compressi
       "DESTINATION":"/opt/backup/encrypted",
       "REMOVE_TARGETS": "True"
     }
-  }
+  }`
 This section as the name indicates encrypts files, but also splits long files according to FILE_SIZE give in MB. "KEY_FILE" is the path to the key file.
 Regarding the optional end required parameters the same could be exported to the encryption configuration so the minimal working configuration for a standard system is as follows:
-  "ENCRYPTION": {
+  `"ENCRYPTION": {
     "ACTION": "execute",
     "NAME": "encryption"
-  }
+  }`
 Notice: Out standard for the configurations has changed so now all the configuration files have to be in /etc/nc-backup-py/ in this case the key file will be in /etc/nc-backup-py/key_file.
 #### Storage
 #####Local backup
-  "STORAGE_LOCAL": {
+  `"STORAGE_LOCAL": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
       "DESTINATION":"local",
       "TARGETS": "/opt/backup/encrypted"
     }
-  }
+  }`
 ##### AWS s3
-  "STORAGE": {
+  `"STORAGE": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
@@ -619,10 +626,10 @@ Notice: Out standard for the configurations has changed so now all the configura
       "UPLOAD_COMMAND": "aws s3 cp",
       "REMOVE_TARGETS": "True"
     }
-  }
+  }`
 This section is to store the backup, in this case s3. S3 is the only current backend implemented, but the script is supposed to support various backends including OSS, SSH, etc.
 ##### Aliyun OSS
-  "STORAGE_OSS": {
+  `"STORAGE_OSS": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
@@ -632,9 +639,9 @@ This section is to store the backup, in this case s3. S3 is the only current bac
       "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
       "REMOVE_TARGETS": "True"
     }
-  }
+  }`
 ##### Combine storages
-  "STORAGE_LOCAL": {
+  `"STORAGE_LOCAL": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
@@ -651,14 +658,14 @@ This section is to store the backup, in this case s3. S3 is the only current bac
       "TARGETS": "/opt/backup/local",
       "REMOVE_TARGETS": "False"
     }
-  }
+  }`
 ##### QA
- "QA":{
+ `"QA":{
    "ACTION": "load",
    "FROM": "qa",
    "FILENAME": "qa",
    "CLASS": "QA"
- }
+ }`
 This feature is still under development in test conceptual phase, the idea is for the script to be able to detect the problems on it's own and at some point even auto-fix them. For now it's just included as a proof of concept module it only checks that the user running the script is ncbackup and logs a warning if the user is wrong. Please provide feedback on the things that the script is supposed to QA for so the development can be carried out following the best and more useful practices.
 #### AWS CLI integration
 
