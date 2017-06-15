@@ -1,3 +1,7 @@
+#!/usr/bin/env python2
+"""
+Setup nc-backup-py
+"""
 import os
 import shutil
 import pwd
@@ -52,20 +56,21 @@ if sys.version_info[0] == 2 and sys.version_info[1] == 7:
     except ImportError:
         print 'Error importing AES from Crypto.Cypher, this library is required for Python 2.7'
         exit(1)
+
 elif sys.version_info[0] == 2 and sys.version_info[1] < 7 and sys.version_info[1] > 5:
     python_version = '2.6'
     try:
         import simplejson
         print 'Simplejson present'
     except ImportError:
-        print 'Error importing simplejson, this library is required for Python 2.7'
+        print 'Error importing simplejson, this library is required for Python 2.6'
         print 'The modules simplejson, backport_collections are required.'
         exit(1)
     try:
         from backport_collections import OrderedDict
         print 'backport_collections.OrderedDict present'
     except ImportError:
-        print 'Error importing OrderedDict from backport_collections, this library is required for Python 2.7'
+        print 'Error importing OrderedDict from backport_collections, this library is required for Python 2.6'
         print 'The modules simplejson, backport_collections are required.'
         exit(1)
 else:
@@ -88,12 +93,11 @@ except KeyError:
     os.system('useradd -m %s -s /sbin/nologin' % username)
     print 'Done.'
 
+
 # Copy the files function
 def copy_files(source, destination, username, space=''):
+    """ Copy files to their respective directories."""
     # Os chown of the config folder
-    """
-    :rtype: object
-    """
     uid = pwd.getpwnam(username).pw_uid
     gid = grp.getgrnam(username).gr_gid
     files = os.listdir(source)
@@ -102,7 +106,7 @@ def copy_files(source, destination, username, space=''):
     for f in files:
         src = source + '/' + f
         dst = destination + '/' + f
-        if os.path.isdir(src) == True:
+        if os.path.isdir(src):
             print space + '- ' + src
             try:
                 os.stat(dst)
@@ -115,6 +119,7 @@ def copy_files(source, destination, username, space=''):
             # print space + '|__' + src
             shutil.copy(src, dst)
             os.chown(dst, uid, gid)
+
 
 # Current folder
 path = os.getcwd()
