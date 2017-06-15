@@ -28,8 +28,8 @@ If you think the project is useful or has potential, please add a star.
 
 This quick start is to download, install and configure the `master` branch to upload files to AWS S3.
 
-See [INSTALLATION](docs/INSTALLATION) for more information on customizing your install.
-See [CONFIGURATION](docs/CONFIGURATION) to view and configure all available features.
+See [INSTALLATION](docs/INSTALLATION.md) for more information on customizing your install.
+See [CONFIGURATION](docs/CONFIGURATION.md) to view and configure all available features.
 
 * Clone or Download the git repository and change directory .
   ```
@@ -52,7 +52,7 @@ See [CONFIGURATION](docs/CONFIGURATION) to view and configure all available feat
 
 * Edit configuration
 
-  This quick start works for uploading you local files to AWS S3. See [CONFIGURATION](docs/CONFIGURATION) for a complete guide and documentation.
+  This quick start works for uploading you local files to AWS S3. See [CONFIGURATION](docs/CONFIGURATION.md) for a complete guide and documentation.
 
   1. Change hostname to your hostname.
     ```
@@ -85,7 +85,7 @@ $ crontab -e
 00 03 * * * python /var/lib/nc-backup-py/backup.py -r -c /etc/nc-backup-py/conf.json
 ```
 
-* Provide feedback on [Issue](https://github.com/ChinaNetCloud/nc-backup-py/issues) for suport,
+* Provide feedback on [Issue](https://github.com/ChinaNetCloud/nc-backup-py/issues) for support,
 
 
 ## Features
@@ -99,7 +99,7 @@ $ crontab -e
 
 #### Features Planned
 * MySQL Xtrabackup
-* Avoid multiple compreassion operations. This can actually be considered a bug.
+* Avoid multiple compression operations. This can actually be considered a bug.
 * Optionally use or Not local drive to consolidate backup files (Direct Streaming to remote destination).
 * SSH storage backup
 * Send report messages using e-mail, sms, wechat
