@@ -4,7 +4,7 @@
 
 nc-backup-py intends to be a comprehensive one stop solution for backups. It can backup files, mySQL databases, Postgres databases, LVM, MongoDB and many more to another drive, to the cloud or to another server via the network.
 
-To quickly set up a backup and never lose your files again go to [Quick Start](## Quick Start)
+To quickly set up a backup and never lose your files again go to [Quick Start](#quick-start)
 
 See [Features](#features) for a complete list of current and planned Features.
 See [How to contribute](#how-to-contribute) if you would like to join us.
