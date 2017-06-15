@@ -6,8 +6,8 @@ nc-backup-py intends to be a comprehensive one stop solution for backups. It can
 
 To quickly set up a backup and never lose your files again go to [Quick Start](## Quick Start)
 
-See [Features](## Features) for a complete list of current and planned Features.
-See [How to contribute](## How to contribute) if you would like to join us.
+See [Features](#Features) for a complete list of current and planned Features.
+See [How to contribute](#How to contribute) if you would like to join us.
 
 If you are interested on leaning about the structure of the project
 See [OVERVIEW](docs/OVERVIEW.md)
