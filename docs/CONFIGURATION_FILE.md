@@ -118,6 +118,7 @@ This is a working plugin that only calculates the size of the files to be backed
     }`
   
 This section executes a external script that executes a dump on the MySQL DB. Some parameters implementations are still pending or not completed.
+
 #### Mongo DB
 
     `"MONGODB":{
