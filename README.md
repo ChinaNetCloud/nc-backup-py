@@ -17,12 +17,14 @@ If you think the project is useful or has potential, please add a star.
 ## Requirements
 * Operating System
   * Linux
-  * Windows (in development)
 
 * Python >= 2.6 (Python 3 not supported)
 * `pip` (Python)
 * `git` (Optional)
 * `curl` or `wget`
+* Python modules
+  * Python2.7 - Crypto, hashlib 
+  * Python2.6 - simplejson, backport_collections
 
 ## Quick Start
 
@@ -47,7 +49,7 @@ See [CONFIGURATION](docs/CONFIGURATION.md) to view and configure all available f
 
 * Run setup
   ```
-  $ ./setup.py
+  $ sudo ./setup.py
   ```
 
 * Edit configuration
@@ -77,7 +79,7 @@ See [CONFIGURATION](docs/CONFIGURATION.md) to view and configure all available f
 
 * Execute Backup manually
 ```
-$ python /path/to/backup.py -r -c /path/to/conf.json -l WARNING
+$ sudo -u ncbackup python /path/to/backup.py -r -c /path/to/conf.json -l WARNING
 ```
 * Optionally add a cronjob
 ```
@@ -106,6 +108,7 @@ $ crontab -e
 * Improve documentation.
 
 #### Features under development
+* Windows support.
 * ionice and network nice management.
 * snapshots for different storages.
 * clean up scripts for local and remote files.
