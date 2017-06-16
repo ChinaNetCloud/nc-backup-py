@@ -23,7 +23,7 @@ If you think the project is useful or has potential, please add a star.
 * `git` (Optional)
 * `curl` or `wget`
 * Python modules
-  * Python2.7 - Crypto, hashlib 
+  * Python2.7 - Crypto, hashlib
   * Python2.6 - simplejson, backport_collections
 
 ## Quick Start
@@ -98,6 +98,9 @@ $ crontab -e
 * Backup of regular files and Multiple Databases: MySQL Dump, Mongo DB dump, Postgres SQL dump.
 * Send POST message reports to custom URL. Report includes Success, size, server, log, etc.
 * Retry failed uploads and report messages.
+* Extendable with plugins and scripts:
+  * Run custom separate program on any programming language,
+  * Accept integrated plugins; this are Python special classes that can be understood by nc-backup-py.
 
 #### Features Planned
 * MySQL Xtrabackup
@@ -117,10 +120,6 @@ $ crontab -e
 * Active directory backup
 * ms-sql backup.
 
-#### Extending Features
-* The solution accepts 2 ways to extend it:
-  * Run custom separate program on any programming language,
-  * Accept integrated plugins; this are Python special classes that can be understood by nc-backup-py.
 
 ## How to contribute
 
