@@ -23,8 +23,8 @@ If you think the project is useful or has potential, please add a star.
 * `git` (Optional)
 * `curl` or `wget`
 * Python modules
-  * Python2.7 - Crypto, hashlib 
-  * Python2.6 - simplejson, backport_collections
+  * Python2.7 - requests, Crypto, hashlib
+  * Python2.6 - requests, simplejson, backport_collections
 
 ## Quick Start
 
