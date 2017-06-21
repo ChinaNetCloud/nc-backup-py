@@ -20,13 +20,10 @@ If you think the project is useful or has potential, please add a star.
 
 * Python >= 2.6 (Python 3 not supported)
 * `pip` (Python)
-* `git` (Optional)
-* `curl` or `wget`
-* Python modules
-  * Python2.7 - Crypto, hashlib
-  * Python2.6 - simplejson, backport_collections
+* `gcc`, `python-devel` (To build dependencies)  
 
-## Quick Start
+
+## Quick Start # Change this after setup is done
 
 This quick start is to download, install and configure the `master` branch to upload files to AWS S3.
 
