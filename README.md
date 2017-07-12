@@ -20,6 +20,7 @@ If you think the project is useful or has potential, please add a star.
 
 * Python >= 2.6 (Python 3 not supported)
 * `pip` (Python)
+
 * `gcc`, `python-devel` (To build dependencies)  
 * `python-crypto` (Optional, install if pip fails to install Crypto)
 
@@ -29,7 +30,7 @@ If you think the project is useful or has potential, please add a star.
 This quick start is to download, install and configure the `master` branch to upload files to AWS S3.
 
 See [INSTALLATION](docs/INSTALLATION.md) for more information on customizing your install.
-See [CONFIGURATION](docs/CONFIGURATION.md) to view and configure all available features.
+See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all available features.
 
 * Clone or Download the git repository and change directory .
   ```
