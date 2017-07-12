@@ -87,7 +87,7 @@ $ sudo -u ncbackup python /path/to/backup.py -r -c /path/to/conf.json -l WARNING
 ```
 * Optionally add a cronjob
 ```
-$ crontab -e
+$ crontab -eu ncbackup
 00 03 * * * python /var/lib/nc-backup-py/backup.py -r -c /etc/nc-backup-py/conf.json
 ```
 
