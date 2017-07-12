@@ -21,6 +21,7 @@ If you think the project is useful or has potential, please add a star.
 * Python >= 2.6 (Python 3 not supported)
 * `pip` (Python)
 * `gcc`, `python-devel` (To build dependencies)  
+* `python-crypto` (Optional, install if pip fails to install Crypto)
 
 
 ## Quick Start # Change this after setup is done
@@ -45,6 +46,12 @@ See [CONFIGURATION](docs/CONFIGURATION.md) to view and configure all available f
   ```
 
 * Run setup
+  ```
+  $ pip install . -v
+  ```
+
+  or, after installing the required dependencies using pip
+
   ```
   $ sudo ./setup.py
   ```
@@ -86,6 +93,33 @@ $ crontab -e
 
 * Provide feedback on [Issue](https://github.com/ChinaNetCloud/nc-backup-py/issues) for support,
 
+
+## Uninstall
+
+```
+pip uninstall nc-backup-py
+```
+* To remove scripts and sudo access
+```
+sudo rm -rf /var/lib/nc-backup-py/
+```
+* To remove ncbackup user
+```
+sudo userdel ncbackup && /etc/sudoers.d/ncbackup
+```
+* To remove logs
+```
+sudo rm -rf /var/log/nc-backup-py
+```
+* To remove configuration
+```
+sudo rm -rf /etc/nc-backup-py
+```
+* To remove all
+```
+sudo rm -rf /var/lib/nc-backup-py/ /etc/nc-backup-py/ /var/log/nc-backup-py/
+sudo userdel ncbackup && rm -rf /etc/sudoers.d/ncbackup
+```
 
 ## Features
 

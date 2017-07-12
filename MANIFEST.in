@@ -1,4 +1,0 @@
-recursive-include src *
-recursive-include src/conf/*
-include src/ucloud-sdk-python/region.list
-prune src/windows_backup
