@@ -20,13 +20,12 @@ If you think the project is useful or has potential, please add a star.
 
 * Python >= 2.6 (Python 3 not supported)
 * `pip` (Python)
-* `git` (Optional)
-* `curl` or `wget`
-* Python modules
-  * Python2.7 - requests, Crypto, hashlib
-  * Python2.6 - requests, simplejson, backport_collections
+* `gcc`, `python-devel` (To build dependencies)  
+* `python-crypto` (Optional, install if pip fails to install Crypto)
 
-## Quick Start
+
+
+## Quick Start # Change this after setup is done
 
 This quick start is to download, install and configure the `master` branch to upload files to AWS S3.
 
@@ -48,6 +47,12 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
   ```
 
 * Run setup
+  ```
+  $ pip install . -v
+  ```
+
+  or, after installing the required dependencies using pip
+
   ```
   $ sudo ./setup.py
   ```
@@ -83,12 +88,39 @@ $ sudo -u ncbackup python /path/to/backup.py -r -c /path/to/conf.json -l WARNING
 ```
 * Optionally add a cronjob
 ```
-$ crontab -e
+$ crontab -eu ncbackup
 00 03 * * * python /var/lib/nc-backup-py/backup.py -r -c /etc/nc-backup-py/conf.json
 ```
 
 * Provide feedback on [Issue](https://github.com/ChinaNetCloud/nc-backup-py/issues) for support,
 
+
+## Uninstall
+
+```
+pip uninstall nc-backup-py
+```
+* To remove scripts and sudo access
+```
+sudo rm -rf /var/lib/nc-backup-py/
+```
+* To remove ncbackup user
+```
+sudo userdel ncbackup && /etc/sudoers.d/ncbackup
+```
+* To remove logs
+```
+sudo rm -rf /var/log/nc-backup-py
+```
+* To remove configuration
+```
+sudo rm -rf /etc/nc-backup-py
+```
+* To remove all
+```
+sudo rm -rf /var/lib/nc-backup-py/ /etc/nc-backup-py/ /var/log/nc-backup-py/
+sudo userdel ncbackup && rm -rf /etc/sudoers.d/ncbackup
+```
 
 ## Features
 

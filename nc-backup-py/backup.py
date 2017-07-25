@@ -49,7 +49,7 @@ def determine_log_level_this_run(command_object):
         logging_level = logging.WARNING
     return logging_level
 
-
+print json_dict
 
 # Logger object creation.
 logger = LoggerHandlers.login_to_file(LoggerHandlers(),'ncbackup', determine_log_level_this_run(command_object),
