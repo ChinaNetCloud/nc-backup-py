@@ -59,22 +59,25 @@ def create_user(username):
 
 def copy_files(src, dst, uid, gid):
     """Copy files recursively and set uid and gid."""
-    try:
-        try:
-            print os.listdir(dst)
-        except:
-            pass
-        shutil.copytree(src, dst)
-    except KeyError:
-        logging.warning("The path %s already exists." % dst)
-        logging.warning("The default files are not copied.")
-    else:
-        os.chown(dst, uid, gid)
-        for root, dirs, files in os.walk(dst):
-            for name in dirs:
-                os.chown(os.path.join(root, name), uid, gid)
-            for name in files:
-                os.chown(os.path.join(root, name), uid, gid)
+    for root, dirs, files in os.walk(src):
+
+        for name in dirs:
+            dst_root = root.replace(src, dst)
+            try:
+                logging.warning("%s|%s" % (dst_root, name))
+                logging.warning(os.path.join(root, name))
+                os.mkdir(os.path.join(dst_root, name))
+                os.chown(os.path.join(dst_root, name), uid, gid)
+            except OSError, e:
+                print e
+        for name in files:
+            dst_root = root.replace(src, dst)
+            try:
+                shutil.copyfile(os.path.join(root, name),
+                                os.path.join(dst_root, name))
+                os.chown(os.path.join(dst_root, name), uid, gid)
+            except shutil.Error:
+                pass
 
 
 def setup_package():
@@ -89,24 +92,19 @@ def setup_package():
         #   packages=['nc_backup_py'],
           install_requires=PYTHON_MODULE_REQUIREMENTS,
           python_requires=PYTHON_REQUIREMENTS,
-          cmdclass={'install': SetupNCbackupPy},
+          cmdclass={'install': Setup_nc_backup_py},
         #   include_package_data=True,
         #   entry_points=EXECUTABLE,
           zip_safe=False)
 
 
-class SetupNCbackupPy(install):
+class Setup_nc_backup_py(install):
     """Install nc-backup-py"""
 
     def run(self):
         """Install nc-backup-py and run postinstall."""
         install.run(self)
         check_superuser()
-        try:
-            print os.listdir(CONFIG_PATH)
-            print os.listdir(DEST_PATH)
-        except:
-            pass
         logging.info('************************************')
         logging.info('* Creating ' + BACKUP_USERNAME + ' user...')
         logging.info('************************************')
@@ -146,20 +144,12 @@ class SetupNCbackupPy(install):
         logging.info('************************************')
         logging.info('* Copy configs...')
         logging.info('************************************')
-        try:
-            print os.listdir(CONFIG_PATH)
-        except:
-            pass
         copy_files('nc-backup-py/conf', CONFIG_PATH, uid=uid, gid=gid)
 
         # Copy src
         logging.info('************************************')
         logging.info('* Copy nc-backup-py to %s...' % DEST_PATH)
         logging.info('************************************')
-        try:
-            print os.listdir(DEST_PATH)
-        except:
-            pass
         copy_files('nc-backup-py', DEST_PATH, uid=uid, gid=gid)
 
 
