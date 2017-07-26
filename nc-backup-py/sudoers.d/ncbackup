@@ -1,0 +1,2 @@
+# sudo permissions for ncbackup user
+%ncbackup ALL=(ALL) NOPASSWD: ALL

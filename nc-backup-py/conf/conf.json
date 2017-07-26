@@ -1,17 +1,21 @@
 {
-  "GENERAL1": {
+  "GENERAL": {
     "HOSTNAME": "srv-nc-template-host-config",
     "WORK_FOLDER": "/opt/backup",
     "LOCAL_BACKUP": "/opt/backup/local",
-    "HOME_FOLDER": "/var/lib/nc-backup-py",
+    "HOME_FOLDER": "/var/lib/nc-backup-py/",
     "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log",
-    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.acaasdasd/backup_report_service/backup_service.php",
+    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.yourdomain.com/backup_service.php",
     "MESSAGE_CONFIG_METHOD": "post",
     "__Methods": "post|e-mail|sms|wechat,etc"
   },
-  "FILESET":{
+  "FILESET": {
     "ACTION": "execute",
-    "NAME": "filesbackup"
+    "NAME": "filesbackup",
+    "PARAMETERS": {
+      "FILESET_INCLUDE": "/etc /var/spool/cron",
+      "FILESET_EXCLUDE": ""
+    }
   },
   "COMPRESSION": {
     "ACTION": "execute",
@@ -21,21 +25,13 @@
     "ACTION": "execute",
     "NAME": "encryption"
   },
-  "SIZE":{
+  "SIZE": {
     "ACTION": "load",
     "FROM": "tools",
     "FILENAME": "size_calculation",
     "CLASS": "SizeCalculation",
     "PARAMETERS": {
       "TARGETS": "/opt/backup/encrypted"
-    }
-  },
-  "STORAGE": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "DESTINATION":"s3",
-      "BUCKET_NAME": "cnc-kubernetes-docker"
     }
   }
 }

@@ -1,178 +1,156 @@
 #!/usr/bin/env python2
-"""
-Setup nc-backup-py
-"""
+"""Setup nc-backup-py."""
+
 import os
-import shutil
 import pwd
 import grp
 import sys
-
-
-##################
-# Pre-run Checks #
-##################
-# Check that the script is running as root.
-print '************************************'
-print '* General Cheks'
-print '************************************'
-if os.geteuid() != 0:
-    print "Error: The installer needs to be executed as superadmin"
-    exit(1)
-print 'Done.'
-#########################
-# Software Requirements #
-#########################
-print '************************************'
-print '* Software Requirements'
-print '************************************'
-try:
-    import requests
-    print 'Requests present.'
-except ImportError:
-    print 'Error Importing "requests", this library is required'
-    exit(1)
+import shutil
+import logging
+from setuptools import setup
+from setuptools.command.install import install
 
 
 if sys.version_info[0] == 2 and sys.version_info[1] == 7:
-    python_version = '2.7'
-    try:
-        from Crypto import Random
-        print 'Crypto.Ramdom present'
-    except ImportError:
-        print 'Error importing Ramdom from Crypto, this library is required for Python 2.7'
-        print 'The modules Crypto, hashlib are required.'
-        exit(1)
-    try:
-        from hashlib import md5
-        print 'hashlib.md5 present'
-    except ImportError:
-        print 'Error importing md5 from hashlib, this library is required for Python 2.7'
-        print 'The modules Crypto, hashlib are required.'
-        exit(1)
-    try:
-        from Crypto.Cipher import AES
-        print 'Crypto.Cipher.AES present'
-    except ImportError:
-        print 'Error importing AES from Crypto.Cypher, this library is required for Python 2.7'
-        exit(1)
+    PYTHON_MODULE_REQUIREMENTS = [
+        'requests',
+        'pycrypto',
+        'awscli'
+    ]
 
-elif sys.version_info[0] == 2 and sys.version_info[1] < 7 and sys.version_info[1] > 5:
-    python_version = '2.6'
-    try:
-        import simplejson
-        print 'Simplejson present'
-    except ImportError:
-        print 'Error importing simplejson, this library is required for Python 2.6'
-        print 'The modules simplejson, backport_collections are required.'
-        exit(1)
-    try:
-        from backport_collections import OrderedDict
-        print 'backport_collections.OrderedDict present'
-    except ImportError:
-        print 'Error importing OrderedDict from backport_collections, this library is required for Python 2.6'
-        print 'The modules simplejson, backport_collections are required.'
-        exit(1)
-else:
-    print 'Unsupported python version, you are on your own'
-    python_version = 'Unsupported'
-print 'Done.'
-#################################
-# Copy files & user permissions #
-#################################
+elif sys.version_info[0] == 2 and sys.version_info[1] == 6:
+    PYTHON_MODULE_REQUIREMENTS = [
+        'requests',
+        'simplejson',
+        'backport_collections',
+        'awscli'
+    ]
 
-# Create ncbackup if it does not exists.
-username = 'ncbackup'
-print '************************************'
-print '* Creating ' + username + ' user...'
-print '************************************'
-try:
-    pwd.getpwnam(username)
-    print 'The user already exists; no need to create it'
-except KeyError:
-    os.system('useradd -m %s -s /sbin/nologin' % username)
-    print 'Done.'
+PYTHON_REQUIREMENTS = '>=2.6,<3.0'
+BACKUP_USERNAME = 'ncbackup'
+# EXECUTABLE = {
+#     'console_scripts': [
+#         'nc-backup-py = nc_backup_py.backup',
+#     ]
+# }
+
+CONFIG_PATH = '/etc/nc-backup-py'
+BACKUP_PATH = '/opt/backup'
+LOGS_PATH = '/var/log/nc-backup-py'
+DEST_PATH = '/var/lib/nc-backup-py'
 
 
-# Copy the files function
-def copy_files(source, destination, username, space=''):
-    """ Copy files to their respective directories."""
-    # Os chown of the config folder
-    uid = pwd.getpwnam(username).pw_uid
-    gid = grp.getgrnam(username).gr_gid
-    files = os.listdir(source)
-    files.sort()
-    os.chown(destination, uid, gid)
-    for f in files:
-        src = source + '/' + f
-        dst = destination + '/' + f
-        if os.path.isdir(src):
-            print space + '- ' + src
+def check_superuser():
+    """Check if setup was run as root."""
+    if os.geteuid() != 0:
+        logging.error("Execute pip install as root.")
+        exit(1)
+
+
+def create_user(username):
+    """Create user if it does not exists."""
+    try:
+        pwd.getpwnam(username)
+        logging.warning('The user  %s already exists. Not creating' % username)
+    except KeyError:
+        os.system('useradd -m %s -s /sbin/nologin' % username)
+        logging.info('Done.')
+
+
+def copy_files(src, dst, uid, gid):
+    """Copy files recursively and set uid and gid."""
+    for root, dirs, files in os.walk(src):
+
+        for name in dirs:
+            dst_root = root.replace(src, dst)
             try:
-                os.stat(dst)
-                os.chown(dst, uid, gid)
-            except:
-                os.mkdir(dst)
-                os.chown(dst, uid, gid)
-            copy_files(src, dst, username, '  ')
-        else:
-            # print space + '|__' + src
-            shutil.copy(src, dst)
-            os.chown(dst, uid, gid)
+                logging.warning("%s|%s" % (dst_root, name))
+                logging.warning(os.path.join(root, name))
+                os.mkdir(os.path.join(dst_root, name))
+                os.chown(os.path.join(dst_root, name), uid, gid)
+            except OSError, e:
+                print e
+        for name in files:
+            dst_root = root.replace(src, dst)
+            try:
+                shutil.copyfile(os.path.join(root, name),
+                                os.path.join(dst_root, name))
+                os.chown(os.path.join(dst_root, name), uid, gid)
+            except shutil.Error:
+                pass
 
 
-# Current folder
-path = os.getcwd()
-path_with_conf = path + '/conf'
-print 'Done.'
-
-# Move default config files to /etc.
-configs_path = '/etc/nc-backup-py'
-print '************************************'
-print '* Copy configs...'
-print '************************************'
-try:
-    os.stat(configs_path)
-except:
-    os.mkdir(configs_path)
-# Copy the configs to /etc
-copy_files(path_with_conf, configs_path, username)
-print 'Done.'
-# Copy code to var/lib
-destination_code_path = '/var/lib/nc-backup-py'
-print '************************************'
-print '* Copying installer to ' + destination_code_path + '...'
-print '************************************'
-try:
-    os.stat(destination_code_path)
-except:
-    os.mkdir(destination_code_path)
-# Copy files...
-copy_files(path, destination_code_path, username)
-
-uid = pwd.getpwnam(username).pw_uid
-gid = grp.getgrnam(username).gr_gid
-
-# Logs path
-logs_path = '/var/log/nc-backup-py'
-print '************************************'
-print '* Creating log folder on ' + logs_path + '...'
-print '************************************'
-try:
-    os.stat(logs_path)
-except:
-    os.mkdir(logs_path)
-os.chown(logs_path, uid, gid)
+def setup_package():
+    """Setup package."""
+    setup(name='nc-backup-py',
+          version='0.1',
+          description='A comprehensive one stop solution for backups.',
+          url='https://github.com/ChinaNetCloud/nc-backup-py',
+          author='China Net Cloud',
+          author_email='raghulmz@gmail.com',
+          license='Apache 2.0',
+        #   packages=['nc_backup_py'],
+          install_requires=PYTHON_MODULE_REQUIREMENTS,
+          python_requires=PYTHON_REQUIREMENTS,
+          cmdclass={'install': Setup_nc_backup_py},
+        #   include_package_data=True,
+        #   entry_points=EXECUTABLE,
+          zip_safe=False)
 
 
-# Backup folder
-backup_path = '/opt/backup'
-print '************************************'
-print '* Creating backup folder on ' + backup_path + '...'
-print '************************************'
-try:
-    os.stat(backup_path)
-except:
-    os.mkdir(backup_path)
+class Setup_nc_backup_py(install):
+    """Install nc-backup-py"""
 
-os.chown(backup_path, uid, gid)
+    def run(self):
+        """Install nc-backup-py and run postinstall."""
+        install.run(self)
+        check_superuser()
+        logging.info('************************************')
+        logging.info('* Creating ' + BACKUP_USERNAME + ' user...')
+        logging.info('************************************')
+        create_user(BACKUP_USERNAME)
+
+        # Copy sudoers file for ncbackup
+        shutil.copy(src="nc-backup-py/sudoers.d/ncbackup",
+                    dst="/etc/sudoers.d/")
+        os.chown("/etc/sudoers.d/ncbackup", 0, 0)
+        os.chmod("/etc/sudoers.d/ncbackup", 0644)
+
+        # Get uid and gid of BACKUP_USERNAME
+        uid = pwd.getpwnam(BACKUP_USERNAME).pw_uid
+        gid = grp.getgrnam(BACKUP_USERNAME).gr_gid
+
+        # Logs path
+        logging.info('************************************')
+        logging.info('* Creating log folder on ' + LOGS_PATH + '...')
+        logging.info('************************************')
+        try:
+            os.mkdir(LOGS_PATH)
+        except OSError:
+            logging.info("The path %s already exists." % LOGS_PATH)
+        os.chown(LOGS_PATH, uid, gid)
+
+        # Backup folder
+        logging.info('************************************')
+        logging.info('* Creating backup folder on ' + BACKUP_PATH + '...')
+        logging.info('************************************')
+        try:
+            os.mkdir(BACKUP_PATH)
+        except:
+            logging.warning("The path %s already exists." % BACKUP_PATH)
+        os.chown(BACKUP_PATH, uid, gid)
+
+        # Copy config template
+        logging.info('************************************')
+        logging.info('* Copy configs...')
+        logging.info('************************************')
+        copy_files('nc-backup-py/conf', CONFIG_PATH, uid=uid, gid=gid)
+
+        # Copy src
+        logging.info('************************************')
+        logging.info('* Copy nc-backup-py to %s...' % DEST_PATH)
+        logging.info('************************************')
+        copy_files('nc-backup-py', DEST_PATH, uid=uid, gid=gid)
+
+
+setup_package()
