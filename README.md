@@ -48,7 +48,7 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
 
 * Run setup
   ```
-  $ pip install . -v
+  $ pip install --upgrade .
   ```
 
   or, after installing the required dependencies using pip
