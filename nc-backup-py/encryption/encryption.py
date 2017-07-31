@@ -173,7 +173,7 @@ if __name__ == "__main__":
     # Dynamic imporst using HOME_FOLDER as default value.
     sys.path.append(encryption_command.HOME_FOLDER)
     from execution.subprocess_execution import SubprocessExecution
-    from tools.filesystem_handling import FilesystemHandling
+    from tools.filesystem_handling import FilesystemHandling, remove_objectives
     from execution.config_parser import ConfigParser
 
     # Validate some Parameters and pass default values if absent
@@ -239,12 +239,8 @@ if __name__ == "__main__":
                         EncryptionWorks.split_file(EncryptionWorks(), file_encrypted, encryption_command.FILE_SIZE)
                         FilesystemHandling.remove_files(out_file_str)
 
-        # Compressed file is not a directory.
-        if not ConfigParser.check_exists(ConfigParser(), encryption_command.REMOVE_OBJECTIVES) \
-                or encryption_command.REMOVE_OBJECTIVES == 'True' or  encryption_command.REMOVE_OBJECTIVES == True:
-            print 'Deleting files after objective files as per config option --REMOVE_OBJECTIVES: ' \
-                  + encryption_command.OBJECTIVES
-            FilesystemHandling.remove_files(encryption_command.OBJECTIVES)
+        remove_objectives(encryption_command.OBJECTIVES,
+                          encryption_command.REMOVE_OBJECTIVES)
 
     # Decryption
     elif encryption_command.DECRYPT == '-d' or encryption_command.DECRYPT is True:

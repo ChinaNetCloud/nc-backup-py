@@ -80,7 +80,7 @@ if __name__ == "__main__":
     if command_compression.OBJECTIVES:
         sys.path.append(command_compression.HOME_FOLDER)
         from execution.subprocess_execution import SubprocessExecution
-        from tools.filesystem_handling import FilesystemHandling
+        from tools.filesystem_handling import FilesystemHandling, remove_objectives
         from execution.config_parser import ConfigParser
 
         execute = False
@@ -101,7 +101,5 @@ if __name__ == "__main__":
         print 'OBJECTIVES and DESTINATION need to be present in compression module, execution will not continue'
         exit(1)
 
-    if command_compression.REMOVE_OBJECTIVES == True or command_compression.REMOVE_OBJECTIVES == 'True':
-        print 'Deleting files after objective files as per config option --REMOVE_OBJECTIVES: ' \
-              + command_compression.OBJECTIVES
-        FilesystemHandling.remove_files(command_compression.OBJECTIVES)
+    remove_objectives(command_compression.OBJECTIVES,
+                      command_compression.REMOVE_OBJECTIVES)
