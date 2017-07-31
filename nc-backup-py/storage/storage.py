@@ -43,7 +43,7 @@ class StorageExecution:
 if __name__ == "__main__":
     storage_cmd = StorageExecution.storage_commands(StorageExecution())
     sys.path.append(storage_cmd.HOME_FOLDER)
-    from tools.filesystem_handling import FilesystemHandling
+    from tools.filesystem_handling import FilesystemHandling, remove_objectives
     from execution.subprocess_execution import SubprocessExecution
     from execution.config_parser import ConfigParser
     if str(storage_cmd.DESTINATION) not in ['s3', 'oss', 'ssh', 'local', 'azure']:
@@ -56,11 +56,10 @@ if __name__ == "__main__":
         storage_cmd.OBJECTIVES = '/opt/backup/encrypted'
     print 'Executing backup files type: ' + storage_cmd.DESTINATION
     if storage_cmd.DESTINATION == 'local':
-        command_move = 'mv ' + storage_cmd.OBJECTIVES + '/* ' + storage_cmd.LOCAL_BACKUP
+        command_move = 'cp ' + storage_cmd.OBJECTIVES + '/* ' + storage_cmd.LOCAL_BACKUP
         FilesystemHandling.create_directory(storage_cmd.LOCAL_BACKUP)
         ExecuteBackup = SubprocessExecution.main_execution_function(SubprocessExecution(), command_move)
-        if storage_cmd.REMOVE_OBJECTIVES == 'True':
-            FilesystemHandling.remove_files(storage_cmd.OBJECTIVES)
+        remove_objectives(storage_cmd.OBJECTIVES, storage_cmd.REMOVE_OBJECTIVES)
     elif storage_cmd.DESTINATION == 's3':
         print "calling S3 storage upload functions"
         from storages import AWSS3
