@@ -4,7 +4,7 @@ import time
 
 from os import listdir
 from os.path import isfile, join
-
+from tools.filesystem_handling import remove_objectives
 
 class Storage:
 
@@ -96,9 +96,8 @@ class AWSS3(Storage):
                     time.sleep(time_retry)
                 count = count + 1
             execution_message.append(tmp_execution_message)
-        if remove_objective == 'True':
-            execution_message.append(SubprocessExecution.main_execution_function(SubprocessExecution(),
-                                                                                 'rm -rf ' + mypath_to_dir))
+
+        remove_objectives(mypath_to_dir, remove_objective)
         return execution_message
 
     def remove_content(self):
@@ -184,11 +183,7 @@ class AliyunOSS(Storage):
             execution_message.append(tmp_execution_message)
 
         sys.path.append(self.__home_path)
-        from execution.subprocess_execution import SubprocessExecution
-        if remove_objective == 'True' or  remove_objective == True:
-            execution_message.append(SubprocessExecution.main_execution_function(SubprocessExecution(),
-                                                                                 'rm -rf ' + mypath_to_dir))
-
+        remove_objectives(mypath_to_dir, remove_objective)
         return execution_message
 
     def remove_content(self):
