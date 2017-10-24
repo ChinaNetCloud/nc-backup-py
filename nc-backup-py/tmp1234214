@@ -1,9 +1,0 @@
-srv-swatch-longines-oms-staging1     192.168.20.82:40022
-srv-swatch-longines-oms-prod1          192.168.20.83:40022
-
-srv-swatch-longines-eco-web1            192.168.20.78:40022
-srv-swatch-longines-eco-web2            192.168.20.79:40022
-srv-swatch-longiens-eco-redis1           192.168.20.80:40022
-srv-swatch-longines-eco-db1               192.168.30.77:40022
-srv-swatch-longines-eco-staging1        192.168.20.81:40022
-

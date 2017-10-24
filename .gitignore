@@ -1,0 +1,12 @@
+nc-backup-py/conf/conf.json
+*.pyc
+tmp/
+*.tmp
+.idea/markdown-navigator/
+.idea/misc.xml
+.idea/modules.xml
+.idea/nc-backup-py.iml
+.idea/preferred-vcs.xml
+.idea/workspace.xml
+conf/
+nc_backup_py.egg-info/
