@@ -2,6 +2,7 @@ nc-backup-py/conf/conf.json
 *.pyc
 tmp/
 *.tmp
+.idea
 .idea/markdown-navigator/
 .idea/misc.xml
 .idea/modules.xml
