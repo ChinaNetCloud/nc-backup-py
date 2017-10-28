@@ -121,7 +121,7 @@ class BackupExecutionLogic:
         # Load plugins dynamically
         elif section == 'ACTION' and json_dict[scripts_modules][section] == "load":
             path_to_import = json_dict[scripts_modules]['FROM'] + '.' + json_dict[scripts_modules]['FILENAME']
-            loading_plugin = 'This is a loadable module (plugin): ' + path_to_import
+            loading_plugin = 'Loadable dependant module (plugin): ' + path_to_import
             print loading_plugin
             logger.info(loading_plugin)
             plugin_object = DynamicImporter(path_to_import, json_dict[scripts_modules]['CLASS'], )
@@ -129,6 +129,7 @@ class BackupExecutionLogic:
                 instanciated_plugin = plugin_object.create_object(json_dict[scripts_modules]['PARAMETERS'], logger)
             else:
                 instanciated_plugin = plugin_object.create_object(logger)
+
             instanciated_plugin.config_plugin()
             works_execution = instanciated_plugin.works_execution()
             logger.info('Plugin works_execution function output: ' + str(works_execution))

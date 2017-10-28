@@ -9,48 +9,17 @@
     "MESSAGE_CONFIG_METHOD": "post",
     "__Methods": "post|e-mail|sms|wechat,etc"
   },
-  "FILESET": {
-    "ACTION": "execute",
-    "NAME": "filesbackup",
-    "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc",
-      "FILESET_EXCLUDE": ""
-    }
-  },
-  "COMPRESSION": {
-    "ACTION": "execute",
-    "NAME": "compression",
-    "PARAMETERS": {
-      "TARGETS": "/opt/backup/files",
-      "DESTINATION":"/opt/backup/compressed",
-      "REMOVE_TARGETS": "True"
-    }
-  },
-  "ENCRYPTION": {
-    "ACTION": "execute",
-    "NAME": "encryption",
-    "PARAMETERS": {
-      "TARGETS": "/opt/backup/compressed",
-      "DESTINATION":"/opt/backup/encrypted",
-      "REMOVE_TARGETS": "True"
-    }
-  },
-  "SIZE": {
+  "RSYNC": {
     "ACTION": "load",
-    "FROM": "tools",
-    "FILENAME": "size_calculation",
-    "CLASS": "SizeCalculation",
+    "FROM": "rsync",
+    "FILENAME": "rsync",
+    "CLASS": "RsyncBackup",
     "PARAMETERS": {
-      "TARGETS": "/opt/backup/encrypted"
-    }
-  },
-  "STORAGE_LOCAL": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "DESTINATION":"local",
-      "TARGETS": "/opt/backup/encrypted",
-      "REMOVE_TARGETS": "True"
+      "LOG_INTERNAL": "yes",
+      "ORIGIN_AND_TARGETS_PARAMS": {
+        "WORK001": "rsync -a --remove-source-files --no-perms --no-owner --no-group -PH --rsh 'ssh -p40022 -i /root/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' --rsync-path 'rsync' /SAPLOCAL/Q24/CHINA/SWATOMS/ sftp.admin@10.55.124.33:/DATAEXCHANGE/SWATTMALL/SAP/OUT/PRICE/",
+        "WORK002": "rsync -a --remove-source-files --no-perms --no-owner --no-group -PH --rsh 'ssh -p40022 -i /root/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' --rsync-path 'rsync' /SAPLOCAL/Q24/CHINA/SWATOMS1/ sftp.admin@10.55.124.33:/DATAEXCHANGE/SWATTMALL/SAP/OUT/PRICE1/"
+      }
     }
   }
 }
