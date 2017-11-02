@@ -8,7 +8,6 @@ class RsyncBackup:
 
     def config_plugin(self):
         pass
-        # print parameters
 
     def works_execution(self):
         rsync_commands = self.iterate_works('ORIGIN_AND_TARGETS_PARAMS')
