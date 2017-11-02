@@ -3,6 +3,7 @@ import time
 
 from os import path
 
+
 from subprocess_execution import SubprocessExecution
 from tools.os_works import OSInformation
 
@@ -76,8 +77,7 @@ class BackupExecutionLogic:
 
     def __execute_selection_of_external_script(self,section ,json_dict, scripts_modules, home_folder, logger=None):
         loaded_scripts = []
-        # for section in json_dict[scripts_modules]:
-            # Load independent executable
+        # Load independent executable
         if section == 'ACTION' and json_dict[scripts_modules][section] == "execute":
             log_string = "Loading executable module: " + json_dict[scripts_modules]['NAME']
             print log_string
@@ -98,20 +98,14 @@ class BackupExecutionLogic:
                 print module_call_message
                 logger.info(module_call_message)
 
-            # log_string = "List of parameters passed to script: " + module_to_call
-            # print log_string
-            # logger.info(log_string)
-
             out_put_exec = SubprocessExecution.main_execution_function(SubprocessExecution(),
                                                                             module_to_call, True, logger)
-            # print 'AAAA'
-            # print out_put_exec
+
             if out_put_exec[0] is not 0:
                 logger.critical('Error executing external script')
                 logger.critical('Eddor Code: ' + str(out_put_exec[0]) + \
                                 ' StdOut: ' + out_put_exec[1] + \
                                 ' StdErr: ' + str(out_put_exec[2]))
-                # exit(1)
             elif out_put_exec[0] is 0:
                 logger.info('the execution was succesfull')
                 logger.info('StdOut: ' + out_put_exec[1])
@@ -121,7 +115,7 @@ class BackupExecutionLogic:
         # Load plugins dynamically
         elif section == 'ACTION' and json_dict[scripts_modules][section] == "load":
             path_to_import = json_dict[scripts_modules]['FROM'] + '.' + json_dict[scripts_modules]['FILENAME']
-            loading_plugin = 'This is a loadable module (plugin): ' + path_to_import
+            loading_plugin = 'Loadable dependant module (plugin): ' + path_to_import
             print loading_plugin
             logger.info(loading_plugin)
             plugin_object = DynamicImporter(path_to_import, json_dict[scripts_modules]['CLASS'], )
@@ -129,6 +123,7 @@ class BackupExecutionLogic:
                 instanciated_plugin = plugin_object.create_object(json_dict[scripts_modules]['PARAMETERS'], logger)
             else:
                 instanciated_plugin = plugin_object.create_object(logger)
+
             instanciated_plugin.config_plugin()
             works_execution = instanciated_plugin.works_execution()
             logger.info('Plugin works_execution function output: ' + str(works_execution))
