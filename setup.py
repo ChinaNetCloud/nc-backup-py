@@ -69,7 +69,7 @@ def copy_files(src, dst, uid, gid):
                 os.mkdir(os.path.join(dst_root, name))
                 os.chown(os.path.join(dst_root, name), uid, gid)
             except OSError, e:
-                print e
+                logging.warn(e)
         for name in files:
             dst_root = root.replace(src, dst)
             try:
@@ -77,7 +77,7 @@ def copy_files(src, dst, uid, gid):
                                 os.path.join(dst_root, name))
                 os.chown(os.path.join(dst_root, name), uid, gid)
             except shutil.Error:
-                pass
+                logging.warn(e)
 
 
 def setup_package():
