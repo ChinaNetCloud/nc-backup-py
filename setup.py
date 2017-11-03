@@ -69,7 +69,7 @@ def copy_files(src, dst, uid, gid):
                 os.mkdir(os.path.join(dst_root, name))
                 os.chown(os.path.join(dst_root, name), uid, gid)
             except OSError, e:
-                print e
+                logging.warn(e)
         for name in files:
             dst_root = root.replace(src, dst)
             try:
@@ -77,7 +77,7 @@ def copy_files(src, dst, uid, gid):
                                 os.path.join(dst_root, name))
                 os.chown(os.path.join(dst_root, name), uid, gid)
             except shutil.Error:
-                pass
+                logging.warn(e)
 
 
 def setup_package():
@@ -144,12 +144,20 @@ class Setup_nc_backup_py(install):
         logging.info('************************************')
         logging.info('* Copy configs...')
         logging.info('************************************')
+        try:
+            os.mkdir(CONFIG_PATH)
+        except:
+            logging.warning("The path %s already exists." % CONFIG_PATH)
         copy_files('nc-backup-py/conf', CONFIG_PATH, uid=uid, gid=gid)
 
         # Copy src
         logging.info('************************************')
         logging.info('* Copy nc-backup-py to %s...' % DEST_PATH)
         logging.info('************************************')
+        try:
+            os.mkdir(DEST_PATH)
+        except:
+            logging.warning("The path %s already exists." % DEST_PATH)
         copy_files('nc-backup-py', DEST_PATH, uid=uid, gid=gid)
 
 
