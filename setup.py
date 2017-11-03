@@ -28,11 +28,6 @@ elif sys.version_info[0] == 2 and sys.version_info[1] == 6:
 
 PYTHON_REQUIREMENTS = '>=2.6,<3.0'
 BACKUP_USERNAME = 'ncbackup'
-# EXECUTABLE = {
-#     'console_scripts': [
-#         'nc-backup-py = nc_backup_py.backup',
-#     ]
-# }
 
 CONFIG_PATH = '/etc/nc-backup-py'
 BACKUP_PATH = '/opt/backup'
