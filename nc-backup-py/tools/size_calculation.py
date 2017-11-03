@@ -12,6 +12,7 @@ class SizeCalculation:
         pass
 
     def works_execution(self):
+
         return self.get_dir_size(self.__parameters_dict['OBJECTIVES'])
 
     def output(self):

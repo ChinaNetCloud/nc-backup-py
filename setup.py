@@ -28,11 +28,6 @@ elif sys.version_info[0] == 2 and sys.version_info[1] == 6:
 
 PYTHON_REQUIREMENTS = '>=2.6,<3.0'
 BACKUP_USERNAME = 'ncbackup'
-# EXECUTABLE = {
-#     'console_scripts': [
-#         'nc-backup-py = nc_backup_py.backup',
-#     ]
-# }
 
 CONFIG_PATH = '/etc/nc-backup-py'
 BACKUP_PATH = '/opt/backup'
@@ -69,7 +64,7 @@ def copy_files(src, dst, uid, gid):
                 os.mkdir(os.path.join(dst_root, name))
                 os.chown(os.path.join(dst_root, name), uid, gid)
             except OSError, e:
-                print e
+                logging.warn(e)
         for name in files:
             dst_root = root.replace(src, dst)
             try:
@@ -77,7 +72,7 @@ def copy_files(src, dst, uid, gid):
                                 os.path.join(dst_root, name))
                 os.chown(os.path.join(dst_root, name), uid, gid)
             except shutil.Error:
-                pass
+                logging.warn(e)
 
 
 def setup_package():
@@ -144,12 +139,20 @@ class Setup_nc_backup_py(install):
         logging.info('************************************')
         logging.info('* Copy configs...')
         logging.info('************************************')
+        try:
+            os.mkdir(CONFIG_PATH)
+        except:
+            logging.warning("The path %s already exists." % CONFIG_PATH)
         copy_files('nc-backup-py/conf', CONFIG_PATH, uid=uid, gid=gid)
 
         # Copy src
         logging.info('************************************')
         logging.info('* Copy nc-backup-py to %s...' % DEST_PATH)
         logging.info('************************************')
+        try:
+            os.mkdir(DEST_PATH)
+        except:
+            logging.warning("The path %s already exists." % DEST_PATH)
         copy_files('nc-backup-py', DEST_PATH, uid=uid, gid=gid)
 
 
