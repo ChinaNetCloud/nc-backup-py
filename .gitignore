@@ -3,6 +3,7 @@ nc-backup-py/conf/Examples/conf.json
 tmp/
 *.tmp
 .idea
+.idea/*
 .idea/markdown-navigator/
 .idea/misc.xml
 .idea/modules.xml
@@ -11,3 +12,4 @@ tmp/
 .idea/workspace.xml
 conf/
 nc_backup_py.egg-info/
+
