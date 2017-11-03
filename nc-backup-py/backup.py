@@ -144,7 +144,7 @@ if type(json_dict) is not str:
 
     # TODO: Backup Report
     if 'MESSAGE_CONFIG_METHOD' in json_dict['GENERAL'].keys():
-        reporter = BackupReporter(json_dict, successful_execution, logger)
+        reporter = BackupReporter(json_dict, successful_execution, size_final, logger)
         reporter.send_post_report()
     else:
         logger.info('No report(s) enabled in configuration.')

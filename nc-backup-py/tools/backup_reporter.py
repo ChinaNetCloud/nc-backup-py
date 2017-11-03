@@ -8,9 +8,10 @@ class BackupReporter:
 
     """Create BackupReport and send it."""
 
-    def __init__(self, json_dict, successful_execution, logger=None):
+    def __init__(self, json_dict, successful_execution, size_final, logger=None):
         """Initialize class."""
-        self.__parameters = parameters
+        # self.__parameters = parameters
+        self.__size_final = size_final
         self.__logger = logger
         self.__json_dict = json_dict
         self.__logger.info('Sending report...')
@@ -35,7 +36,7 @@ class BackupReporter:
             'srvname': self.__json_dict['GENERAL']['HOSTNAME'],
             'result': status_backup,
             'bckmethod': 'ncscript-py',
-            'size': self.size_final,
+            'size': self.__size_final,
             'log': open(self.__json_dict['GENERAL']['LOG_FOLDER'], 'rb').read(),
             'error': '',
             'destination': storage_name
