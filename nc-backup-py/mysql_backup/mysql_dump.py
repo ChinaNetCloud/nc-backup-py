@@ -10,12 +10,12 @@ from subprocess import PIPE
 
 '''
 This code file was developed originally  by Randy Yang.
-Abel Guzman is supposed to make it work with his help
+Abel Guzman is supposed to make it work
 and make improvements in:
--Coding standards
--Decopling code
--Command independence from script (Exclude)
--bing log not active should not make backup fiale, just warn.
+- Coding standards
+- Decopling code
+- Command independence from script (Exclude)
+- bing log not active should not make backup fiale, just warn.
 '''
 
 class mydump:
@@ -77,6 +77,9 @@ class mydump:
         parser_object.add_argument('--TAR_COMMAND', type=str, help='tar command to use', required=False)
         parser_object.add_argument('--EXCLUDE_DB', type=str, help='exclude database', required=False)
         parser_object.add_argument('--EXCLUDE_TABLE', type=str, help='exclude database table', required=False)
+        # Argument to be implemented Name PIPE
+        # parser_object.add_argument('--PIPE', type=str, help='use as pipe true|false, default is false', required=False)
+
         args_list, unknown = parser_object.parse_known_args()
         return args_list
 

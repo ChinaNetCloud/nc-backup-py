@@ -1,4 +1,4 @@
-nc-backup-py/conf/conf.json
+nc-backup-py/conf/Examples/conf.json
 *.pyc
 tmp/
 *.tmp
