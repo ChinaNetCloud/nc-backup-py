@@ -8,9 +8,9 @@ from logs_script.log_handler import LoggerHandlers
 from backupcmd.commands import backupCommands
 from configs.load_json_configs import LoadJsonConfig
 from execution.backup_execution import BackupExecutionLogic
-from communications.communications import Communications
 from tools.os_works import OSInformation
 from execution.config_parser import ConfigParser
+from tools.backup_reporter import BackupReporter
 
 
 # Read execution parameters
@@ -142,65 +142,13 @@ if type(json_dict) is not str:
             logger.warning(script_result_error)
             successful_execution = False
 
-    logger.info('Sending report...')
-
-    # Here we send the report.
-    # It would be good to find a way to move this away from here
-    # so the script does not have to Report necesarity
-    #ALSO need to implement retries in e.g in 5, 20, 1h 4h, then fail (log everything)
-    if successful_execution == True :
-        status_backup = '0'
+    # TODO: Backup Report
+    if 'MESSAGE_CONFIG_METHOD' in json_dict['GENERAL'].keys():
+        reporter = BackupReporter(json_dict, successful_execution, size_final, logger)
+        reporter.send_post_report()
     else:
-        status_backup = '1'
-    if 'STORAGE' in json_dict:
-        storage_name = json_dict['STORAGE']['PARAMETERS']['DESTINATION']
-    else:
-        storage_name = 'Other Snapshot, private, etc, custom'
+        logger.info('No report(s) enabled in configuration.')
 
-    # Send report to BRT this section needs more decoupling of code.
-    report_attempt_message = 'Trying to send report to BRT'
-    logger.info(report_attempt_message)
-    print report_attempt_message
-    data_post = {
-        'srvname': json_dict['GENERAL']['HOSTNAME'],
-        'result': status_backup,
-        'bckmethod': 'ncscript-py',
-        'size': size_final,
-        'log': open(json_dict['GENERAL']['LOG_FOLDER'], 'rb').read(),
-        'error': '',
-        'destination': storage_name
-                 }
-    count=1
-    time_retry = 60
-    message_config_command = json_dict['GENERAL']['MESSAGE_CONFIG_COMMAND']
-    message_config_method = json_dict['GENERAL']['MESSAGE_CONFIG_METHOD']
-    while count <= 5:
-        request_to_brt = Communications.send_message(Communications(), data_post, message_config_command,
-                                                     message_config_method)
-        logger.info('Report sent status: ' + str(request_to_brt.status_code) + ' <===> ' + request_to_brt.reason)
-        print 'Response from server:'
-        attempt_notification = 'Attempt: ' + str(count)
-        print attempt_notification
-        logger.info(attempt_notification)
-        print (request_to_brt.status_code, request_to_brt.reason)
-        logger.info('Server response: ' + str(request_to_brt.status_code) + ' ' + str(request_to_brt.reason))
-        # this should make the script wait for 60s (1min), 120s (2min), 360s (6min), 1440s (24min), 7200s (2h)
-        time_retry = time_retry * count
-        count = count + 1
-        if request_to_brt.status_code == 200:
-            logger.info('Sent')
-            break
-        elif request_to_brt.status_code != 200 and count is not 5:
-            attempt_failed_notification = 'The attempt to send report failed. Attempt number ' + \
-                                          str(count) + ' will be in: ' + str(time_retry/60) + ' minutes.'
-            print attempt_failed_notification
-            logger.warning(attempt_failed_notification)
-            time.sleep(time_retry)
-        elif count == 5 and request_to_brt.status_code != 200:
-            attempt_failed_notification = 'Last attempt to send report FAILED, please check connectivity to BRT'
-            print attempt_failed_notification
-            logger.critical(attempt_failed_notification)
-            exit(1)
 
 elif type(json_dict) is str:
     logger.critical('Execution Error with: ' + json_dict + command_object.config)
