@@ -48,13 +48,13 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
 
 * Run setup
   ```
-  $ sudo pip install --upgrade .
+  $ pip install --upgrade .
   ```
 
   or, after installing the required dependencies using pip
 
   ```
-  $ sudo python setup.py
+  $ sudo ./setup.py
   ```
 
 * Edit configuration
@@ -68,29 +68,15 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
 
   2. Change the AWS S3 bucket name.
     ```
-    "BUCKET_NAME": "your-bucket-name"
+    "BUCKET_NAME": "cnbackup"
     ```
 
   3. Configure AWS CLI or AWS roles.
 
     * AWS CLI
-
       - Install - See [Installing the AWS Command Line Interface](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)
 
       - Configure - See [Quick Configuration](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-quick-configuration)
-
-      - Please switch user to `ncbackup` before configuring AWS CLI
-        ```
-        # su - ncbackup -s /bin/bash
-        $ whoami && pwd
-        ncbackup
-        /home/ncbackup
-        $ aws configure
-        AWS Access Key ID [None]: <ACCESS KEY ID>
-        AWS Secret Access Key [None]: <ACCESS KEY>
-        Default region name [None]: <REGION>
-        Default output format [None]: json
-        ```
 
     * AWS roles
       - See [IAM Roles for Amazon EC2](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html)
@@ -106,7 +92,7 @@ $ crontab -eu ncbackup
 00 03 * * * python /var/lib/nc-backup-py/backup.py -r -c /etc/nc-backup-py/conf.json
 ```
 
-* Provide feedback on [Issue](https://github.com/ChinaNetCloud/nc-backup-py/issues) for support
+* Provide feedback on [Issue](https://github.com/ChinaNetCloud/nc-backup-py/issues) for support,
 
 
 ## Uninstall
@@ -132,7 +118,6 @@ sudo rm -rf /etc/nc-backup-py
 ```
 * To remove all
 ```
-pip uninstall nc-backup-py
 sudo rm -rf /var/lib/nc-backup-py/ /etc/nc-backup-py/ /var/log/nc-backup-py/
 sudo userdel ncbackup && rm -rf /etc/sudoers.d/ncbackup
 ```
