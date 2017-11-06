@@ -11,7 +11,7 @@
     "LOCAL_BACKUP": "/opt/backup/local",
     "HOME_FOLDER": "/var/lib/nc-backup-py",
     "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log",
-    "CONFIG_COMMAND": "https://backupreporter.yourdomain.com/backup_report_service/backup_service.php"
+    "CONFIG_COMMAND": "https://backupreporter.service.chinanetcloud.com/backup_report_service/backup_service.php"
   },
   "FILESET":{
     "ACTION": "execute",
