@@ -5,7 +5,7 @@
     "LOCAL_BACKUP": "/opt/backup/local",
     "HOME_FOLDER": "/var/lib/nc-backup-py/",
     "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log",
-    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.service.chinanetcloud.com/backup_report_service/backup_service.php",
+    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.yourdomain.com/backup_report_service/backup_service.php",
     "MESSAGE_CONFIG_METHOD": "post",
     "__Methods": "silent|post|e-mail|sms|wechat,etc"
   },
@@ -17,8 +17,8 @@
     "PARAMETERS": {
       "LOG_INTERNAL": "yes",
       "ORIGIN_AND_TARGETS_PARAMS": {
-        "WORK001": "rsync -a --remove-source-files --no-perms --no-owner --no-group -PH --rsh 'ssh -p40022 -i /root/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' --rsync-path 'rsync' /SAPLOCAL/Q24/CHINA/SWATOMS/ sftp.admin@10.55.124.33:/DATAEXCHANGE/SWATTMALL/SAP/OUT/PRICE/",
-        "WORK002": "rsync -a --remove-source-files --no-perms --no-owner --no-group -PH --rsh 'ssh -p40022 -i /root/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' --rsync-path 'rsync' /SAPLOCAL/Q24/CHINA/SWATOMS1/ sftp.admin@10.55.124.33:/DATAEXCHANGE/SWATTMALL/SAP/OUT/PRICE1/"
+        "WORK001": "rsync -a --remove-source-files --no-perms --no-owner --no-group -PH --rsh 'ssh -p40022 -i .ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' --rsync-path 'rsync' /source/ sftp.admin@remotehost:/destination/",
+        "WORK002": "rsync -a --remove-source-files --no-perms --no-owner --no-group -PH --rsh 'ssh -p40022 -i .ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' --rsync-path 'rsync' /source/ sftp.admin@remotehost:/destination/"
       }
     }
   }
