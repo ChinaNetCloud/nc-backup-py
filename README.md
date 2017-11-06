@@ -25,7 +25,7 @@ If you think the project is useful or has potential, please add a star.
 
 
 
-## Quick Start # Change this after setup is done
+## Quick Start 
 
 This quick start is to download, install and configure the `master` branch to upload files to AWS S3.
 
