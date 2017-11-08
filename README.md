@@ -108,6 +108,16 @@ $ crontab -eu ncbackup
 
 * Provide feedback on [Issue](https://github.com/ChinaNetCloud/nc-backup-py/issues) for support
 
+## Decryption
+
+Download the files to /opt/backup e.g.:
+```
+$ aws s3 cp s3://cnc-bj-backup/srv-nc-bj-zabbix-qa1/20160705_042923.tar.gz.crypt.000 /opt/backup
+Execute the decryption command:
+$ python /var/lib/nc-backup-py/encryption/encryption.py -d --KEY_FILE “/etc/nc-backup-py/key_file” --OBJECTIVES “/opt/backup/20160705_042923.tar.gz.crypt.000" --DESTINATION “/opt/backup/20160705_042923.tar.gz” --HOME_FOLDER “/var/lib/nc-backup-py”
+```
+
+For more information on decryption, go to the decryption section
 
 ## Uninstall
 
