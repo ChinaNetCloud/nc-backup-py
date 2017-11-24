@@ -2,10 +2,12 @@
 """Create BackupReport and send it."""
 
 from time import time
+from datetime import datetime
 from communications.communications import Communications
+from smtp_email import sendMail
+
 
 class BackupReporter:
-
     """Create BackupReport and send it."""
 
     def __init__(self, json_dict, successful_execution, size_final, logger=None):
@@ -16,46 +18,64 @@ class BackupReporter:
         self.__json_dict = json_dict
         self.__logger.info('Sending report...')
         self.__successful_execution = successful_execution
+        self.__logfile = self.__json_dict['GENERAL']['LOG_FOLDER']
+        self.__hostname = self.__json_dict['GENERAL']['HOSTNAME']
+        if "STORAGE" in json_dict:
+            self.__destination = self.__json_dict['STORAGE']['PARAMETERS']['DESTINATION']
+        with open(self.__logfile, 'rb') as f:
+            self.__logtext = f.read()
+
+        if self.__successful_execution:
+            self.__status_backup = '0'
+        else:
+            self.__status_backup = '1'
+        if 'STORAGE' in self.__json_dict:
+            self.__storage_name = self.__destination
+        else:
+            self.__storage_name = 'Other Snapshot, private, etc, custom'
+
+        self.__report_time = datetime.utcnow().strftime("%d-%m-%Y %H:%M:%S")
+
+    def execute(self):
+        if "MESSAGE_POST" in self.__json_dict.keys():
+            self.create_post_report()
+            urls = self.__json_dict['MESSAGE_POST']['URLS']
+            for url in urls:
+                self.send_post_report(url)
+        if "MESSAGE_EMAIL" in self.__json_dict.keys():
+            self.send_email_report()
+        # logger.info('No report(s) enabled in configuration.')
 
     def create_post_report(self):
         """Create data for report by POST method."""
-        if self.__successful_execution:
-            status_backup = '0'
-        else:
-            status_backup = '1'
-        if 'STORAGE' in self.__json_dict:
-            storage_name = self.__json_dict['STORAGE']['PARAMETERS']['DESTINATION']
-        else:
-            storage_name = 'Other Snapshot, private, etc, custom'
 
-        # Send report to BRT this section needs more decoupling of code.
-        report_attempt_message = 'Trying to send report to BRT'
-        self.__logger.info(report_attempt_message)
-        print report_attempt_message
         data_post = {
-            'srvname': self.__json_dict['GENERAL']['HOSTNAME'],
-            'result': status_backup,
+            'srvname': self.__hostname,
+            'result': self.__status_backup,
             'bckmethod': 'ncscript-py',
             'size': self.__size_final,
-            'log': open(self.__json_dict['GENERAL']['LOG_FOLDER'], 'rb').read(),
+            'log': self.__logtext,
             'error': '',
-            'destination': storage_name
+            'destination': self.__storage_name
                      }
         return data_post
 
-    def send_post_report(self):
-        """Send post report to a given URL."""
+    def send_post_report(self, url):
+        """Send post report to BRT / a given URL."""
+
+        report_attempt_message = 'Trying to send report to BRT'
+        self.__logger.info(report_attempt_message)
+        print report_attempt_message
+
         data_post = self.create_post_report()
         count = 1
         time_retry = 60
-        message_config_command = self.__json_dict['GENERAL']['MESSAGE_CONFIG_COMMAND']
-        message_config_method = self.__json_dict['GENERAL']['MESSAGE_CONFIG_METHOD']
         while count <= 5:
             request_to_brt = Communications.send_message(
                 Communications(),
                 data_post,
-                message_config_command,
-                message_config_method)
+                url,
+                "post")
             self.__logger.info(
                 'Report sent status: ' +
                 str(request_to_brt.status_code) +
@@ -83,3 +103,28 @@ class BackupReporter:
                 print attempt_failed_notification
                 self.__logger.critical(attempt_failed_notification)
                 exit(1)
+
+    def send_email_report(self):
+
+        report_attempt_message = 'Trying to send report to BRT'
+        self.__logger.info(report_attempt_message)
+        print report_attempt_message
+
+        if self.__status_backup == 0:
+            subject = "Sucess! "
+        else:
+            subject = "Failed! "
+        subject += self.__hostname + ' '
+        subject += ' Backup Report'
+        subject += self.__report_time
+        body = "The backup job on %s was %s. Please find the backup log attached to this email." %(self.__hostname, self.__status_backup)
+        to = self.__json_dict['MESSAGE_EMAIL']['TO_IDS']
+        fro = self.__json_dict['MESSAGE_EMAIL']['FROM_IDS']
+        server = self.__json_dict['MESSAGE_EMAIL']['SERVER']
+        username = self.__json_dict['MESSAGE_EMAIL']['USERNAME']
+        password = self.__json_dict['MESSAGE_EMAIL']['PASSWORD']
+        sendMail(to=to, fro=fro,
+                 subject=subject, text=body, files=[self.__logfile],
+                 server=server,
+                 username=username,
+                 password=password)
