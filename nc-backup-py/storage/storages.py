@@ -41,7 +41,7 @@ class AWSS3(Storage):
         # print result_aws_s3_ls[1].find(bucket_name)
         # print type(result_aws_s3_ls[1].find(bucket_name))
         # print result_aws_s3_ls[0]
-        if result_aws_s3_ls[0] == 255 and and result_aws_s3_ls[1].find("Unable to locate credentials."):
+        if result_aws_s3_ls[0] == 255 and result_aws_s3_ls[1].find("Unable to locate credentials."):
             return 'No credentials'
         elif result_aws_s3_ls[0] == 255:
             return 'Other error. Check if Bucket exists.'
