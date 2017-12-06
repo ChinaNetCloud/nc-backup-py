@@ -98,7 +98,7 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
 
 * Execute Backup manually
 ```
-$ sudo -u ncbackup python /path/to/backup.py -r -c /path/to/conf.json -l WARNING
+$ sudo -u ncbackup python /var/lib/nc-backup-py/backup.py -r -c /etc/nc-backup-py/conf.json -l WARNING
 ```
 * Optionally add a cronjob
 ```
