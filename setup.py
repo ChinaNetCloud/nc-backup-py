@@ -121,6 +121,8 @@ class Setup_nc_backup_py(install):
         logging.info('************************************')
         try:
             os.mkdir(LOGS_PATH)
+            os.chown(LOGS_PATH, uid, gid)
+
         except OSError:
             logging.info("The path %s already exists." % LOGS_PATH)
         os.chown(LOGS_PATH, uid, gid)
@@ -131,6 +133,7 @@ class Setup_nc_backup_py(install):
         logging.info('************************************')
         try:
             os.mkdir(BACKUP_PATH)
+            os.chown(BACKUP_PATH, uid, gid)
         except:
             logging.warning("The path %s already exists." % BACKUP_PATH)
         os.chown(BACKUP_PATH, uid, gid)
@@ -141,6 +144,7 @@ class Setup_nc_backup_py(install):
         logging.info('************************************')
         try:
             os.mkdir(CONFIG_PATH)
+            os.chown(CONFIG_PATH, uid, gid)
         except:
             logging.warning("The path %s already exists." % CONFIG_PATH)
         copy_files('nc-backup-py/conf', CONFIG_PATH, uid=uid, gid=gid)
@@ -151,6 +155,7 @@ class Setup_nc_backup_py(install):
         logging.info('************************************')
         try:
             os.mkdir(DEST_PATH)
+            os.chown(DEST_PATH, uid, gid)
         except:
             logging.warning("The path %s already exists." % DEST_PATH)
         copy_files('nc-backup-py', DEST_PATH, uid=uid, gid=gid)
