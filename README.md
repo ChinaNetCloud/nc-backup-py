@@ -113,8 +113,15 @@ $ crontab -eu ncbackup
 Download the files to /opt/backup e.g.:
 ```
 $ aws s3 cp s3://cnc-bj-backup/srv-nc-bj-zabbix-qa1/20160705_042923.tar.gz.crypt.000 /opt/backup
-Execute the decryption command:
-$ python /var/lib/nc-backup-py/encryption/encryption.py -d --KEY_FILE “/etc/nc-backup-py/key_file” --OBJECTIVES “/opt/backup/20160705_042923.tar.gz.crypt.000" --DESTINATION “/opt/backup/20160705_042923.tar.gz” --HOME_FOLDER “/var/lib/nc-backup-py”
+# Execute the decryption command:
+# For a encrypted archive "20160705_042923.tar.gz.crypt.000"
+$ ls
+$ 20160705_042923.tar.gz.crypt.000
+$ python /var/lib/nc-backup-py/encryption/encryption.py -d \
+--KEY_FILE "/etc/nc-backup-py/key_file" \
+--OBJECTIVES "20171106_105027.tar.gz.crypt.000" \
+--DESTINATION "20171106_105027.tar.gz" \
+--HOME_FOLDER "/var/lib/nc-backup-py"
 ```
 
 For more information on decryption, go to the decryption section

@@ -31,7 +31,7 @@ class AWSS3(Storage):
 
     @staticmethod
     def test_aws_connectivity(home_path, bucket_name):
-        aws_s3_ls_command = 'aws s3 ls'
+        aws_s3_ls_command = 'aws s3 ls %s' % bucket_name
         sys.path.append(home_path)
         from execution.subprocess_execution import SubprocessExecution
         result_aws_s3_ls = SubprocessExecution.main_execution_function(SubprocessExecution(), aws_s3_ls_command)
