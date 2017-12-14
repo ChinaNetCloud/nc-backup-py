@@ -96,4 +96,8 @@ if __name__ == "__main__":
         print "calling custom command to upload."
         from storages import CustomCommand
         custom_command_upload = CustomCommand(storage_cmd)
-        custom_command_upload.execute()
+        custom_uploads = custom_command_upload.execute()
+        if custom_uploads:
+            StorageExecution.iterate_resut(StorageExecution(), custom_uploads)
+        else:
+            print 'Executing Custom upload retuned a None result'

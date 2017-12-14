@@ -237,13 +237,33 @@ class CustomCommand(Storage):
         self.__custom_command_dict["OBJECTIVES"] = self.__args.OBJECTIVES
         self.__custom_command_dict["HOSTNAME"] = self.__args.HOSTNAME
 
-
     def execute(self):
         from execution.subprocess_execution import SubprocessExecution
         files_to_upload = [f for f in listdir(self.__args.OBJECTIVES)
                            if isfile(join(self.__args.OBJECTIVES, f))]
         for file_to_upload in files_to_upload:
             self.__custom_command_dict["file"] = file_to_upload
-            command = self.__args.CUSTOM_COMMAND_TEMPLATE % self.__custom_command_dict
-            SubprocessExecution.main_execution_function(SubprocessExecution(),
-                                                        command)
+            count = 1
+            time_retry = 60
+            execution_message = []
+            while count <= 5:
+                print 'Trying upload attempt number: ' + str(count)
+                command = self.__args.CUSTOM_COMMAND_TEMPLATE % self.__custom_command_dict
+                tmp_execution_message = SubprocessExecution.main_execution_function(
+                    SubprocessExecution(),
+                    command)
+                count = count + 1
+                time_retry = time_retry * count
+                if tmp_execution_message[0] == 0:
+                    print 'Upload attempt ' + str(count) + ' successful.'
+                    break
+                else:
+                    print 'Upload attempt number: ' + str(count) + ' FAILED for: ' + aws_command
+                    print 'StdOut: ' + str(tmp_execution_message[0])
+                    print 'StdErr: ' + str(tmp_execution_message[0])
+                    print 'We will wait for: ' + str(time_retry/60) + ' minute(s) before upload attempt number: ' + \
+                          str(count + 1)
+                    time.sleep(time_retry)
+            execution_message.append(tmp_execution_message)
+
+        return execution_message
