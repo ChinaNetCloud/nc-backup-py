@@ -233,9 +233,6 @@ class CustomCommand(Storage):
         self.__checkArgs()
 
     def __checkArgs(self):
-        print self.__args.CUSTOM_COMMAND_TEMPLATE
-        print self.__args.CUSTOM_COMMAND_DICT
-        print dir(self.__args)
         self.__custom_command_dict = eval(self.__args.CUSTOM_COMMAND_DICT)
         self.__custom_command_dict["OBJECTIVES"] = self.__args.OBJECTIVES
         self.__custom_command_dict["HOSTNAME"] = self.__args.HOSTNAME
@@ -247,7 +244,6 @@ class CustomCommand(Storage):
                            if isfile(join(self.__args.OBJECTIVES, f))]
         for file_to_upload in files_to_upload:
             self.__custom_command_dict["file"] = file_to_upload
-            print self.__custom_command_dict
             command = self.__args.CUSTOM_COMMAND_TEMPLATE % self.__custom_command_dict
             SubprocessExecution.main_execution_function(SubprocessExecution(),
                                                         command)
