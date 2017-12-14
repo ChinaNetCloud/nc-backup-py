@@ -31,7 +31,7 @@ class AWSS3(Storage):
 
     @staticmethod
     def test_aws_connectivity(home_path, bucket_name):
-        aws_s3_ls_command = 'aws s3 ls'
+        aws_s3_ls_command = 'aws s3 ls %s' % bucket_name
         sys.path.append(home_path)
         from execution.subprocess_execution import SubprocessExecution
         result_aws_s3_ls = SubprocessExecution.main_execution_function(SubprocessExecution(), aws_s3_ls_command)
@@ -41,10 +41,10 @@ class AWSS3(Storage):
         # print result_aws_s3_ls[1].find(bucket_name)
         # print type(result_aws_s3_ls[1].find(bucket_name))
         # print result_aws_s3_ls[0]
-        if result_aws_s3_ls[0] == 255:
+        if result_aws_s3_ls[0] == 255 and result_aws_s3_ls[1].find("Unable to locate credentials."):
             return 'No credentials'
-        elif result_aws_s3_ls[0] == 0 and result_aws_s3_ls[1].find(bucket_name) is -1:
-            return 'Bucket not Found'
+        elif result_aws_s3_ls[0] == 255:
+            return 'Other error. Check if Bucket exists.'
         return 'Ok'
 
     def upload_content(self, mypath_to_dir, bucket, client_host_name, upload_command='aws s3 cp',
