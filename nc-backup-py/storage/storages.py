@@ -246,9 +246,11 @@ class CustomCommand(Storage):
             count = 1
             time_retry = 60
             execution_message = []
+
             while count <= 5:
                 print 'Trying upload attempt number: ' + str(count)
                 command = self.__args.CUSTOM_COMMAND_TEMPLATE % self.__custom_command_dict
+                print "Executing external command: %s " % command
                 tmp_execution_message = SubprocessExecution.main_execution_function(
                     SubprocessExecution(),
                     command)
