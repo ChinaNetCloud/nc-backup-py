@@ -258,7 +258,7 @@ class CustomCommand(Storage):
                     print 'Upload attempt ' + str(count) + ' successful.'
                     break
                 else:
-                    print 'Upload attempt number: ' + str(count) + ' FAILED for: ' + aws_command
+                    print 'Upload attempt number: ' + str(count) + ' FAILED for: ' + command
                     print 'StdOut: ' + str(tmp_execution_message[0])
                     print 'StdErr: ' + str(tmp_execution_message[0])
                     print 'We will wait for: ' + str(time_retry/60) + ' minute(s) before upload attempt number: ' + \
