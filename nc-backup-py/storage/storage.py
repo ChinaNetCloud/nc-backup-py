@@ -26,6 +26,10 @@ class StorageExecution:
                                    , help='Remove Encrypted files and folder after execution', required=False)
         parser_object.add_argument('-A', '--ALIYUN_CREDENTIALS', type=str
                                    , help='Remove Encrypted files and folder', required=False)
+        parser_object.add_argument('--CUSTOM_COMMAND_TEMPLATE', type=str
+                                   , help='Custom Command Template', required=False)
+        parser_object.add_argument('--CUSTOM_COMMAND_DICT', type=str
+                                   , help='Custom Command Dictionary', required=False)
         args_list, unknown = parser_object.parse_known_args()
         return args_list
 
@@ -46,7 +50,7 @@ if __name__ == "__main__":
     from tools.filesystem_handling import FilesystemHandling, remove_objectives
     from execution.subprocess_execution import SubprocessExecution
     from execution.config_parser import ConfigParser
-    if str(storage_cmd.DESTINATION) not in ['s3', 'oss', 'ssh', 'local', 'azure']:
+    if str(storage_cmd.DESTINATION) not in ['s3', 'oss', 'ssh', 'local', 'azure', 'custom_command']:
         print 'Not supported storage destination: ' + str(storage_cmd.DESTINATION)
         exit(1)
 
@@ -87,3 +91,13 @@ if __name__ == "__main__":
 
     elif storage_cmd.DESTINATION == 'ssh':
         print "calling SSH storage upload functions"
+
+    elif storage_cmd.DESTINATION == 'custom_command':
+        print "calling custom command to upload."
+        from storages import CustomCommand
+        custom_command_upload = CustomCommand(storage_cmd)
+        custom_uploads = custom_command_upload.execute()
+        if custom_uploads:
+            StorageExecution.iterate_resut(StorageExecution(), custom_uploads)
+        else:
+            print 'Executing Custom upload retuned a None result'

@@ -1,0 +1,67 @@
+{
+  "GENERAL": {
+    "HOSTNAME": "srv-nc-template-host-config",
+    "WORK_FOLDER": "/opt/backup",
+    "LOCAL_BACKUP": "/opt/backup/local",
+    "HOME_FOLDER": "/var/lib/nc-backup-py/",
+    "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log",
+    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.service.chinanetcloud.com/backup_report_service/backup_service.php",
+    "MESSAGE_CONFIG_METHOD": "post",
+    "__Methods": "post|e-mail|sms|wechat,etc"
+  },
+  "FILESET": {
+    "ACTION": "execute",
+    "NAME": "filesbackup",
+    "PARAMETERS": {
+      "FILESET_INCLUDE": "/etc",
+      "FILESET_EXCLUDE": ""
+    }
+  },
+  "COMPRESSION": {
+    "ACTION": "execute",
+    "NAME": "compression",
+    "PARAMETERS": {
+      "TARGETS": "/opt/backup/files",
+      "DESTINATION":"/opt/backup/compressed",
+      "REMOVE_TARGETS": "True"
+    }
+  },
+  "ENCRYPTION": {
+    "ACTION": "execute",
+    "NAME": "encryption",
+    "PARAMETERS": {
+      "TARGETS": "/opt/backup/compressed",
+      "DESTINATION":"/opt/backup/encrypted",
+      "REMOVE_TARGETS": "True"
+    }
+  },
+  "SIZE": {
+    "ACTION": "load",
+    "FROM": "tools",
+    "FILENAME": "size_calculation",
+    "CLASS": "SizeCalculation",
+    "PARAMETERS": {
+      "TARGETS": "/opt/backup/encrypted"
+    }
+  },
+  "STORAGE_CUSTOM": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION":"custom_command",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "CUSTOM_COMMAND_TEMPLATE": "aws s3 cp %(OBJECTIVES)s/%(file)s s3://%(BUCKET)s/%(HOSTNAME)s/%(file)s",
+      "CUSTOM_COMMAND_DICT": "{'BUCKET': 'ncbackup'}",
+      "REMOVE_TARGETS": "False"
+    }
+  },
+  "STORAGE_LOCAL": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION": "local",
+      "TARGETS": "/opt/backup/encrypted",
+      "REMOVE_TARGETS": "True"
+    }
+  }
+}
