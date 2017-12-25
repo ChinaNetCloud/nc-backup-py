@@ -238,70 +238,10 @@ Regarding the optional end required parameters the same could be exported to the
 ```
 Notice: Out standard for the configurations has changed so now all the configuration files have to be in /etc/nc-backup-py/ in this case the key file will be in /etc/nc-backup-py/key_file.
 
-#### Storage
-#####Local backup
-```
-     "STORAGE_LOCAL": {
-        "ACTION": "execute",
-        "NAME": "storage",
-        "PARAMETERS":{
-          "DESTINATION":"local",
-          "TARGETS": "/opt/backup/encrypted"
-        }
-    }
-```
+#### Storage Configuration
 
-##### AWS s3
-```
-     "STORAGE": {
-        "ACTION": "execute",
-        "NAME": "storage",
-        "PARAMETERS":{
-          "TARGETS": "/opt/backup/encrypted",
-          "DESTINATION":"s3",
-          "BUCKET_NAME": "cncbackup",
-          "UPLOAD_COMMAND": "aws s3 cp",
-          "REMOVE_TARGETS": "True"
-        }
-    }
-```
-This section is to store the backup, in this case s3. S3 is the only current backend implemented, but the script is supposed to support various backends including OSS, SSH, etc.
+[CONFIGURATION](docs/STORAGE.md) for instructions on how to configure storage and install related 3rd party tools.
 
-##### Aliyun OSS
-```
-     "STORAGE_OSS": {
-        "ACTION": "execute",
-        "NAME": "storage",
-        "PARAMETERS":{
-          "TARGETS": "/Users/cncuser/Downloads/backup/encrypted",
-          "DESTINATION":"oss",
-          "BUCKET_NAME": "cncbackup",
-          "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
-          "REMOVE_TARGETS": "True"
-        }
-    }
-```
-##### Combine storages
-```
-    "STORAGE_LOCAL": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "DESTINATION":"local",
-      "TARGETS": "/opt/backup/encrypted"
-    }
-    },
-    "STORAGE": {
-        "ACTION": "execute",
-        "NAME": "storage",
-        "PARAMETERS":{
-          "DESTINATION":"s3",
-          "BUCKET_NAME": "bucketname",
-          "TARGETS": "/opt/backup/local",
-          "REMOVE_TARGETS": "False"
-        }
-    }
-```
 ##### QA
 ```
       "QA":{
@@ -318,37 +258,6 @@ This feature is still under development in test conceptual phase, the idea is fo
 Q: Does the AWS CLI validate checksums?
 The AWS CLI will perform checksum validation for uploading and downloading files in specific scenarios. Upload The AWS CLI will calculate and auto-populate the Content-MD5 header for both standard and multipart uploads. If the checksum that S3 calculates does not match the Content-MD5 provided, S3 will not store the object and instead will return an error message back the AWS CLI. The AWS CLI will retry this error up to 5 times before giving up. On the case that any files fail to transfer successfully to S3, the AWS CLI will exit with a non zero RC. See aws help returncodes for more information. Taken from AWS CLI FAQ
 
-## How to decrypt
-
-###if the server doing backups has python 2.7
-
-The encryption script is the same script used for decription. Is should be user as follows:
-
-`python encryption/encryption.py -d --KEY_FILE "conf/key_file" --OBJECTIVES "/path/to/file/name" --DESTINATION "/path/where/the/resulting/will/be" --HOME_FOLDER "/path/to/nc-backup-py"`
-
-`-d`: is to say we are decrypting.
-`--KEY_FILE "conf/key_file"`: is to indicate the path to the keyfile to used for decryption.
-`--OBJECTIVES "/path/to/file(s)"`: It's to say where are the encrypted files to be decrypted. if the download is more than one file they need to have names that start with the same partern; the software asumes you mean wild card (*) at the end. In other words, the names should be like something like this filename.tar.gz.crypt.000, filename.tar.gz.crypt.001, filename.tar.gz.crypt.00N, so in this case yout path should contanin the common part's of the name "filename.tar.gz.crypt.00".
-`--DESTINATION "path/and/name/of/tar.gz/file"`: this is the name and path that you want the resulting file to have after decryption
-`--HOME_FOLDER "/path/to/source/code/nc-backup-py"`: this is for the encryption script to know where the whole backups software is installed.
-
-Example for a single file:
-
-`python /var/lib/nc-backup-py/encryption/encryption.py -d --KEY_FILE "/etc/nc-backup-py/key_file" --OBJECTIVES "/opt/backup/20160705_042923.tar.gz.crypt.000" --DESTINATION "/opt/backup/20160705_042923.tar.gz" --HOME_FOLDER "/var/lib/nc-backup-py"`
-
-Example for multiple files:
-
-`python /vagrant/nc-backup-py/encryption/encryption.py -d --KEY_FILE "/vagrant/nc-backup-py/conf/key_file" --OBJECTIVES "/opt/backup/20160607_161750.tar.gz.crypt.00" --DESTINATION "/opt/backup/20160607_161750.tar.gz" --HOME_FOLDER "/vagrant/nc-backup-py"`
-
-Notice: The only difference to decrypt one or more than one file is in the name of --OBJECTIVES. The first example show the whole path and the second example shows only the path with the part of the name that is common.
-
-After this you have to untar the file using something like this:
-
-`tar -xvf /opt/backup/20160607_161750.tar.gz /opt/backup/`
-
-Idea: We might want develop a feature in the near future called "restore" that would do all the work for you and give you back the files already decompressed. This feature could even log information to BRT about the Restore job, and use dates, etc
-
-### if the server doing backups has python 2.6
 
 # NOTICE: Add MATERIS
 Use the same method as weth ncbackup bash script: https://wiki.service.chinanetcloud.com/wiki/Operations:NC-OP_TP-782-How_to_restore_GPG_encrypt_backup_files

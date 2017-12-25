@@ -2,10 +2,9 @@
   "GENERAL": {
     "HOSTNAME": "srv-nc-template-host-config",
     "WORK_FOLDER": "/opt/backup",
-    "LOCAL_BACKUP": "/opt/backup/local",
     "HOME_FOLDER": "/var/lib/nc-backup-py/",
     "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log",
-    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.service.chinanetcloud.com/backup_report_service/backup_service.php",
+    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.service.yourdomain.com/backup_report_service/backup_service.php",
     "MESSAGE_CONFIG_METHOD": "post",
     "__Methods": "post|e-mail|sms|wechat,etc"
   },
@@ -44,12 +43,38 @@
       "TARGETS": "/opt/backup/encrypted"
     }
   },
+  "STORAGE_S3": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION":"s3",
+      "ACTION": "upload",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "ARGS_DICT": "{'BUCKET': 'yourbucket'}",
+      "__READTHIS": "Use awscli and configure s3 access keys.",
+      "REMOVE_TARGETS": "False"
+    }
+  },
+  "STORAGE_OSS": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION":"oss",
+      "ACTION": "upload",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "ARGS_DICT": "{}",
+      "__READTHIS": "Use alicmd -c to configure oss access and bucket.",
+      "REMOVE_TARGETS": "False"
+    }
+  },
   "STORAGE_LOCAL": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
-      "DESTINATION":"local",
+      "DESTINATION": "local",
       "TARGETS": "/opt/backup/encrypted",
+      "ARGS_DICT": "{'LOCAL_BACKUP': '/opt/backup/local'}",
+      "__READTHIS": "The above path is where your local backups will be stored.",
       "REMOVE_TARGETS": "True"
     }
   }

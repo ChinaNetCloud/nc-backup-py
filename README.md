@@ -25,7 +25,7 @@ If you think the project is useful or has potential, please add a star.
 
 
 
-## Quick Start # Change this after setup is done
+## Quick Start
 
 This quick start is to download, install and configure the `master` branch to upload files to AWS S3.
 
@@ -33,27 +33,27 @@ See [INSTALLATION](docs/INSTALLATION.md) for more information on customizing you
 See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all available features.
 
 * Clone or Download the git repository and change directory .
-  ```
+  ```bash
   $ git clone https://github.com/ChinaNetCloud/nc-backup-py.git
   $ cd nc-backup-py
   ```
 
   or
 
-  ```
+  ```bash
   $ wget -O nc-backup-py.zip https://github.com/ChinaNetCloud/nc-backup-py/archive/master.zip
   $ unzip nc-backup-py.zip
   $ cd nc-backup-py-master
   ```
 
 * Run setup
-  ```
+  ```bash
   $ sudo pip install --upgrade .
   ```
 
   or, after installing the required dependencies using pip
 
-  ```
+  ```bash
   $ sudo python setup.py
   ```
 
@@ -62,12 +62,12 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
   This quick start works for uploading you local files to AWS S3. See [CONFIGURATION](docs/CONFIGURATION.md) for a complete guide and documentation.
 
   1. Change hostname to your hostname.
-    ```
+    ```bash
     "HOSTNAME": "srv-your-hostname"
     ```
 
   2. Change the AWS S3 bucket name.
-    ```
+    ```bash
     "BUCKET_NAME": "your-bucket-name"
     ```
 
@@ -80,7 +80,7 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
       - Configure - See [Quick Configuration](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-quick-configuration)
 
       - Please switch user to `ncbackup` before configuring AWS CLI
-        ```
+        ```bash
         # su - ncbackup -s /bin/bash
         $ whoami && pwd
         ncbackup
@@ -97,11 +97,22 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
 
 
 * Execute Backup manually
-```
+```bash
 $ sudo -u ncbackup python /var/lib/nc-backup-py/backup.py -r -c /etc/nc-backup-py/conf.json -l WARNING
 ```
+
+* Copy and save your key file.
+
+  The first time you run your backup script with **ENCRYPTION** enabled, it will create a key at `/etc/nc-backup-py/key_file`. Please copy this and store it in a secure location. (ex: keepass) You will require this to decrypt the files later.
+
+  ```bash
+  # ls /etc/nc-backup-py/key_file
+  # cat /etc/nc-backup-py/key_file
+  ```
+
+
 * Optionally add a cronjob
-```
+```bash
 $ crontab -eu ncbackup
 00 03 * * * python /var/lib/nc-backup-py/backup.py -r -c /etc/nc-backup-py/conf.json
 ```
@@ -111,7 +122,7 @@ $ crontab -eu ncbackup
 ## Decryption
 
 Download the files to /opt/backup e.g.:
-```
+```bash
 $ aws s3 cp s3://cnc-bj-backup/srv-nc-bj-zabbix-qa1/20160705_042923.tar.gz.crypt.000 /opt/backup
 # Execute the decryption command:
 # For a encrypted archive "20160705_042923.tar.gz.crypt.000"
@@ -124,31 +135,35 @@ $ python /var/lib/nc-backup-py/encryption/encryption.py -d \
 --HOME_FOLDER "/var/lib/nc-backup-py"
 ```
 
-For more information on decryption, go to the decryption section
+For more information see [decryption](docs/DECRYPTION.md)
 
 ## Uninstall
 
-```
+```bash
 pip uninstall nc-backup-py
 ```
-* To remove scripts and sudo access
-```
+* To remove scripts
+```bash
 sudo rm -rf /var/lib/nc-backup-py/
 ```
 * To remove ncbackup user
-```
+```bash
 sudo userdel ncbackup && /etc/sudoers.d/ncbackup
 ```
-* To remove logs
+* To remove sudo access.
+```bash
+rm -rf /etc/sudoers.d/ncbackup
 ```
+* To remove logs
+```bash
 sudo rm -rf /var/log/nc-backup-py
 ```
 * To remove configuration
-```
+```bash
 sudo rm -rf /etc/nc-backup-py
 ```
 * To remove all
-```
+```bash
 pip uninstall nc-backup-py
 sudo rm -rf /var/lib/nc-backup-py/ /etc/nc-backup-py/ /var/log/nc-backup-py/
 sudo userdel ncbackup && rm -rf /etc/sudoers.d/ncbackup
