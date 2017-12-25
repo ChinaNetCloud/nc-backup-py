@@ -14,8 +14,6 @@
   "oss" : {
     "UPLOAD_COMMAND_TEMPLATE": "alicmd -u %(OBJECTIVES)s/%(file)s",
     "UPLOAD_COMMAND_DICT": "",
-    "RM_COMMAND_TEMPLATE": "aws s3 rm s3://%(BUCKET)s/%(HOSTNAME)s/%(file)s",
-    "LS_COMMAND_TEMPLATE": "aws s3 ls s3://%(BUCKET)s/%(HOSTNAME)s/"
   },
   "scp" : {
     "UPLOAD_COMMAND_TEMPLATE": "scp -P %(PORT)s %(OBJECTIVES)s/%(file)s %(REMOTE_USER)s@%(REMOTE_HOST)s:%(REMOTE_DIR) ",
