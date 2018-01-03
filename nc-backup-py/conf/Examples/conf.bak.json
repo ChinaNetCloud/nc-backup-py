@@ -106,26 +106,37 @@
       "OBJECTIVES": "/opt/backup/encrypted"
     }
   },
-  "STORAGE": {
+  "STORAGE_S3": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
-      "OBJECTIVES": "/opt/backup/encrypted",
       "DESTINATION":"s3",
-      "BUCKET_NAME": "cncbackup",
-      "UPLOAD_COMMAND": "aws s3 cp",
-      "REMOVE_OBJECTIVES": "True"
+      "ACTION": "upload",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "ARGS_DICT": "{'BUCKET': 'ncbackup'}",
+      "REMOVE_TARGETS": "False"
     }
   },
   "STORAGE_OSS": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
-      "OBJECTIVES": "/Users/cncuser/Downloads/backup/encrypted",
       "DESTINATION":"oss",
-      "BUCKET_NAME": "cncbackup",
-      "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
-      "REMOVE_OBJECTIVES": "True"
+      "ACTION": "upload",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "ARGS_DICT": "{}",
+      "__READTHIS": "Use alicmd -c to configure oss access and bucket.",
+      "REMOVE_TARGETS": "False"
+    }
+  },
+  "STORAGE_LOCAL": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION": "local",
+      "TARGETS": "/opt/backup/encrypted",
+      "ARGS_DICT": "{'LOCAL_BACKUP': '/opt/backup/local'}",
+      "REMOVE_TARGETS": "True"
     }
   },
   "CLEANUP":{

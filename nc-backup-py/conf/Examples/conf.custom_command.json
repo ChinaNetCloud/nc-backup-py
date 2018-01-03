@@ -44,24 +44,49 @@
       "TARGETS": "/opt/backup/encrypted"
     }
   },
+  "STORAGE_S3": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION":"s3",
+      "ACTION": "upload",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "ARGS_DICT": "{'BUCKET': 'ncbackup'}",
+      "REMOVE_TARGETS": "False"
+    }
+  },
+  "STORAGE_OSS": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION":"oss",
+      "ACTION": "upload",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "ARGS_DICT": "{}",
+      "__READTHIS": "Use alicmd -c to configure oss access and bucket.",
+      "REMOVE_TARGETS": "False"
+    }
+  },
   "STORAGE_CUSTOM": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
       "DESTINATION":"custom_command",
       "OBJECTIVES": "/opt/backup/encrypted",
-      "CUSTOM_COMMAND_TEMPLATE": "aws s3 cp %(OBJECTIVES)s/%(file)s s3://%(BUCKET)s/%(HOSTNAME)s/%(file)s",
-      "CUSTOM_COMMAND_DICT": "{'BUCKET': 'ncbackup'}",
+      "UPLOAD_COMMAND_TEMPLATE": "examplecmd cp %(OBJECTIVES)s/%(file)s s3://%(BUCKET)s/%(HOSTNAME)s/%(file)s",
+      "ARGS_DICT": "{'BUCKET': 'ncbackup'}",
+      "__READTHIS": "Use UPLOAD_COMMAND_TEMPLATE to create your custom command.",
+      "__READTHIS1": "ARGS_DICT to pass variables to your custom upload command",
       "REMOVE_TARGETS": "False"
-    }
-  },
+    },
   "STORAGE_LOCAL": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
       "DESTINATION": "local",
       "TARGETS": "/opt/backup/encrypted",
+      "ARGS_DICT": "{'LOCAL_BACKUP': '/opt/backup/local'}",
       "REMOVE_TARGETS": "True"
-    }
+    },
   }
 }

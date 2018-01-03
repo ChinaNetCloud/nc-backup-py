@@ -31,11 +31,12 @@
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
-      "OBJECTIVES": "/opt/backup/encrypted",
       "DESTINATION":"oss",
-      "BUCKET_NAME": "chinanetcloud",
-      "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
-      "REMOVE_OBJECTIVES": "True"
+      "ACTION": "upload",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "ARGS_DICT": "{}",
+      "__READTHIS": "Use alicmd -c to configure oss access and bucket.",
+      "REMOVE_TARGETS": "False"
     }
   }
 }

@@ -15,7 +15,7 @@ class RsyncBackup:
             execution_output = SubprocessExecution.main_execution_function(SubprocessExecution()
                                                                        , rsync_commands[i], True
                                                                        , self.__logger)
-            return execution_output
+        return execution_output
 
     def output(self):
         pass
