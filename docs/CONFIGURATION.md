@@ -240,7 +240,7 @@ Notice: Out standard for the configurations has changed so now all the configura
 
 #### Storage Configuration
 
-[CONFIGURATION](docs/STORAGE.md) for instructions on how to configure storage and install related 3rd party tools.
+[STORAGE](STORAGE.md) for instructions on how to configure storage and install related 3rd party tools.
 
 ##### QA
 ```
@@ -258,9 +258,6 @@ This feature is still under development in test conceptual phase, the idea is fo
 Q: Does the AWS CLI validate checksums?
 The AWS CLI will perform checksum validation for uploading and downloading files in specific scenarios. Upload The AWS CLI will calculate and auto-populate the Content-MD5 header for both standard and multipart uploads. If the checksum that S3 calculates does not match the Content-MD5 provided, S3 will not store the object and instead will return an error message back the AWS CLI. The AWS CLI will retry this error up to 5 times before giving up. On the case that any files fail to transfer successfully to S3, the AWS CLI will exit with a non zero RC. See aws help returncodes for more information. Taken from AWS CLI FAQ
 
-
-# NOTICE: Add MATERIS
-Use the same method as weth ncbackup bash script: https://wiki.service.chinanetcloud.com/wiki/Operations:NC-OP_TP-782-How_to_restore_GPG_encrypt_backup_files
 
 ### Reference Manual the JSON file:
 
