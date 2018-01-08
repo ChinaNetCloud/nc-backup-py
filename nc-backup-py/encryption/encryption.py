@@ -131,7 +131,7 @@ class EncryptionWorks:
                 chapters += 1
 
     @staticmethod
-    def cat_files (self, path_to_file):
+    def cat_files (path_to_file):
         command_cat = 'cat ' + path_to_file + '* > ' + path_to_file
         print command_cat
         cat_execution = SubprocessExecution.main_execution_function(SubprocessExecution(), command_cat)
