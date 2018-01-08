@@ -130,7 +130,7 @@ class EncryptionWorks:
                     break
                 chapters += 1
 
-
+    @staticmethod
     def cat_files (self, path_to_file):
         command_cat = 'cat ' + path_to_file + '* > ' + path_to_file
         print command_cat
