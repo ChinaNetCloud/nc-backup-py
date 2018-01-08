@@ -13,14 +13,14 @@
   },
   "oss" : {
     "UPLOAD_COMMAND_TEMPLATE": "alicmd -u %(OBJECTIVES)s/%(file)s",
-    "UPLOAD_COMMAND_DICT": "",
+    "UPLOAD_COMMAND_DICT": ""
   },
   "scp" : {
     "UPLOAD_COMMAND_TEMPLATE": "scp -P %(PORT)s %(OBJECTIVES)s/%(file)s %(REMOTE_USER)s@%(REMOTE_HOST)s:%(REMOTE_DIR) ",
-    "UPLOAD_COMMAND_DICT": "{'PORT': '22', REMOTE_HOST:'localhost', 'REMOTE_USER': 'ncbackup', REMOTE_DIR: '/opt/storage'}",
+    "UPLOAD_COMMAND_DICT": "{'PORT': '22', REMOTE_HOST:'localhost', 'REMOTE_USER': 'ncbackup', REMOTE_DIR: '/opt/storage'}"
   },
   "rsync" : {
     "UPLOAD_COMMAND_TEMPLATE": "rsync -a  %(OBJECTIVES)s/%(file)s %(REMOTE_USER)s@%(REMOTE_HOST)s:%(PORT)s/%(REMOTE_DIR) ",
-    "UPLOAD_COMMAND_DICT": "{'PORT': '22', REMOTE_HOST:'localhost', 'REMOTE_USER': 'ncbackup', REMOTE_DIR: '/opt/storage'}",
+    "UPLOAD_COMMAND_DICT": "{'PORT': '22', REMOTE_HOST:'localhost', 'REMOTE_USER': 'ncbackup', REMOTE_DIR: '/opt/storage'}"
   }
 }
