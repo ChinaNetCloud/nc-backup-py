@@ -178,7 +178,7 @@ Instructions on how to setup 3rd party clients are given below.
   aliyun-oss-tools
 
   * You might need to add CNC repo first:
-  ```
+  ```bash
   [root@localhost ~]# cat /etc/yum.repos.d/CNC.repo
   [cnc]
   name=cnc
