@@ -122,28 +122,27 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
       - See [IAM Roles for Amazon EC2](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html)
 
 
-* Execute Backup manually
-```bash
-$ sudo -u ncbackup python /var/lib/nc-backup-py/backup.py -r -c /etc/nc-backup-py/conf.json -l WARNING
-```
+  4. Execute Backup manually
+    ```bash
+    $ sudo -u ncbackup python /var/lib/nc-backup-py/backup.py -r -c /etc/nc-backup-py/conf.json -l WARNING
+    ```
 
-* Copy and save your key file.
+  * Copy and save your key file.
 
-  The first time you run your backup script with **ENCRYPTION** enabled, it will create a key at `/etc/nc-backup-py/key_file`. Please copy this and store it in a secure location. (ex: keepass) You will require this to decrypt the files later.
+    The first time you run your backup script with **ENCRYPTION** enabled, it will create a key at `/etc/nc-backup-py/key_file`. Please copy this and store it in a secure location. (ex: keepass) You will require this to decrypt the files later.
 
-  ```bash
-  # ls /etc/nc-backup-py/key_file
-  # cat /etc/nc-backup-py/key_file
-  ```
+    ```bash
+    # ls /etc/nc-backup-py/key_file
+    # cat /etc/nc-backup-py/key_file
+    ```
 
+  * Optionally add a cronjob
+    ```bash
+    $ crontab -eu ncbackup
+    00 03 * * * python /var/lib/nc-backup-py/backup.py -r -c /etc/nc-backup-py/conf.json
+    ```
 
-* Optionally add a cronjob
-```bash
-$ crontab -eu ncbackup
-00 03 * * * python /var/lib/nc-backup-py/backup.py -r -c /etc/nc-backup-py/conf.json
-```
-
-* Provide feedback on [Issue](https://github.com/ChinaNetCloud/nc-backup-py/issues) for support
+  * Provide feedback on [Issue](https://github.com/ChinaNetCloud/nc-backup-py/issues) for support
 
 ## Decryption
 
