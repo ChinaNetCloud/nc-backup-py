@@ -97,7 +97,7 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
 
   3. Configure storage for AWS CLI or AWS roles.
 
-    For more storage options see [CUSTOM_COMMAND](docs/CUSTOM_COMMAND.md)
+    For more storage options see [STORAGE](docs/STORAGE.md#customized-storage)
 
     * AWS CLI
 
