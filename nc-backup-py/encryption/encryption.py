@@ -131,7 +131,7 @@ class EncryptionWorks:
                 chapters += 1
 
     @staticmethod
-    def cat_files (self, path_to_file):
+    def cat_files (path_to_file):
         command_cat = 'cat ' + path_to_file + '* > ' + path_to_file
         print command_cat
         cat_execution = SubprocessExecution.main_execution_function(SubprocessExecution(), command_cat)
@@ -256,7 +256,6 @@ if __name__ == "__main__":
                     with open(encryption_command.DESTINATION, 'wb') as out_file:
                         with open(encryption_command.KEY_FILE, 'r') as key_file:
                             key_from_file = key_file.read().replace('\n', '')
-                            # key_from_file = '473ab6adca7355f9cc70f71e784679ce'
                             EncryptionWorks.decrypt(EncryptionWorks(), in_file, out_file, key_from_file, 32,
                                                     encryption_command.HOME_FOLDER)
             else:
