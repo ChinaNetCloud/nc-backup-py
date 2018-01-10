@@ -25,7 +25,7 @@ Multiple storage options can be configured into one.
 
 Add the below section to `/etc/nc-backup-py/conf.json` and
 
-See [Using Amazon S3](#Using-Amazon-S3) below for how to setup awscli.
+See [Using Amazon S3](#using-amazon-s3) below for how to setup awscli.
 ```json
   "STORAGE_OSS": {
     "ACTION": "execute",
