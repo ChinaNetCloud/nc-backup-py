@@ -25,7 +25,7 @@ Multiple storage options can be configured into one.
 
 Add the below section to `/etc/nc-backup-py/conf.json` and
 
-See [Using Amazon S3](#using-amazon-s3) below for how to setup awscli.
+See [Using Amazon S3](#using-amazon-s3) below for how to setup the 3rd party tool awscli.
 ```json
   "STORAGE_OSS": {
     "ACTION": "execute",
@@ -46,7 +46,7 @@ This section is to store the backup, in this case s3. S3 is the only current bac
 
 Add the below section to `/etc/nc-backup-py/conf.json` and
 
-See [Using Aliyun Object Storage Services](#using-aliyun-object-storage-services) below for how to setup alicmd.
+See [Using Aliyun Object Storage Services](#using-aliyun-object-storage-services) below for how to setup the 3rd party tool alicmd.
 
 ```json
   "STORAGE_OSS": {
@@ -176,6 +176,25 @@ Instructions on how to setup 3rd party clients are given below.
 
   * To upload backups to Aliyun OSS install aliyun-oss-tools.
   aliyun-oss-tools
+
+  * You might need to add CNC repo first:
+  ```
+  [root@localhost ~]# cat /etc/yum.repos.d/CNC.repo
+  [cnc]
+  name=cnc
+  baseurl=http://repo.service.chinanetcloud.com/repo/el$releasever/base/$basearch/
+  gpgcheck=1
+  #gpgkey=http://61.129.13.40/repo/rpm-gpg/RPM-GPG-KEY-CNC
+  gpgkey=http://repo.service.chinanetcloud.com/repo/rpm-gpg/RPM-GPG-KEY-CNC
+
+
+  [cnc_devel]
+  name=cnc_devel
+  baseurl=http://repo.service.chinanetcloud.com/repo/el$releasever/devel/$basearch/
+  gpgcheck=1
+  enabled=0
+  gpgkey=http://repo.service.chinanetcloud.com/repo/rpm-gpg/RPM-GPG-KEY-CNC
+  ```
 
   `# yum install aliyun-oss-tools`
 
