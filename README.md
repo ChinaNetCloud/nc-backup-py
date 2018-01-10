@@ -15,14 +15,22 @@ See [OVERVIEW](docs/OVERVIEW.md)
 If you think the project is useful or has potential, please add a star.
 
 ## Requirements
+
+The script is tested for the following requirements. It maybe possible to run on other configurations. If you can run it on other configurations successfully please let us know by creating an issue.
+
 * Operating System
   * Linux
+    - Centos > 6
+    - Ubuntu > 14.04
 
 * Python >= 2.6 (Python 3 not supported)
 * `pip` (Python)
 * `gcc`, `python-devel` (To build dependencies)  
 * `python-crypto` (Optional, install if pip fails to install Crypto)
-
+  ```bash
+  $ sudo yum install python-crypto gcc python-devel python-pip # RHEL, Fedora, centOS
+  $ sudo apt-get instal python-crypto python-devel python-pip # Debian, Ubuntu
+  ```
 
 
 ## Quick Start
@@ -38,7 +46,7 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
   $ cd nc-backup-py
   ```
 
-  or
+  *or*
 
   ```bash
   $ wget -O nc-backup-py.zip https://github.com/ChinaNetCloud/nc-backup-py/archive/master.zip
@@ -51,7 +59,7 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
   $ sudo pip install --upgrade .
   ```
 
-  or, after installing the required dependencies using pip
+  *or*, after installing the required dependencies using pip
 
   ```bash
   $ sudo python setup.py
@@ -59,19 +67,37 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
 
 * Edit configuration
 
-  This quick start works for uploading you local files to AWS S3. See [CONFIGURATION](docs/CONFIGURATION.md) for a complete guide and documentation.
+  This quick start works for uploading your local files to AWS S3. See [CONFIGURATION](docs/CONFIGURATION.md) for a complete guide and documentation.
 
-  1. Change hostname to your hostname.
-    ```bash
+  nc-backup-py read configuration from a json file and executes it sequentially. Each first level section (item) in the json list are the individual modules executed.
+
+  The "GENERAL" section is the only mandatory section.
+
+  The other sections do one particular job, for example "COMPRESSION" compresses files and the "STORAGE_S3" uploads files.
+
+  It is also possible to run any command using the "CUSTOM_COMMAND" section. See [CUSTOM_COMMAND](docs/CUSTOM_COMMAND.md)
+
+  You can also define a customized storage location. See [STORAGE](docs/STORAGE.md#customized-storage)
+
+  1. Copy the sample "/etc/nc-backup-py/conf.dist.json" and change hostname to your hostname.
+    ```json
     "HOSTNAME": "srv-your-hostname"
     ```
 
   2. Change the AWS S3 bucket name.
-    ```bash
+    ```json
     "BUCKET_NAME": "your-bucket-name"
     ```
 
-  3. Configure AWS CLI or AWS roles.
+  3. Optionally send backup reports via HTTP POST. Or you can remove it.
+    ```json
+    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.service.chinanetcloud.com/backup_report_service/backup_service.php",
+    "MESSAGE_CONFIG_METHOD": "post",
+    ```
+
+  3. Configure storage for AWS CLI or AWS roles.
+
+    For more storage options see [CUSTOM_COMMAND](docs/CUSTOM_COMMAND.md)
 
     * AWS CLI
 
