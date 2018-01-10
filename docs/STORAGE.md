@@ -46,7 +46,7 @@ This section is to store the backup, in this case s3. S3 is the only current bac
 
 Add the below section to `/etc/nc-backup-py/conf.json` and
 
-See [Using Aliyun Object Storage Services](###Using-Aliyun-Object-Storage-Services) for how to setup alicmd.
+See [Using Aliyun Object Storage Services](#using-aliyun-object-storage-services) below for how to setup alicmd.
 
 ```json
   "STORAGE_OSS": {
