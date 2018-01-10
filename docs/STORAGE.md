@@ -177,25 +177,26 @@ Instructions on how to setup 3rd party clients are given below.
   * To upload backups to Aliyun OSS install aliyun-oss-tools.
   aliyun-oss-tools
 
-  * You might need to add CNC repo first:
-  ```bash
-  [root@localhost ~]# cat /etc/yum.repos.d/CNC.repo
-  [cnc]
-  name=cnc
-  baseurl=http://repo.service.chinanetcloud.com/repo/el$releasever/base/$basearch/
-  gpgcheck=1
-  #gpgkey=http://61.129.13.40/repo/rpm-gpg/RPM-GPG-KEY-CNC
-  gpgkey=http://repo.service.chinanetcloud.com/repo/rpm-gpg/RPM-GPG-KEY-CNC
+  * You may have to add CNC repo first:
+    ```bash
+    [root@localhost ~]# cat /etc/yum.repos.d/CNC.repo
+    [cnc]
+    name=cnc
+    baseurl=http://repo.service.chinanetcloud.com/repo/el$releasever/base/$basearch/
+    gpgcheck=1
+    #gpgkey=http://61.129.13.40/repo/rpm-gpg/RPM-GPG-KEY-CNC
+    gpgkey=http://repo.service.chinanetcloud.com/repo/rpm-gpg/RPM-GPG-KEY-CNC
 
 
-  [cnc_devel]
-  name=cnc_devel
-  baseurl=http://repo.service.chinanetcloud.com/repo/el$releasever/devel/$basearch/
-  gpgcheck=1
-  enabled=0
-  gpgkey=http://repo.service.chinanetcloud.com/repo/rpm-gpg/RPM-GPG-KEY-CNC
-  ```
+    [cnc_devel]
+    name=cnc_devel
+    baseurl=http://repo.service.chinanetcloud.com/repo/el$releasever/devel/$basearch/
+    gpgcheck=1
+    enabled=0
+    gpgkey=http://repo.service.chinanetcloud.com/repo/rpm-gpg/RPM-GPG-KEY-CNC
+    ```
 
+  * Install aliyun-oss-tools.
   `# yum install aliyun-oss-tools`
 
   * Add x privilege to command
