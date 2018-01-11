@@ -4,6 +4,8 @@ The encryption script `/var/lib/nc-backup-py/encryption/encryption.py` is also u
 
 ### Decrypting a single file:
 
+* The backup files are encrypted with keys located at `/etc/nc-backup-py/key_file`.
+
 * Download the files to you computer (ex:`/opt/backup/restore`)
   ```bash
   $ mkdir -p /opt/backup/restore # If /opt/backup/restore is not present
