@@ -12,6 +12,11 @@ The encryption script `/var/lib/nc-backup-py/encryption/encryption.py` is also u
   $ aws s3 cp s3://cnc-bj-backup/srv-nc-bj-zabbix-qa1/20160705_042923.tar.gz.crypt.000 /opt/backup/restore
   ```
 
+* Optionally you can change the user to ncbackup to use the same permissions as used during encryption, but this is not necessary.
+  ```
+  # su - ncbackup -s bin/bash
+  ```
+
 * Restore using the following command. Here `20171106_105027.tar.gz` is the decrypted tar archive.
   ```bash
   # Execute the decryption command:
