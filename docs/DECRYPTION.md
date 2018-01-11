@@ -60,4 +60,6 @@ The encryption script `/var/lib/nc-backup-py/encryption/encryption.py` is also u
   var
   ```
 
-TODO: develop a feature in the near future called "restore" that will decrypt and decompress the files and log information to BRT about the Restore job, dates, etc...
+#### Upcoming feature:
+
+A restore script that will take input interactively and decrypt files. It will be able to send a report on decryption to a preconfigured URL and email using POST and SMTP.
