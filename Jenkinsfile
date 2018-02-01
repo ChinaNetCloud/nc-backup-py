@@ -10,7 +10,7 @@ pipeline {
                 sh 'cat /etc/sudoers.d/ncbackup'
             }
         }
-        stage('Setup on centos7') {
+        stage('Setup on centos6') {
         agent { dockerfile {filename 'Dockerfile.centos6'} }
             steps {
                 sh 'python --version'
