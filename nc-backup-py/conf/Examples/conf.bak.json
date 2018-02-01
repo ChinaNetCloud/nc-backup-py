@@ -1,0 +1,202 @@
+{
+  "QA":{
+    "ACTION": "load",
+    "FROM": "qa",
+    "FILENAME": "qa",
+    "CLASS": "QA"
+  },
+  "GENERAL": {
+    "HOSTNAME": "srv-nc-template-host-config",
+    "WORK_FOLDER": "/opt/backup",
+    "LOCAL_BACKUP": "/opt/backup/local",
+    "HOME_FOLDER": "/var/lib/nc-backup-py",
+    "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log",
+    "CONFIG_COMMAND": "https://backupreporter.yourdomain.com/backup_report_service/backup_service.php"
+  },
+  "FILESET":{
+    "ACTION": "execute",
+    "NAME": "filesbackup",
+    "EXECUTE_WITH": "python",
+    "EXECUTABLE": "",
+    "PARAMETERS": {
+      "FILESET_INCLUDE": "/etc /vagrant",
+      "FILESET_EXCLUDE": "/etc/yum.repos.d",
+      "TAR_COMMAND": "sudo /bin/tar czCf /"
+    }
+  },
+  "MYSQL": {
+    "ACTION": "execute",
+    "NAME": "mysql_backup",
+    "EXECUTABLE": "mysql_dump.py",
+    "EXECUTE_WITH": "python",
+    "PARAMETERS": {
+      "CREDENTIAL_PATH": "/etc/nc-backup-py/mysql.credentials",
+      "DATA_DIR": "/var/lib/mysql",
+      "MY_INSTANCES": "3306",
+      "BINLOG_PATH": "/var/lib/mysql/data",
+      "BINLOG_FILE_PREFIX": "mysql-bin",
+      "DESTINATION": "/opt/backup",
+      "TAR_COMMAND": "sudo /bin/tar czf",
+      "MYSQL_DUMP_BINARY": "/bin/mysqldump",
+      "MYSQL_BINARY": "/bin/mysql",
+      "PREFIX_FOLDER": "mydump",
+      "EXCLUDE_DB": "",
+      "BINLOG_DAYS": "3",
+      "EXCLUDE_TABLE": "mysql.user mysql.func mysql.event"
+      "EXCLUDE_DB": "brt"
+    }
+  },
+  "MONGODB":{
+    "ACTION": "load",
+    "FROM": "mongo",
+    "FILENAME": "mongo",
+    "CLASS": "MongoBackup",
+    "PARAMETERS":{
+      "MONGO_USER": "",
+      "MONGO_PWD": "",
+      "MONGO_HOST": "127.0.0.1",
+      "MONGODUMP_BIN": "/usr/bin/mongodump",
+      "TAR_COMMAND": "sudo /bin/tar czf",
+      "PREFIX_FOLDER": "mongodump",
+      "DESTINATION": "/opt/backup"
+    }
+  },
+  "POSTGRES":{
+    "ACTION": "load",
+    "FROM": "postgres",
+    "FILENAME": "postgres",
+    "CLASS": "PostgresBackup",
+    "PARAMETERS": {
+      "PREFIX_FOLDER": "pgdump",
+      "PSQLDUMP": "/usr/bin/pg_dump",
+      "PSQL": "/usr/bin/psql",
+      "DESTINATION": "/opt/backup",
+      "EXCLUDE_DB": ""
+    }
+  },
+  "COMPRESSION": {
+    "ACTION": "execute",
+    "NAME": "compression",
+    "EXECUTABLE": "",
+    "EXECUTE_WITH": "",
+    "PARAMETERS": {
+      "TAR_COMMAND": "sudo /bin/tar czCf /",
+      "OBJECTIVES": "/opt/backup/files /opt/backup/mydump /opt/backup/mongodump /opt/backup/pgdump",
+      "DESTINATION": "/opt/backup/compressed",
+      "REMOVE_OBJECTIVES": "False"
+    }
+  },
+  "ENCRYPTION": {
+    "ACTION": "execute",
+    "NAME": "encryption",
+    "PARAMETERS": {
+      "KEY_FILE": "/vagrant/nc-backup-py/conf/key_file",
+      "FILE_SIZE": "5",
+      "OBJECTIVES": "/opt/backup/compressed",
+      "DESTINATION":"/opt/backup/encrypted",
+      "REMOVE_OBJECTIVES": "True"
+    }
+  },
+  "SIZE":{
+    "ACTION": "load",
+    "FROM": "tools",
+    "FILENAME": "size_calculation",
+    "CLASS": "SizeCalculation",
+    "PARAMETERS": {
+      "OBJECTIVES": "/opt/backup/encrypted"
+    }
+  },
+  "STORAGE_S3": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION":"s3",
+      "ACTION": "upload",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "ARGS_DICT": "{'BUCKET': 'ncbackup'}",
+      "REMOVE_TARGETS": "False"
+    }
+  },
+  "STORAGE_OSS": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION":"oss",
+      "ACTION": "upload",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "ARGS_DICT": "{}",
+      "__READTHIS": "Use alicmd -c to configure oss access and bucket.",
+      "REMOVE_TARGETS": "False"
+    }
+  },
+  "STORAGE_LOCAL": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION": "local",
+      "TARGETS": "/opt/backup/encrypted",
+      "ARGS_DICT": "{'LOCAL_BACKUP': '/opt/backup/local'}",
+      "REMOVE_TARGETS": "True"
+    }
+  },
+  "CLEANUP":{
+    "BUCKET": "cncbackup",
+    "PREFIX": "srv-nc-backup-py-test1/",
+    "KEEP": {
+      "DAILY": {"NUMBER": "7"},
+      "WEEKLY": {"NUMBER": "2", "DAY": "1"},
+      "MONTHLY": {"NUMBER": "2", "DAY": "1"}
+    }
+  }
+}
+
+,
+  "MYSQL": {
+    "ACTION": "execute",
+    "NAME": "mysql_backup",
+    "EXECUTABLE": "mysql_dump.py",
+    "EXECUTE_WITH": "python",
+    "PARAMETERS": {
+      "CREDENTIAL_PATH": "/etc/nc-backup-py/mysql.credentials",
+      "DATA_DIR": "/var/lib/mysql",
+      "MY_INSTANCES": "3306",
+      "BINLOG_PATH": "/var/lib/mysql",
+      "BINLOG_FILE_PREFIX": "mysql-bin",
+      "BINLOG_DAYS": "1",
+      "DESTINATION": "/opt/backup",
+      "TAR_COMMAND": "sudo /bin/tar czf",
+      "MYSQL_DUMP_BINARY": "/bin/mysqldump",
+      "MYSQL_BINARY": "/bin/mysql",
+      "PREFIX_FOLDER": "mydump",
+      "EXCLUDE_DB": "",
+      "EXCLUDE_TABLE": "mysql.user mysql.func mysql.event"
+    }
+  },
+  "MONGODB":{
+    "ACTION": "load",
+    "FROM": "mongo",
+    "FILENAME": "mongo",
+    "CLASS": "MongoBackup",
+    "PARAMETERS":{
+      "MONGO_USER": "",
+      "MONGO_PWD": "",
+      "MONGO_HOST": "127.0.0.1",
+      "MONGODUMP_BIN": "/usr/bin/mongodump",
+      "TAR_COMMAND": "sudo /bin/tar czf",
+      "PREFIX_FOLDER": "mongodump",
+      "DESTINATION": "/opt/backup"
+    }
+  },
+  "POSTGRES":{
+    "ACTION": "load",
+    "FROM": "postgres",
+    "FILENAME": "postgres",
+    "CLASS": "PostgresBackup",
+    "PARAMETERS": {
+      "PREFIX_FOLDER": "pgdump",
+      "PSQLDUMP": "/usr/bin/pg_dump",
+      "PSQL": "/usr/bin/psql",
+      "DESTINATION": "/opt/backup",
+      "EXCLUDE_DB": ""
+    }
+  }

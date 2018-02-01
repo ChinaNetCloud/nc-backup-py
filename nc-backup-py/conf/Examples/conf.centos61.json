@@ -1,0 +1,62 @@
+{
+  "GENERAL": {
+    "HOSTNAME": "srv-nc-py26-vbox-vagrant2",
+    "WORK_FOLDER": "/opt/backup",
+    "LOCAL_BACKUP": "/opt/backup/local",
+    "HOME_FOLDER": "/vagrant",
+    "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log"
+  },
+  "FILESET":{
+    "ACTION": "execute",
+    "NAME": "filesbackup"
+  },
+  "COMPRESSION": {
+    "ACTION": "execute",
+    "NAME": "compression"
+  },
+  "ENCRYPTION": {
+    "ACTION": "execute",
+    "NAME": "encryption"
+  },
+  "SIZE":{
+    "ACTION": "load",
+    "FROM": "tools",
+    "FILENAME": "size_calculation",
+    "CLASS": "SizeCalculation",
+    "PARAMETERS": {
+      "TARGETS": "/opt/backup/encrypted"
+    }
+  },
+  "STORAGE_S3": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION":"s3",
+      "ACTION": "upload",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "ARGS_DICT": "{'BUCKET': 'ncbackup'}",
+      "REMOVE_TARGETS": "False"
+    }
+  },
+  "STORAGE_OSS": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION":"oss",
+      "ACTION": "upload",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "ARGS_DICT": "{}",
+      "__READTHIS": "Use alicmd -c to configure oss access and bucket.",
+      "REMOVE_TARGETS": "False"
+    }
+  },
+  "STORAGE_LOCAL": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION": "local",
+      "TARGETS": "/opt/backup/encrypted",
+      "ARGS_DICT": "{'LOCAL_BACKUP': '/opt/backup/local'}",
+      "REMOVE_TARGETS": "True"
+    }
+}
