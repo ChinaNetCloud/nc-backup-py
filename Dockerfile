@@ -4,4 +4,4 @@ RUN sed "s|dl-cdn.alpinelinux.org|mirrors.aliyun.com|g" /etc/apk/repositories -i
     git clone https://github.com/ChinaNetCloud/nc-backup-py.git && \
     git checkout jenkins-setup && \
     cd nc-backup-py && \
-    pip install --upgrade . && \
+    pip install --upgrade . 
