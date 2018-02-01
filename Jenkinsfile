@@ -1,4 +1,5 @@
 pipeline {
+    agent none
     stages {
         stage('Setup on centos7') {
         agent { dockerfile {filename 'Dockerfile.centos7'} }
