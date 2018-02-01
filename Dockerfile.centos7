@@ -1,4 +1,4 @@
-FROM centos7:latest
+FROM centos7
 RUN sed 's|^mirrorlist|#mirrorlist|g' /etc/yum.repos.d/CentOS-* -i && \
     sed 's|^#baseurl|baseurl|g' /etc/yum.repos.d/CentOS-* -i && \
     sed 's|mirror.centos.org|mirrors.aliyun.com|g' /etc/yum.repos.d/CentOS-* -i && \
