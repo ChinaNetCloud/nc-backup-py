@@ -5,6 +5,7 @@ node {
      * maps the port (`3306`) to a known port on the host machine.
      */
     docker.image('alpine:3.7').inside('--name nc-backup-py') { c ->
+        sh 'sudo -i'
         /* Add aliyun mirrors and install git */
         sh 'sed "s|dl-cdn.alpinelinux.org|mirrors.aliyun.com|g" /etc/apk/repositories -i'
         sh 'apk add git python'
