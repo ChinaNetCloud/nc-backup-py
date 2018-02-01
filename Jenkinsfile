@@ -8,7 +8,7 @@ pipeline {
                 sh 'ls -l /etc/nc-backup-py'
                 sh 'ls -l /var/lib/nc-backup-py'
                 sh 'grep ncbackup /etc/passwd'
-                sh 'cat /etc/sudoers.d/ncbackup'
+                sh 'sudo cat /etc/sudoers.d/ncbackup'
             }
         }
         stage('Setup on centos6') {
@@ -18,7 +18,7 @@ pipeline {
                 sh 'ls -l /etc/nc-backup-py'
                 sh 'ls -l /var/lib/nc-backup-py'
                 sh 'grep ncbackup /etc/passwd'
-                sh 'cat /etc/sudoers.d/ncbackup'
+                sh 'sudo cat /etc/sudoers.d/ncbackup'
             }
         }
     }
