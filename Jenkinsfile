@@ -4,7 +4,7 @@ node {
      * In order to communicate with the MySQL server, this Pipeline explicitly
      * maps the port (`3306`) to a known port on the host machine.
      */
-    docker.image('alpine:3.7').withRun('--name nc-backup-py') { c ->
+    docker.image('alpine:3.7').inside('--name nc-backup-py') { c ->
         /* Add aliyun mirrors and install git */
         sh 'sed "s|dl-cdn.alpinelinux.org|mirrors.aliyun.com|g" /etc/apk/repositories -i'
         sh 'apk add git python'
