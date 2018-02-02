@@ -257,7 +257,7 @@ sudo userdel ncbackup && rm -rf /etc/sudoers.d/ncbackup
 
 ## How to contribute
 
-We appreciate all contributions and need and are looking forward for your help.
+We appreciate all contributions and look forward to your help.
 
 #### Developer:
 1. Install the `test-dev` branch and get it to work.
