@@ -87,7 +87,7 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
 
   This quick start works for uploading your local files to AWS S3. See [CONFIGURATION](docs/CONFIGURATION.md) for a complete guide and documentation.
 
-  nc-backup-py read configuration from a json file and executes it sequentially. Each first level section (item) in the json list are individual modules executed.
+  nc-backup-py reads configuration from a json file and executes it sequentially. Each first level section (item) in the json list is an individual modules that gets executed.
 
   The "GENERAL" section is the only mandatory section. **Use only the modules you need.**
 
@@ -102,9 +102,9 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
     "HOSTNAME": "srv-your-hostname"
     ```
 
-  2. Change the AWS S3 bucket name.
+  2. Change the AWS S3 bucket name under the `STORAGE_S3` section.
     ```json
-    "BUCKET_NAME": "your-bucket-name"
+    "ARGS_DICT": "{'BUCKET': 'yourbucket'}",
     ```
 
   3. Optionally send backup reports via HTTP POST. Or you can remove it.
