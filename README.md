@@ -27,9 +27,19 @@ The script is tested for the following requirements. It maybe possible to run on
 * `pip` (Python)
 * `gcc`, `python-devel` (To build dependencies)  
 * `python-crypto` (Optional, install if pip fails to install Crypto)
+  * RHEL7, CentOS7, Fedora7
   ```bash
-  $ sudo yum install python-crypto gcc python-devel python-pip # RHEL, Fedora, centOS
-  $ sudo apt-get instal python-crypto python-devel python-pip # Debian, Ubuntu
+  $ sudo yum install python-crypto gcc python-devel python-pip # RHEL7, Fedora7, centOS7
+  $ yum groupinstall 'Development Tools' -y # If development tools are not available.
+  ```
+  * RHEL6, CentOS6, Fedora6
+  ```bash
+  $ sudo yum install python-crypto gcc python-devel python-pip # RHEL6, Fedora6, centOS6
+  $ yum groupinstall 'Development Tools' -y # If development tools are not available.
+  ```
+  * Debian, Ubuntu
+  ```bash
+  $ sudo apt-get install python-crypto python-dev python-pip # Debian, Ubuntu
   ```
 
 
