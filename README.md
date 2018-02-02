@@ -29,6 +29,7 @@ The script is tested for the following requirements. It maybe possible to run on
 * `python-crypto` (Optional, install if pip fails to install Crypto)
   * RHEL7, CentOS7, Fedora7
   ```bash
+<<<<<<< HEAD
   $ yum install https://mirrors.aliyun.com/epel/epel-release-latest-7.noarch.rpm # If you don't have EPEL/pip installed
   $ sudo yum install python-crypto gcc python-devel python-pip # RHEL7, Fedora7, centOS7
   $ yum groupinstall 'Development Tools' -y # If development tools are not available.
@@ -38,6 +39,17 @@ The script is tested for the following requirements. It maybe possible to run on
   $ sudo yum install python-crypto gcc python-devel python-pip # RHEL6, Fedora6, centOS6
   $ yum install https://mirrors.aliyun.com/epel/epel-release-latest-6.noarch.rpm # If you don't have EPEL/pip installed
   $ yum groupinstall 'Development Tools' -y # If development tools are not available.
+=======
+  $ sudo yum install https://mirrors.aliyun.com/epel/epel-release-latest-7.noarch.rpm # If you don't have EPEL/pip installed
+  $ sudo yum install python-crypto gcc python-devel python-pip # RHEL7, Fedora7, centOS7
+  $ sudo yum groupinstall 'Development Tools' -y # If development tools are not available.
+  ```
+  * RHEL6, CentOS6, Fedora6
+  ```bash
+  $ sudo yum install https://mirrors.aliyun.com/epel/epel-release-latest-6.noarch.rpm # If you don't have EPEL/pip installed
+  $ sudo yum install python-crypto gcc python-devel python-pip # RHEL6, Fedora6, centOS6
+  $ sudo yum groupinstall 'Development Tools' -y # If development tools are not available.
+>>>>>>> 48b9234b81031dfe5dc87880c6a355294153a722
   ```
   * Debian, Ubuntu
   ```bash
@@ -64,6 +76,11 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
   $ wget -O nc-backup-py.zip https://github.com/ChinaNetCloud/nc-backup-py/archive/master.zip
   $ unzip nc-backup-py.zip
   $ cd nc-backup-py-master
+  ```
+
+* *Optionally* checkout to the branch you want. *Do this only if you know what this is for.*
+  ```bash
+  $ git checkout test-dev
   ```
 
 * Run setup
