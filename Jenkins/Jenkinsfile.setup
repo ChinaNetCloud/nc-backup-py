@@ -1,9 +1,9 @@
 pipeline {
+  agent none
   withCredentials([
       [string(credentialsId: 'AwsAccessKeyId', variable: 'AwsAccessKeyId')],
       [string(credentialsId: 'AwsSecretAccessKey', variable: 'AwsSecretAccessKey')],
   ]){
-    agent none
     stages {
     stage('Run Tests') {
       parallel {
