@@ -113,7 +113,7 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
     "MESSAGE_CONFIG_METHOD": "post",
     ```
 
-  4. Include the files you want, it will be backed up recursively. You can exclude files with this directory by using `FILESET_EXCLUDE`
+  4. Include the files you want, it will be backed up recursively. You can exclude files within this directory by using `FILESET_EXCLUDE`
     ```json
     "FILESET": {
       "ACTION": "execute",
