@@ -1,6 +1,7 @@
 pipeline {
     agent none
     stages {
+    stage('Run Tests') {
       parallel {
         stage('Setup on centos7') {
         agent { dockerfile {
@@ -60,4 +61,5 @@ pipeline {
         }
       }
     }
+  }
 }
