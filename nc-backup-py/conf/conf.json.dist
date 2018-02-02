@@ -4,7 +4,7 @@
     "WORK_FOLDER": "/opt/backup",
     "HOME_FOLDER": "/var/lib/nc-backup-py/",
     "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log",
-    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.service.yourdomain.com/backup_report_service/backup_service.php",
+    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.<Change this to your domain>.com/backup_service.php",
     "MESSAGE_CONFIG_METHOD": "post",
     "__Methods": "post|e-mail|sms|wechat,etc"
   },
@@ -52,18 +52,6 @@
       "OBJECTIVES": "/opt/backup/encrypted",
       "ARGS_DICT": "{'BUCKET': 'yourbucket'}",
       "__READTHIS": "Use awscli and configure s3 access keys.",
-      "REMOVE_TARGETS": "False"
-    }
-  },
-  "STORAGE_OSS": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "DESTINATION":"oss",
-      "ACTION": "upload",
-      "OBJECTIVES": "/opt/backup/encrypted",
-      "ARGS_DICT": "{}",
-      "__READTHIS": "Use alicmd -c to configure oss access and bucket.",
       "REMOVE_TARGETS": "False"
     }
   },
