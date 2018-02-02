@@ -27,6 +27,7 @@ The script is tested for the following requirements. It maybe possible to run on
 * `pip` (Python)
 * `gcc`, `python-devel` (To build dependencies)  
 * `python-crypto` (Optional, install if pip fails to install Crypto)
+
   * RHEL7, CentOS7, Fedora7
   ```bash
   $ sudo yum install https://mirrors.aliyun.com/epel/epel-release-latest-7.noarch.rpm # If you don't have EPEL/pip installed
@@ -86,9 +87,9 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
 
   This quick start works for uploading your local files to AWS S3. See [CONFIGURATION](docs/CONFIGURATION.md) for a complete guide and documentation.
 
-  nc-backup-py read configuration from a json file and executes it sequentially. Each first level section (item) in the json list are the individual modules executed.
+  nc-backup-py reads configuration from a json file and executes it sequentially. Each first level section (item) in the json list is an individual modules that gets executed.
 
-  The "GENERAL" section is the only mandatory section.
+  The "GENERAL" section is the only mandatory section. **Use only the modules you need.**
 
   The other sections do one particular job, for example "COMPRESSION" compresses files and the "STORAGE_S3" uploads files.
 
@@ -96,14 +97,14 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
 
   You can also define a customized storage location. See [STORAGE](docs/STORAGE.md#customized-storage)
 
-  1. Copy the sample "/etc/nc-backup-py/conf.dist.json" and change hostname to your hostname.
+  1. Copy the sample `/etc/nc-backup-py/conf.dist.json` to `/etc/nc-backup-py/conf.json` and change hostname to your hostname.
     ```json
     "HOSTNAME": "srv-your-hostname"
     ```
 
-  2. Change the AWS S3 bucket name.
+  2. Change the AWS S3 bucket name under the `STORAGE_S3` section.
     ```json
-    "BUCKET_NAME": "your-bucket-name"
+    "ARGS_DICT": "{'BUCKET': 'yourbucket'}",
     ```
 
   3. Optionally send backup reports via HTTP POST. Or you can remove it.
@@ -112,7 +113,19 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
     "MESSAGE_CONFIG_METHOD": "post",
     ```
 
-  3. Configure storage for AWS CLI or AWS roles.
+  4. Include the files you want, it will be backed up recursively. You can exclude files within this directory by using `FILESET_EXCLUDE`
+    ```json
+    "FILESET": {
+      "ACTION": "execute",
+      "NAME": "filesbackup",
+      "PARAMETERS": {
+        "FILESET_INCLUDE": "/etc",
+        "FILESET_EXCLUDE": ""
+      }
+    }
+    ```
+
+  5. Configure storage for AWS CLI or AWS roles.
 
     For more storage options see [STORAGE](docs/STORAGE.md#customized-storage)
 
@@ -139,7 +152,7 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
       - See [IAM Roles for Amazon EC2](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html)
 
 
-  4. Execute Backup manually
+  * Execute Backup manually
     ```bash
     $ sudo -u ncbackup python /var/lib/nc-backup-py/backup.py -r -c /etc/nc-backup-py/conf.json -l WARNING
     ```
@@ -149,8 +162,8 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
     The first time you run your backup script with **ENCRYPTION** enabled, it will create a key at `/etc/nc-backup-py/key_file`. Please copy this and store it in a secure location. (ex: keepass) You will require this to decrypt the files later.
 
     ```bash
-    # ls /etc/nc-backup-py/key_file
-    # cat /etc/nc-backup-py/key_file
+    $ ls /etc/nc-backup-py/key_file
+    $ cat /etc/nc-backup-py/key_file
     ```
 
   * Optionally add a cronjob
