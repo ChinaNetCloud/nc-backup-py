@@ -4,8 +4,8 @@
 
 #### Introduction
 A .json config file is the sole config for all modules and scripts used. This is standard JSON; with a few Keywords specific to the software and sections. Maybe at some point in the future we might need to implement being able to have more than one .json config file that can be included from a central file. Something like and include feature. The config only has one mandatory section It looks like this:
-
-    `{
+```
+    {
         "GENERAL": {
             "HOSTNAME": "WIN-G5AKB09AALD",
             "WORK_FOLDER": "c:\\backup",
@@ -16,8 +16,8 @@ A .json config file is the sole config for all modules and scripts used. This is
             "DISK_SPACE_THRESHOLD": "20"
         },
     (...)
-    }`
-    
+    }
+```
 #### The GENERAL section
 
 Basics of the .json file:
@@ -43,8 +43,8 @@ The credentials, configs and keyfiles is advisable to be added to /etc instead o
 
 #### Files backup section
 The following is a real working section that calls and executes external colde to compress a fileset.
-
-     `"FILESET":{
+```
+      "FILESET":{
         "ACTION": "execute",
         "NAME": "filesbackup",
         "EXECUTE_WITH": "python",
@@ -53,17 +53,19 @@ The following is a real working section that calls and executes external colde t
             "FILESET_INCLUDE": "/etc /opt/ncscripts /var/spool/cron",
             "FILESET_EXCLUDE": ""
         }
-     }`
+     }
+```
 Notice: `FILESET_INCLUDE` can not be "/"
 
 ##### Optional parameters
 This section as most of the others have most of it's parameters as optional. For a default Cent OS 6 or 7 configuration this section should work the same as the section before as it would assume default configurations according to our new standards.
-
-     `"FILESET":{
+```
+      "FILESET":{
         "ACTION": "execute",
         "NAME": "filesbackup"
-     }`
-     
+     }
+```
+
 ##### Line by line explanation
 `"FILESET":{` Defines a section beginning, the name can be anything, but as a convention is good to give it a name according to it's content.
 `"ACTION":` "execute", The kay word ACTION says to the script the now I want to say what to do in the section, there are 2 possible options defined for now:
@@ -78,8 +80,8 @@ This section as most of the others have most of it's parameters as optional. For
 ##### The plugins
 
 Plugins also need a config section similar to this:
-
-     `"SIZE":{
+```
+      "SIZE":{
         "ACTION": "load",
         "FROM": "tools",
         "FILENAME": "size_calculation",
@@ -87,15 +89,15 @@ Plugins also need a config section similar to this:
         "PARAMETERS": {
             "TARGETS": "/Users/cncuser/Downloads/backup/encrypted"
         }
-     }`
-     
+     }
+```
 This is a working plugin that only calculates the size of the files to be backed up.
 
 #### Sections and modules specifics
 
 #### MySQL Dump:
-
-    `"MYSQL": {
+```
+     "MYSQL": {
         "ACTION": "execute",
         "NAME": "mysql_backup",
         "EXECUTABLE": "mysql_dump.py",
@@ -115,13 +117,13 @@ This is a working plugin that only calculates the size of the files to be backed
           "BINLOG_DAYS": "3",
           "EXCLUDE_TABLE": "mysql.user mysql.func mysql.event"
         }
-    }`
-  
+    }
+```
 This section executes a external script that executes a dump on the MySQL DB. Some parameters implementations are still pending or not completed.
 
 #### Mongo DB
-
-    `"MONGODB":{
+```
+     "MONGODB":{
         "ACTION": "load",
         "FROM": "mongo",
         "FILENAME": "mongo",
@@ -135,8 +137,9 @@ This section executes a external script that executes a dump on the MySQL DB. So
           "PREFIX_FOLDER": "mongodump",
           "DESTINATION": "/opt/backup"
         }
-    }`
-  
+    }
+```
+
 Notice: This is a plugin instead of an executable independent script.
 
 #### Postgresql
@@ -158,15 +161,16 @@ You should change the `$PASSWORD` part accordingly
 
 Setup ownership and privilge like the following:
 
-`[root@srv-xxx-xxx ~]# ls -l /home/ncbackup/.pgpass 
+```
+[root@srv-xxx-xxx ~]# ls -l /home/ncbackup/.pgpass
 -rw------- 1 ncbackup ncbackup 34 Jun 12 17:04 /home/ncbackup/.pgpass
-[root@srv-xxx-xxx ~]#`
+```
 
 Be careful, `600` permisions is a must when the backup will be restored, before you do anything, you must create all the user and database related to the backup, or the restore will fail
 
 ##### Config file
-
-    `"POSTGRES":{
+```
+     "POSTGRES":{
         "ACTION": "load",
         "FROM": "postgres",
         "FILENAME": "postgres",
@@ -178,13 +182,15 @@ Be careful, `600` permisions is a must when the backup will be restored, before 
           "DESTINATION": "/opt/backup",
           "EXCLUDE_DB": ""
         }
-    }`
+    }
+```
 
 Notice: This is a plugin instead of an executable independent script.
 Notice: The script can exclude databases with EXCLUDE_DB, but is can not exclude tables yet.
 #### Compression
 
-    `"COMPRESSION": {
+```
+     "COMPRESSION": {
         "ACTION": "execute",
         "NAME": "compression",
         "EXECUTABLE": "",
@@ -195,22 +201,22 @@ Notice: The script can exclude databases with EXCLUDE_DB, but is can not exclude
           "DESTINATION": "/opt/backup/compressed",
           "REMOVE_TARGETS": "True"
         }
-    }`
-  
+    }
+```
 This section takes a set of folders and compresses them. The parameters "REMOVE_TARGETS": "True" means that the script will remove the fileset passed as parameters. We are discussing the possibility of changing "OBJECTIVES" in all sections to some other candidate word like FILESETS. If this change is finally implemented the development changes are not a lot. Compression also has many optional parameters, so in a standard CentOS 6 or 7 configuration this configuration could look like this:
-
-    `"COMPRESSION": {
+```
+     "COMPRESSION": {
         "ACTION": "execute",
         "NAME": "compression",
         "PARAMETERS": {
           "TARGETS": "/opt/backup/files /opt/backup/mongodump"
         }
-    }`
-  
+    }
+```
 The system will assume on it's own the default values as per the first compression configuration sample. You only need to change it if your parameters NEED to be different, even when we would not advise it unless strictly required.
 #### Encryption
-
-    `"ENCRYPTION": {
+```
+     "ENCRYPTION": {
         "ACTION": "execute",
         "NAME": "encryption",
         "PARAMETERS": {
@@ -220,89 +226,31 @@ The system will assume on it's own the default values as per the first compressi
           "DESTINATION":"/opt/backup/encrypted",
           "REMOVE_TARGETS": "True"
         }
-    }`
-
+    }
+```
 This section as the name indicates encrypts files, but also splits long files according to FILE_SIZE give in MB. "KEY_FILE" is the path to the key file.
 Regarding the optional end required parameters the same could be exported to the encryption configuration so the minimal working configuration for a standard system is as follows:
-
-    `"ENCRYPTION": {
+```
+     "ENCRYPTION": {
         "ACTION": "execute",
         "NAME": "encryption"
-    }`
-
+    }
+```
 Notice: Out standard for the configurations has changed so now all the configuration files have to be in /etc/nc-backup-py/ in this case the key file will be in /etc/nc-backup-py/key_file.
 
-#### Storage
-#####Local backup
+#### Storage Configuration
 
-    `"STORAGE_LOCAL": {
-        "ACTION": "execute",
-        "NAME": "storage",
-        "PARAMETERS":{
-          "DESTINATION":"local",
-          "TARGETS": "/opt/backup/encrypted"
-        }
-    }`
-
-##### AWS s3
-
-    `"STORAGE": {
-        "ACTION": "execute",
-        "NAME": "storage",
-        "PARAMETERS":{
-          "TARGETS": "/opt/backup/encrypted",
-          "DESTINATION":"s3",
-          "BUCKET_NAME": "cncbackup",
-          "UPLOAD_COMMAND": "aws s3 cp",
-          "REMOVE_TARGETS": "True"
-        }
-    }`
-
-This section is to store the backup, in this case s3. S3 is the only current backend implemented, but the script is supposed to support various backends including OSS, SSH, etc.
-
-##### Aliyun OSS
-
-    `"STORAGE_OSS": {
-        "ACTION": "execute",
-        "NAME": "storage",
-        "PARAMETERS":{
-          "TARGETS": "/Users/cncuser/Downloads/backup/encrypted",
-          "DESTINATION":"oss",
-          "BUCKET_NAME": "cncbackup",
-          "ALIYUN_CREDENTIALS": "/etc/.alioss.conf",
-          "REMOVE_TARGETS": "True"
-        }
-    }`
-
-##### Combine storages
-
-    `"STORAGE_LOCAL": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "DESTINATION":"local",
-      "TARGETS": "/opt/backup/encrypted"
-    }
-    },
-    "STORAGE": {
-        "ACTION": "execute",
-        "NAME": "storage",
-        "PARAMETERS":{
-          "DESTINATION":"s3",
-          "BUCKET_NAME": "bucketname",
-          "TARGETS": "/opt/backup/local",
-          "REMOVE_TARGETS": "False"
-        }
-    }`
+[STORAGE](STORAGE.md) for instructions on how to configure storage and install related 3rd party tools.
 
 ##### QA
-
-     `"QA":{
+```
+      "QA":{
         "ACTION": "load",
         "FROM": "qa",
         "FILENAME": "qa",
         "CLASS": "QA"
-     }`
+     }
+```
 This feature is still under development in test conceptual phase, the idea is for the script to be able to detect the problems on it's own and at some point even auto-fix them. For now it's just included as a proof of concept module it only checks that the user running the script is ncbackup and logs a warning if the user is wrong. Please provide feedback on the things that the script is supposed to QA for so the development can be carried out following the best and more useful practices.
 
 #### AWS CLI integration
@@ -310,40 +258,6 @@ This feature is still under development in test conceptual phase, the idea is fo
 Q: Does the AWS CLI validate checksums?
 The AWS CLI will perform checksum validation for uploading and downloading files in specific scenarios. Upload The AWS CLI will calculate and auto-populate the Content-MD5 header for both standard and multipart uploads. If the checksum that S3 calculates does not match the Content-MD5 provided, S3 will not store the object and instead will return an error message back the AWS CLI. The AWS CLI will retry this error up to 5 times before giving up. On the case that any files fail to transfer successfully to S3, the AWS CLI will exit with a non zero RC. See aws help returncodes for more information. Taken from AWS CLI FAQ
 
-## How to decrypt
-
-###if the server doing backups has python 2.7
-
-The encryption script is the same script used for decription. Is should be user as follows:
-
-`python encryption/encryption.py -d --KEY_FILE "conf/key_file" --OBJECTIVES "/path/to/file/name" --DESTINATION "/path/where/the/resulting/will/be" --HOME_FOLDER "/path/to/nc-backup-py"`
-
-`-d`: is to say we are decrypting.
-`--KEY_FILE "conf/key_file"`: is to indicate the path to the keyfile to used for decryption.
-`--OBJECTIVES "/path/to/file(s)"`: It's to say where are the encrypted files to be decrypted. if the download is more than one file they need to have names that start with the same partern; the software asumes you mean wild card (*) at the end. In other words, the names should be like something like this filename.tar.gz.crypt.000, filename.tar.gz.crypt.001, filename.tar.gz.crypt.00N, so in this case yout path should contanin the common part's of the name "filename.tar.gz.crypt.00".
-`--DESTINATION "path/and/name/of/tar.gz/file"`: this is the name and path that you want the resulting file to have after decryption
-`--HOME_FOLDER "/path/to/source/code/nc-backup-py"`: this is for the encryption script to know where the whole backups software is installed.
-
-Example for a single file:
-
-`python /var/lib/nc-backup-py/encryption/encryption.py -d --KEY_FILE "/etc/nc-backup-py/key_file" --OBJECTIVES "/opt/backup/20160705_042923.tar.gz.crypt.000" --DESTINATION "/opt/backup/20160705_042923.tar.gz" --HOME_FOLDER "/var/lib/nc-backup-py"`
-
-Example for multiple files:
-
-`python /vagrant/nc-backup-py/encryption/encryption.py -d --KEY_FILE "/vagrant/nc-backup-py/conf/key_file" --OBJECTIVES "/opt/backup/20160607_161750.tar.gz.crypt.00" --DESTINATION "/opt/backup/20160607_161750.tar.gz" --HOME_FOLDER "/vagrant/nc-backup-py"`
-
-Notice: The only difference to decrypt one or more than one file is in the name of --OBJECTIVES. The first example show the whole path and the second example shows only the path with the part of the name that is common.
-
-After this you have to untar the file using something like this:
-
-`tar -xvf /opt/backup/20160607_161750.tar.gz /opt/backup/`
-
-Idea: We might want develop a feature in the near future called "restore" that would do all the work for you and give you back the files already decompressed. This feature could even log information to BRT about the Restore job, and use dates, etc
-
-### if the server doing backups has python 2.6
-
-# NOTICE: Add MATERIS
-Use the same method as weth ncbackup bash script: https://wiki.service.chinanetcloud.com/wiki/Operations:NC-OP_TP-782-How_to_restore_GPG_encrypt_backup_files
 
 ### Reference Manual the JSON file:
 
@@ -424,7 +338,7 @@ Use the same method as weth ncbackup bash script: https://wiki.service.chinanetc
     }`
 
 
-### Known issues 
+### Known issues
 
 #### ssl issues on python 2.6
 
@@ -432,7 +346,7 @@ You get the following warning:
 
 `/usr/lib/python2.6/site-packages/pip/_vendor/requests/packages/urllib3/util/ssl_.py:90: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
  InsecurePlatformWarning`
- 
+
 Please ignore this message; the software works just fine, this is a problem with a deprecated ssl python library.
 
 #### gpg-agent --daemon on python 2.6

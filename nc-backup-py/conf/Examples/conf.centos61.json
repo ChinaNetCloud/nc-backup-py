@@ -27,12 +27,36 @@
       "TARGETS": "/opt/backup/encrypted"
     }
   },
-  "STORAGE": {
+  "STORAGE_S3": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
       "DESTINATION":"s3",
-      "BUCKET_NAME": "cncbackup"
+      "ACTION": "upload",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "ARGS_DICT": "{'BUCKET': 'ncbackup'}",
+      "REMOVE_TARGETS": "False"
     }
-  }
+  },
+  "STORAGE_OSS": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION":"oss",
+      "ACTION": "upload",
+      "OBJECTIVES": "/opt/backup/encrypted",
+      "ARGS_DICT": "{}",
+      "__READTHIS": "Use alicmd -c to configure oss access and bucket.",
+      "REMOVE_TARGETS": "False"
+    }
+  },
+  "STORAGE_LOCAL": {
+    "ACTION": "execute",
+    "NAME": "storage",
+    "PARAMETERS":{
+      "DESTINATION": "local",
+      "TARGETS": "/opt/backup/encrypted",
+      "ARGS_DICT": "{'LOCAL_BACKUP': '/opt/backup/local'}",
+      "REMOVE_TARGETS": "True"
+    }
 }
