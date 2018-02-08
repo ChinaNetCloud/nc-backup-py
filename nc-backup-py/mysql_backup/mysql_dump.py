@@ -139,6 +139,10 @@ class mydump:
             mysql_version = '5.5'
         else:
             mysql_version = 'legacy'
+
+        if not db_include:
+            return "No databases found.", ''
+
         for DB_NAME in db_include:
             _SQL2="\"USE information_schema; SELECT TABLE_NAME FROM TABLES WHERE TABLE_SCHEMA='" + \
                   DB_NAME + "' AND TABLE_TYPE= 'BASE TABLE' AND ENGINE NOT like 'innodb';\""

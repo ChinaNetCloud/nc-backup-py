@@ -1,4 +1,6 @@
 nc-backup-py/conf/Examples/conf.json
+nc-backup-py/conf/conf.json
+nc-backup-py/conf/mysql.credentials
 *.pyc
 tmp/
 *.tmp
@@ -10,6 +12,5 @@ tmp/
 .idea/nc-backup-py.iml
 .idea/preferred-vcs.xml
 .idea/workspace.xml
-conf/
 nc_backup_py.egg-info/
-
+.DS_Store

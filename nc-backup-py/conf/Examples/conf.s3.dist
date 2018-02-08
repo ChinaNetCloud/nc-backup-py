@@ -19,14 +19,6 @@
       "FILESET_EXCLUDE": ""
     }
   },
-  "MYSQL": {
-    "ACTION": "execute",
-    "NAME": "mysql_backup",
-    "EXECUTABLE": "mysql_dump.py",
-    "PARAMETERS": {
-      "EXCLUDE_DB": "brt"
-    }
-  },
   "COMPRESSION": {
     "ACTION": "execute",
     "NAME": "compression",
@@ -45,7 +37,7 @@
       "REMOVE_TARGETS": "True"
     }
   },
-  "SIZE":{
+  "SIZE": {
     "ACTION": "load",
     "FROM": "tools",
     "FILENAME": "size_calculation",
@@ -61,7 +53,8 @@
       "DESTINATION":"s3",
       "ACTION": "upload",
       "OBJECTIVES": "/opt/backup/encrypted",
-      "ARGS_DICT": "{'BUCKET': 'ncbackup'}",
+      "ARGS_DICT": "{'BUCKET': 'yourbucket'}",
+      "__READTHIS": "Use awscli and configure s3 access keys.",
       "REMOVE_TARGETS": "False"
     }
   },
@@ -71,6 +64,7 @@
     "PARAMETERS":{
       "DESTINATION": "local",
       "TARGETS": "/opt/backup/encrypted",
+      "__READTHIS": "The below path is where your local backups will be stored.",
       "ARGS_DICT": "{'LOCAL_BACKUP': '/opt/backup/local'}",
       "REMOVE_TARGETS": "True"
     }
