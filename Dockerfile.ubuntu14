@@ -1,8 +1,0 @@
-FROM ubuntu:14.04
-RUN sed 's|http://archive.ubuntu.com/ubuntu/|http://mirrors.aliyun.com/ubuntu/|g' /etc/apt/sources.list -i && \
-    apt-get update && \
-    apt-get install python-crypto python-dev python-pip git sudo -y && \
-    git clone https://github.com/ChinaNetCloud/nc-backup-py.git && \
-    cd nc-backup-py && \
-    git checkout jenkins-setup && \
-    pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade .
