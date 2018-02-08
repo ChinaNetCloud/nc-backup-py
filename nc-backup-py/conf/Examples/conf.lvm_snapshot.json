@@ -1,10 +1,10 @@
 {
   "GENERAL": {
-    "HOSTNAME": "srv-pfizer-drupal-stage-web1",
-    "WORK_FOLDER": "/opt/backup/glusterfs_backup/",
+    "HOSTNAME": "srv-nc-template-host-config",
+    "WORK_FOLDER": "/opt/backup/lv_backup/",
     "HOME_FOLDER": "/var/lib/nc-backup-py/",
     "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log",
-    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.service.chinanetcloud.com/backup_report_service/backup_service.php",
+    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.service.yourdomain.com/backup_report_service/backup_service.php",
     "MESSAGE_CONFIG_METHOD": "post",
     "__Methods": "post|e-mail|sms|wechat,etc"
   },
@@ -16,9 +16,9 @@
     "PARAMETERS": {
       "LOG_INTERNAL": "yes",
       "ORIGIN_AND_TARGETS_PARAMS": {
-        "SNAPSHOT": "sudo lvcreate --snapshot --size=35G --name glrbr1_snap /dev/mapper/domuvg-glrbr1",
-        "MKMOUNTDIR": "sudo mkdir /mnt/ncbackup_snap_mount",
-        "MOUNTSNAP": "sudo mount -o nouuid /dev/mapper/domuvg-glrbr1_snap /mnt/ncbackup_snap_mount"
+        "SNAPSHOT": "sudo lvcreate --snapshot --size=35G --name lv_snap /dev/mapper/vg-lv",
+        "MKMOUNTDIR": "sudo mkdir /mnt/lv_snap_mount",
+        "MOUNTSNAP": "sudo mount -o nouuid /dev/mapper/vg-lv_snap /mnt/lv_snap_mount"
       }
     }
   },
@@ -26,17 +26,17 @@
     "ACTION": "execute",
     "NAME": "filesbackup",
     "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc /opt/ncscripts /mnt/glusterfs/www/ /mnt/ncbackup_snap_mount",
+      "FILESET_INCLUDE": "/etc /opt/ncscripts /mnt/lv/www/ /mnt/lv_snap_mount",
       "FILESET_EXCLUDE": "",
-      "TAR_COMMAND": "sudo /bin/tar --warning=no-file-changed -C / -zcf"
+      "TAR_COMMAND": "sudo /bin/tar -C / -zcf"
       }
     },
   "COMPRESSION": {
     "ACTION": "execute",
     "NAME": "compression",
     "PARAMETERS": {
-      "TARGETS": "/opt/backup/glusterfs_backup/files",
-      "DESTINATION":"/opt/backup/glusterfs_backup/compressed",
+      "TARGETS": "/opt/backup/lv_backup/files",
+      "DESTINATION":"/opt/backup/lv_backup/compressed",
       "REMOVE_TARGETS": "True",
       "TAR_COMMAND": "sudo /bin/tar --warning=no-file-changed -C / -zcf"
     }
@@ -45,8 +45,8 @@
     "ACTION": "execute",
     "NAME": "encryption",
     "PARAMETERS": {
-      "TARGETS": "/opt/backup/glusterfs_backup/compressed",
-      "DESTINATION":"/opt/backup/glusterfs_backup/encrypted",
+      "TARGETS": "/opt/backup/lv_backup/compressed",
+      "DESTINATION":"/opt/backup/lv_backup/encrypted",
       "REMOVE_TARGETS": "True"
     }
   },
@@ -56,7 +56,7 @@
     "FILENAME": "size_calculation",
     "CLASS": "SizeCalculation",
     "PARAMETERS": {
-      "TARGETS": "/opt/backup/glusterfs_backup/encrypted"
+      "TARGETS": "/opt/backup/lv_backup/encrypted"
     }
   },
   "STORAGE_OSS": {
@@ -65,7 +65,7 @@
     "PARAMETERS":{
       "DESTINATION":"oss",
       "ACTION": "upload",
-      "OBJECTIVES": "/opt/backup/glusterfs_backup/encrypted",
+      "OBJECTIVES": "/opt/backup/lv_backup/encrypted",
       "ARGS_DICT": "{}",
       "__READTHIS": "Use alicmd -c to configure oss access and bucket.",
       "REMOVE_TARGETS": "False"
@@ -76,8 +76,8 @@
     "NAME": "storage",
     "PARAMETERS":{
       "DESTINATION": "local",
-      "TARGETS": "/opt/backup/glusterfs_backup/encrypted",
-      "ARGS_DICT": "{'LOCAL_BACKUP': '/opt/backup/glusterfs_backup/local/'}",
+      "TARGETS": "/opt/backup/lv_backup/encrypted",
+      "ARGS_DICT": "{'LOCAL_BACKUP': '/opt/backup/lv_backup/local/'}",
       "REMOVE_TARGETS": "True"
     }
   },
@@ -89,9 +89,9 @@
     "PARAMETERS": {
       "LOG_INTERNAL": "yes",
       "ORIGIN_AND_TARGETS_PARAMS": {
-        "UMOUNTSNAP": "sudo umount /mnt/ncbackup_snap_mount",
-        "RMMOUNTDIR": "rm -r /mnt/ncbackup_snap_mount",
-        "RMSNAPSHOT": "sudo lvremove -f /dev/mapper/domuvg-glrbr1_snap"
+        "UMOUNTSNAP": "sudo umount /mnt/lv_snap_mount",
+        "RMMOUNTDIR": "rm -r /mnt/lv_snap_mount",
+        "RMSNAPSHOT": "sudo lvremove -f /dev/mapper/vg-lv_snap"
       }
     }
   }
