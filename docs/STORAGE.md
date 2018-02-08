@@ -181,18 +181,17 @@ Instructions on how to setup 3rd party clients are given below.
     [root@localhost ~]# cat /etc/yum.repos.d/CNC.repo
     [cnc]
     name=cnc
-    baseurl=http://repo.service.chinanetcloud.com/repo/el$releasever/base/$basearch/
+    baseurl=http://repo.service.chinanetcloud.com/yum/el$releasever/base/$basearch/
     gpgcheck=1
-    #gpgkey=http://61.129.13.40/repo/rpm-gpg/RPM-GPG-KEY-CNC
-    gpgkey=http://repo.service.chinanetcloud.com/repo/rpm-gpg/RPM-GPG-KEY-CNC
+    gpgkey=http://repo.service.chinanetcloud.com/yum/rpm-gpg/RPM-GPG-KEY-CNC
 
 
     [cnc_devel]
     name=cnc_devel
-    baseurl=http://repo.service.chinanetcloud.com/repo/el$releasever/devel/$basearch/
+    baseurl=http://repo.service.chinanetcloud.com/yum/el$releasever/devel/$basearch/
     gpgcheck=1
     enabled=0
-    gpgkey=http://repo.service.chinanetcloud.com/repo/rpm-gpg/RPM-GPG-KEY-CNC
+    gpgkey=http://repo.service.chinanetcloud.com/yum/rpm-gpg/RPM-GPG-KEY-CNC
     ```
 
   * Install aliyun-oss-tools.
