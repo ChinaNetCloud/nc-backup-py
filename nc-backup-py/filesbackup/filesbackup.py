@@ -71,8 +71,10 @@ class FileBackups:
                         print 'Could Not create directory with command: ' + create_dir_cmd
                         print 'Error code: ' + str(execution_mkdir[0])
             execution_message = SubprocessExecution.main_execution_function(SubprocessExecution(), tar_command, True)
+            # tar exits with 1 if the file changed during the time we read it. Ignoring
+            # https://www.gnu.org/software/tar/manual/html_section/tar_19.html#Synopsis
             print execution_message
-            if execution_message [0] != 0:
+            if execution_message [0] not in [0, 1]:
                 print 'Executing the tar command: ' + tar_command
                 print 'Returned nor zero exit code: ' + str(execution_message[0],) + ', ' + str(execution_message[1]) + \
                       ', ' + str(execution_message[2])
