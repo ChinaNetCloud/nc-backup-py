@@ -1,10 +1,5 @@
-from subprocess import Popen
-from subprocess import PIPE
-
-# from subprocess import check_output
-# from subprocess import call
-# from subprocess import CalledProcessError
-# from threading import Thread
+from subprocess import check_output
+from subprocess import CalledProcessError
 from Queue import Queue, Empty
 
 
@@ -22,11 +17,24 @@ class SubprocessExecution:
         else:
             print log_string
 
-        self.__process = Popen(shell_command, shell=True, stdout=PIPE, stderr=PIPE)
-        if wait_cmd is True:
-            self.__process.wait()
-        return_code = self.__process.poll()
-        stdout, stderr = self.__process.communicate()
+        return_code = 0
+        stdout = stderr = ''
+        try:
+            stdout = check_output(shell_command, shell=True)
+        except CalledProcessError as e:
+            return_code = e.returncode
+            stderr = e.output
+        # Debug return codes
+
+        # print("".center(79, '-'))
+        # print("stdout: %s " % stdout)
+        # print("type(stdout: %s " % type(stdout))
+        # print("stderr: %s " % stderr)
+        # print("type(stderr: %s " % type(stderr))
+        # print("return_code: %s " % return_code )
+        # print("type(return_code: %s " % type(return_code))
+        # print("".center(79, '-'))
+
         return return_code, stdout, 'stderr: ' + stderr
 
     def print_output(self, communicates_message):
