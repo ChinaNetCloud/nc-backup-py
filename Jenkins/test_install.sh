@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sudo -s
 sed 's|^mirrorlist|#mirrorlist|g' /etc/yum.repos.d/CentOS-* -i
 sed 's|^#baseurl|baseurl|g' /etc/yum.repos.d/CentOS-* -i
 sed 's|mirror.centos.org|mirrors.aliyun.com|g' /etc/yum.repos.d/CentOS-* -i
@@ -11,4 +12,3 @@ yum groupinstall 'Development Tools' -y
 # cd nc-backup-py
 git checkout jenkins-setup
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade .
-su - nc-backup-py
