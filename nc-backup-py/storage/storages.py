@@ -31,6 +31,8 @@ class Storage:
                 self.__custom_command_dict['LOCAL_BACKUP']
                 )
 
+        with open() as f:
+            f.writelines(files_to_upload)
         # Loop through files in "objectives".
         for file_to_upload in files_to_upload:
             self.__custom_command_dict["file"] = file_to_upload
