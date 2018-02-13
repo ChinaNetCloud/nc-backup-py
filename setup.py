@@ -9,7 +9,7 @@ import shutil
 import logging
 from setuptools import setup
 from setuptools.command.install import install
-
+import socket
 
 if sys.version_info[0] == 2 and sys.version_info[1] == 7:
     PYTHON_MODULE_REQUIREMENTS = [
@@ -73,6 +73,16 @@ def copy_files(src, dst, uid, gid):
                 os.chown(os.path.join(dst_root, name), uid, gid)
             except shutil.Error:
                 logging.warn(e)
+
+
+def sed(filename, pattern, replacement):
+    """Replace pattern with replacement in a file."""
+    import re
+    with open(filename, "r") as sources:
+        lines = sources.readlines()
+    with open(filename, "w") as sources:
+        for line in lines:
+            sources.write(re.sub(pattern, replacement, line))
 
 
 def setup_package():
@@ -148,6 +158,16 @@ class Setup_nc_backup_py(install):
         except:
             logging.warning("The path %s already exists." % CONFIG_PATH)
         copy_files('nc-backup-py/conf', CONFIG_PATH, uid=uid, gid=gid)
+
+        # Get hostname
+        hostname = socket.gethostname()
+        # Change hostname and create default configuration template.
+        for filename in os.listdir(CONFIG_PATH + "Examples"):
+            sed(filename, r"srv-nc-template-host-config", hostname)
+        # Copy s3 backup as default config
+        copy_files(os.path.join(CONFIG_PATH + "Examples/conf.s3.json"),
+                   os.path.join(CONFIG_PATH + "Examples/conf.json"),
+                   uid=uid, gid=gid)
 
         # Copy src
         logging.info('************************************')
