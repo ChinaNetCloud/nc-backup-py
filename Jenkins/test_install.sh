@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cat $0
 sudo sed 's|^mirrorlist|#mirrorlist|g' /etc/yum.repos.d/CentOS-* -i
 sudo sed 's|^#baseurl|baseurl|g' /etc/yum.repos.d/CentOS-* -i
 sudo sed 's|mirror.centos.org|mirrors.aliyun.com|g' /etc/yum.repos.d/CentOS-* -i
