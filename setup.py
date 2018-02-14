@@ -163,11 +163,19 @@ class Setup_nc_backup_py(install):
         hostname = socket.gethostname()
         # Change hostname and create default configuration template.
         for filename in os.listdir(os.path.join(CONFIG_PATH, "Examples")):
-            sed(filename, r"srv-nc-template-host-config", hostname)
+            print "filename: %s" % filename
+            sed(os.path.join(CONFIG_PATH, "Examples", filename), r"srv-nc-template-host-config", hostname)
+        ######
+        with open(os.path.join(CONFIG_PATH, "Examples", filename), "r") as sources:
+            lines = sources.readlines()
+            for line in lines:
+                if "HOSTNAME" in line:
+                    print line
         # Copy s3 backup as default config
         copy_files(os.path.join(CONFIG_PATH, "Examples/conf.s3.json"),
                    os.path.join(CONFIG_PATH, "conf.json"),
                    uid=uid, gid=gid)
+        sed(os.path.join(CONFIG_PATH, "conf.json"), r"srv-nc-template-host-config", hostname)
 
         # Copy src
         logging.info('************************************')
