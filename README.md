@@ -55,7 +55,7 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
 
 * Clone or Download the git repository and change directory .
   ```bash
-  $ git clone https://github.com/ChinaNetCloud/nc-backup-py.git
+  $ git clone --depth=0 --branch master https://github.com/ChinaNetCloud/nc-backup-py.git
   $ cd nc-backup-py
   ```
 
