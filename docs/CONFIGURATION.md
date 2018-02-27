@@ -6,7 +6,7 @@ The conf.json file is the sole configuration file for all modules and scripts us
 Location: /etc/nc-backup-py/conf.json
 Examples: /etc/nc-backup-py/Examples
 
-The file is a list of sections, each a module to be executed. The first and only mandatory section is general. For more information see [General Section docs](GENERAL.md)
+The file is a **list of sections**, each a module to be executed. The first and only mandatory section is general. For more information see [General Section docs](GENERAL.md)
 
 **A typical section looks like this**
 
