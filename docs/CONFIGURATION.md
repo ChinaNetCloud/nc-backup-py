@@ -1,10 +1,32 @@
 ## Configuration -  The JSON config file
 
 ## Introduction
-A .json config file is the sole config for all modules and scripts used. This is standard JSON; with a few Keywords specific to the software and sections. Maybe at some point in the future we might need to implement being able to have more than one .json config file that can be included from a central file. Something like and include feature. The config only has one mandatory section It looks like this:
+The conf.json file is the sole configuration file for all modules and scripts used. This is standard JSON with a few Keywords specific to the software and sections.
 
 Location: /etc/nc-backup-py/conf.json
 Examples: /etc/nc-backup-py/Examples
+
+The file is list of modules to be executed. The first and only mandatory section is general. For more information see [General Section docs](GENERAL.md)
+
+Each module in this json array is executed sequentially, one after the other.
+
+A typical configuration flow looks like this.
+
+* GENERAL (Initialize)
+
+* FILESET (Copy and archive files)
+
+* MYSQL / MONGO / POSTGRES (Optional, to add database dumps)
+
+* COMPRESSION (Compress files)
+
+* ENCRYPTION (Encrypt files)
+
+* SIZE (Calculate size of backup)
+
+* STORAGE_S3 (Send to AWS S3)
+
+* STORAGE_LOCAL (Move files to local backup)
 
 ```json
   "GENERAL": {
@@ -19,20 +41,8 @@ Examples: /etc/nc-backup-py/Examples
   },
 ```
 
-## General tips to keep present:
+## The modules (plugins)
 
-* Every section is flexible to add as many parameters as the specific module to be execute needs.
-* The only section with a compulsory name is GENERAL, because it has parameters that are used by all the other modules. The rest of the executable modules can be called any name, as long a you use a few key words (from 0 to 3 depending on how special the module is; development language, path, executable name) that explain how to find and execute.
-* The config file is the same for windows and Linux, what changes is the OS specific parameters.
-* The size should be a number integer that represents the MB size of one split part.
-* The file paths supplied to the different sections can be in any of the POSIX formats as absolute paths, relative paths, etc. The path ending in / or not should not cause problems to the diferent scripts and if it does a bug case should be opened.
-* We are working now on making the system also able to work with windows paths, but this is still a work in progress
-* The comma (,) at the end of a line means there is a sibling instruction after the one your are working on. This is JSON standard.
-* Keep present that all the parameters from configuration section of the plugins are passed to the class as a python dictionary when pass parameter to the class when costructed. So it's your duty to parse this dictionary if you need config parameters.
-* The credentials, configs and keyfiles is advisable to be added to /etc instead of the current paths, this are just testing and development paths that are used currently for development. The script should be flexible engouh to have the configs anywhere. The specific standard is to be still agreed on.
-
-
-##### The plugins
 
 Plugins also need a config section similar to this:
 ```json
@@ -109,8 +119,18 @@ see [STORAGE](STORAGE.md)
 This feature is still under development in test conceptual phase, the idea is for the script to be able to detect the problems on it's own and at some point even auto-fix them. For now it's just included as a proof of concept module it only checks that the user running the script is ncbackup and logs a warning if the user is wrong. Please provide feedback on the things that the script is supposed to QA for so the development can be carried out following the best and more useful practices.
 
 
+## General tips to keep present:
 
-### Reference Manual the JSON file:
+* Every section is flexible to add as many parameters as the specific module to be execute needs.
+* The only section with a compulsory name is GENERAL, because it has parameters that are used by all the other modules. The rest of the executable modules can be called any name, as long a you use a few key words (from 0 to 3 depending on how special the module is; development language, path, executable name) that explain how to find and execute.
+* The config file is the same for windows and Linux, what changes is the OS specific parameters.
+* The size should be a number integer that represents the MB size of one split part.
+* The file paths supplied to the different sections can be in any of the POSIX formats as absolute paths, relative paths, etc. The path ending in / or not should not cause problems to the diferent scripts and if it does a bug case should be opened.
+* We are working now on making the system also able to work with windows paths, but this is still a work in progress
+* The comma (,) at the end of a line means there is a sibling instruction after the one your are working on. This is JSON standard.
+* Keep present that all the parameters from configuration section of the plugins are passed to the class as a python dictionary when pass parameter to the class when costructed. So it's your duty to parse this dictionary if you need config parameters.
+* The credentials, configs and keyfiles is advisable to be added to /etc instead of the current paths, this are just testing and development paths that are used currently for development. The script should be flexible engouh to have the configs anywhere. The specific standard is to be still agreed on.
+
 
 ### General json keys
 
