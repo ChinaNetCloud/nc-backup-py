@@ -42,3 +42,6 @@ Be careful, `600` permisions is a must when the backup will be restored, before 
         }
     }
 ```
+
+Notice: This is a plugin instead of an executable independent script.
+Notice: The script can exclude databases with EXCLUDE_DB, but is can not exclude tables yet.

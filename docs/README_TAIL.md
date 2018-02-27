@@ -1,3 +1,5 @@
+## This is a partial backup of old documentation when it was part of a wiki, instructions may have changed.
+
 In general nc-backup-py works similar to many backups systems but it's objetives are to achive could and linux servers backups. Let's get into it for you to start getting familiar with it.
 
 Notice: If you are interested on leaning about the structure of the project go ahead and read the rest of the introduction, but you do not really need this information to be able to install the software. In that case you can jump straight to Quick setup; manual install (Quick Start Procedure) or installation instructions and try to follow them.
@@ -289,6 +291,7 @@ Notice: The script does not work as 'root'
 git clone -b master https://gitlab.service.chinanetcloud.com/backup/nc-backup-py.git
 Call (cd) into the folder:
 cd nc-backup-py
+
 ### Configure JSON
 
 Follow the guide lines in the chapter called The JSON config file. The confign file is in conf/conf.json, but you can create your own with a custom name if wanted. The configuration can be anywhere, but out new standard is going to be inside /etc.

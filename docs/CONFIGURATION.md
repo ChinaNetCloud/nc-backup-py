@@ -97,31 +97,29 @@ This is a working plugin that only calculates the size of the files to be backed
 
 This section executes a external script that executes a dump on the MySQL DB. Some parameters implementations are still pending or not completed.
 
-see [MySQL](docs/MYSQL.md)
+see [MySQL](MYSQL.md)
 
 #### Mongo DB
 
-see [MongoDB](docs/MONGO.md)
+see [MongoDB](MONGO.md)
 
 #### Postgresql
 
-see [PostgreSQL](docs/MONGO.md)
-
-
-Notice: This is a plugin instead of an executable independent script.
-Notice: The script can exclude databases with EXCLUDE_DB, but is can not exclude tables yet.
+see [PostgreSQL](MONGO.md)
 
 #### Compression
 
-see [Compression](docs/COMPRESSION.md)
+see [Compression](COMPRESSION.md)
 
 #### Encryption
 
-see [Encryption](docs/ENCRYPTION.md)
+see [Encryption](ENCRYPTION.md)
 
 #### Storage Configuration
 
-[STORAGE](STORAGE.md) for instructions on how to configure storage and install related 3rd party tools.
+see [STORAGE](STORAGE.md)
+
+for instructions on how to configure storage and install related 3rd party tools.
 
 ##### QA
 ```json
