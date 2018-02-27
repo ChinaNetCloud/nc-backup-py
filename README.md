@@ -157,7 +157,7 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
     $ sudo -u ncbackup python /var/lib/nc-backup-py/backup.py -r -c /etc/nc-backup-py/conf.json -l WARNING
     ```
 
-  * Copy and save your key file.
+  * ***IMPORTANT*** Copy and save your key file. If you lose this you will not be able to decrypt your files.
 
     The first time you run your backup script with **ENCRYPTION** enabled, it will create a key at `/etc/nc-backup-py/key_file`. Please copy this and store it in a secure location. (ex: keepass) You will require this to decrypt the files later.
 
