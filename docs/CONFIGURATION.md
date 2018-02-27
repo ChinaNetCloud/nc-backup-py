@@ -6,11 +6,26 @@ The conf.json file is the sole configuration file for all modules and scripts us
 Location: /etc/nc-backup-py/conf.json
 Examples: /etc/nc-backup-py/Examples
 
-The file is list of modules to be executed. The first and only mandatory section is general. For more information see [General Section docs](GENERAL.md)
+The file is a list of sections, each a module to be executed. The first and only mandatory section is general. For more information see [General Section docs](GENERAL.md)
 
-Each module in this json array is executed sequentially, one after the other.
+**A typical section looks like this**
 
-A typical configuration flow looks like this.
+```json
+  "GENERAL": {
+    "HOSTNAME": "srv-nc-template-host-config",
+    "WORK_FOLDER": "/opt/backup",
+    "HOME_FOLDER": "/var/lib/nc-backup-py/",
+    "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log",
+    "__READTHIS": "If you don't want backup reports sent remove the three lines below this.",
+    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.<Change this to your domain>.com/backup_service.php",
+    "MESSAGE_CONFIG_METHOD": "post",
+    "__Methods": "post|e-mail|sms|wechat,etc"
+  },
+```
+
+Each module in this json array is **executed sequentially**, one after the other.
+
+**A typical configuration flow looks like this.**
 
 * GENERAL (Initialize)
 
@@ -28,21 +43,8 @@ A typical configuration flow looks like this.
 
 * STORAGE_LOCAL (Move files to local backup)
 
-```json
-  "GENERAL": {
-    "HOSTNAME": "srv-nc-template-host-config",
-    "WORK_FOLDER": "/opt/backup",
-    "HOME_FOLDER": "/var/lib/nc-backup-py/",
-    "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log",
-    "__READTHIS": "If you don't want backup reports sent remove the three lines below this.",
-    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.<Change this to your domain>.com/backup_service.php",
-    "MESSAGE_CONFIG_METHOD": "post",
-    "__Methods": "post|e-mail|sms|wechat,etc"
-  },
-```
 
 ## The modules (plugins)
-
 
 Plugins also need a config section similar to this:
 ```json
