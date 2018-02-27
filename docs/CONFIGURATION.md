@@ -48,7 +48,7 @@ Plugins also need a config section similar to this:
 ```
 This is a working plugin that only calculates the size of the files to be backed up.
 
-### Sections and modules available
+### Sections and Modules
 
 # The GENERAL section
 
@@ -60,7 +60,7 @@ This section is used to add files to the backup.
 
 see [File Backup](FILESBACKUP.md)
 
-#### MySQL Dump:
+#### MySQL Dump
 
 This section executes a external script that executes a dump on a MySQL DB. Some parameters implementations are still pending or not completed.
 
