@@ -358,3 +358,13 @@ Create a cron job as follows:
 `00 03 * * * python /path/to/executable -r -c /path/to/conf.json`
 
 This will run the script with warning level and critical level logs stored only.
+
+* `PARAMETERS` - Optional paramter to specify parameters to pass to the script ot plugin.
+* `TAR_COMMAND` - Optimal parameters, to execute tar command on custom systems. the default calue is normally 'sudo /bin/tar czCf /' if not specified. this parameter can be specified in the following sections: FILESET, DBSBACKUP, COMPRESSION
+* `TARGETS` or `OBJECTIVES`- This parameter is to specify a group of targets to work with, is used by most scripts and plugins. We are in a discussion to probably will completely remove OBJECTIVES in the near futire, please do not use it for configurations anymore.
+* `DESTINATION` - Where to store the results. Used by most modules.
+* `REMOVE_TARGETS` / `REMOVE_OBJECTIVES` - If you want to remove the Target (OBJECTIVES) files or not. it accepts two possible values; True or False. The default value is True. REMOVE_OBJECTIVES will be deprecated in later versions in favor of REMOVE_TARGETS.
+* `True` - Yes
+* `False` - Not, No
+* `KEY_FILE` - parameter used by the encryption and decryption script as key. this parameter should contain the path to a key file, normally in /etc.
+* `FILE_SIZE` - Size of the encrypted files, always given in MB. The next versions might include other units if deamed required.
