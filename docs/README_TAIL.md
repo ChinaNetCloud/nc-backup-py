@@ -293,30 +293,6 @@ cd nc-backup-py
 
 Follow the guide lines in the chapter called The JSON config file. The confign file is in conf/conf.json, but you can create your own with a custom name if wanted. The configuration can be anywhere, but out new standard is going to be inside /etc.
 
-### Configure credentails accordingly
-If MySQL Db server, create credentials file, create encription key, etc.
-You need to create a MySQL user that can perform the dump of the database.
-Connect to mysql:
-CREATE USER 'ncbackupdb'@'localhost' identified by 'PASSWORD';
-GRANT SELECT, RELOAD, SHOW DATABASES, LOCK TABLES, REPLICATION CLIENT, SHOW VIEW, EVENT ON *.* TO 'ncbackupdb'@'localhost';
-flush privileges;
-localhost host only apply for local backup -- if you need to connect to a remote database, you will need to adapt accordingly (replace 'localhost' by '%')
-Create MySQL login / pass file :
-`# vim /etc/nc-backup-py/mysql_backup.creds
-
-[mysqldump]
-user=ncbackupdb
-password=PASSWORD
-host=localhost
-socket=/var/lib/mysql/mysql.sock
-
-[mysql]
-user=ncbackupdb
-password=PASSWORD
-host=localhost
-socket=/var/lib/mysql/mysql.sock`
-
-Notice: For mysql backups to work on Unbuntu and maybe other distrobutions but CentOS6, 7 AMI Linux, etc. you need to make sure the MySQL is readable by ncbackup. The best way to do this is to add ncbackup to mysql group and then make sure the group has read access.
 
 ####Create log directory
 No need to create the file, but you need to specify the path to the file in the configs). This needs to be fixed. E.g.:
