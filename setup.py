@@ -175,8 +175,8 @@ class Setup_nc_backup_py(install):
         sample = os.path.join(CONFIG_PATH, "Examples/conf.s3.json")
         default = os.path.join(CONFIG_PATH, "conf.json")
         logging.info("Copy default config from %s to %s" % (sample, default))
-        shutil.copyfile(sample, default) #, uid=uid, gid=gid)
-        os.chown(os.path.join(dst_root, name), uid, gid)
+        shutil.copyfile(sample, default)
+        os.chown(default, uid, gid)
         sed(os.path.join(CONFIG_PATH, "conf.json"), r"srv-nc-template-host-config", hostname)
 
         # Copy src
