@@ -19,7 +19,7 @@ Below is a sample mysql configuration section.
     "EXCLUDE_DB": "mysql performance_schema",
     "CONF_PATH": "/etc/my.cnf",
     "EXCLUDE_TABLE": "",
-    "BINLOG_DAYS": 1
+    "BINLOG_DAYS": "1"
   }
 }
 ```
