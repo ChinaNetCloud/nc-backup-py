@@ -98,23 +98,18 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
 
   You can also define a customized storage location. See [STORAGE](docs/STORAGE.md#customized-storage)
 
-  1. Copy the sample `/etc/nc-backup-py/conf.dist.json` to `/etc/nc-backup-py/conf.json` and change hostname to your hostname.
-    ```json
-    "HOSTNAME": "srv-your-hostname"
-    ```
-
-  2. Change the AWS S3 bucket name under the `STORAGE_S3` section.
+  1. Change the AWS S3 bucket name under the `STORAGE_S3` section.
     ```json
     "ARGS_DICT": "{'BUCKET': 'yourbucket'}",
     ```
 
-  3. Optionally send backup reports via HTTP POST. Or you can remove it.
+  2. Optionally send backup reports via HTTP POST. Or you can remove it.
     ```json
     "MESSAGE_CONFIG_COMMAND": "https://backupreporter.service.<yourdomain>.com/backup_report_service/backup_service.php",
     "MESSAGE_CONFIG_METHOD": "post",
     ```
 
-  4. Include the files you want, it will be backed up recursively. You can exclude files within this directory by using `FILESET_EXCLUDE`
+  3. Include the files you want, it will be backed up recursively. You can exclude files within this directory by using `FILESET_EXCLUDE`
     ```json
     "FILESET": {
       "ACTION": "execute",
@@ -126,7 +121,7 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
     }
     ```
 
-  5. Configure storage for AWS CLI or AWS roles.
+  4. Configure storage for AWS CLI or AWS roles.
 
     For more storage options see [STORAGE](docs/STORAGE.md#customized-storage)
 
