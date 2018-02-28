@@ -9,20 +9,29 @@ You can copy the above sample file or parts of the sample file and modify it to 
 
 Below is a sample mysql configuration section.
 
-* Add mysql section to configuration file.
+* Add mysql section to configuration file and add `/opt/backup/mydump` to `COMPRESSION.TARGETS`
 ```JSON
-"MYSQL": {
-  "ACTION": "execute",
-  "NAME": "mysql_backup",
-  "EXECUTABLE": "mysql_dump.py",
-  "PARAMETERS": {
-    "CREDENTIAL_PATH": "/etc/nc-backup-py/mysql.credentials",
-    "EXCLUDE_DB": "mysql performance_schema",
-    "CONF_PATH": "/etc/my.cnf",
-    "EXCLUDE_TABLE": "",
-    "BINLOG_DAYS": "1"
-  }
-}
+  "MYSQL": {
+    "ACTION": "execute",
+    "NAME": "mysql_backup",
+    "EXECUTABLE": "mysql_dump.py",
+    "PARAMETERS": {
+      "CREDENTIAL_PATH": "/etc/nc-backup-py/mysql.credentials",
+      "EXCLUDE_DB": "mysql performance_schema",
+      "CONF_PATH": "/etc/my.cnf",
+      "EXCLUDE_TABLE": "",
+      "BINLOG_DAYS": "1"
+    }
+  },
+  "COMPRESSION": {
+    "ACTION": "execute",
+    "NAME": "compression",
+    "PARAMETERS": {
+      "TARGETS": "/opt/backup/files /opt/backup/mydump",
+      "DESTINATION":"/opt/backup/compressed",
+      "REMOVE_TARGETS": "True"
+    }
+  },
 ```
 
 * Create a MySQL user that can perform the dump of the database.

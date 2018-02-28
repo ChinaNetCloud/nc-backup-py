@@ -220,7 +220,7 @@ Instructions on how to setup 3rd party clients are given below.
     [INFO]: Host 'storage.aliyun.com' selected automatically. You can also update file  /etc/alioss.conf manually. # Backup Host is determined automatically.
     Please input your ACCESS_ID:       # FIND THE ID/KEY in our keepass file(search OSS).
     Please input your ACCESS_KEY:
-    Please input your bucket:        #Our default bucket is "chinanetcloud"
+    Please input your bucket:        # Check your bucket
     Plase input CNC server name:
     [INFO]: AliYum OSS is configured sucessfully !
     [INFO]: Configuration file saved.

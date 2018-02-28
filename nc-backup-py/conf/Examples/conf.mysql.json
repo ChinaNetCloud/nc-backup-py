@@ -35,7 +35,7 @@
     "ACTION": "execute",
     "NAME": "compression",
     "PARAMETERS": {
-      "TARGETS": "/opt/backup/files",
+      "TARGETS": "/opt/backup/files /opt/backup/mydump",
       "DESTINATION":"/opt/backup/compressed",
       "REMOVE_TARGETS": "True"
     }
