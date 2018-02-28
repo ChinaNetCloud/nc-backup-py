@@ -55,7 +55,7 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
 
 * Clone or Download the git repository and change directory .
   ```bash
-  $ git clone --depth=0 --branch master https://github.com/ChinaNetCloud/nc-backup-py.git
+  $ git clone --depth=1 --branch master https://github.com/ChinaNetCloud/nc-backup-py.git
   $ cd nc-backup-py
   ```
 
@@ -67,13 +67,14 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
   $ cd nc-backup-py-master
   ```
 
-* *Optionally* checkout to the branch you want. *Do this only if you know what this is for.*
+* *Optionally* clone the branch you want. *Do this only if you know what this is for.*
   ```bash
-  $ git checkout test-dev
+  $ git clone --depth=1 --branch test-dev https://github.com/ChinaNetCloud/nc-backup-py.git
   ```
 
 * Run setup
   ```bash
+  $ cd nc-backup-py
   $ sudo pip install --upgrade .
   ```
 
@@ -272,5 +273,5 @@ We appreciate all contributions and look forward to your help.
 
 6. Iterate :P.
 
-*ChinaNetCloud/nc-backup-py is licensed under the
-[Apache License 2.0](LICENSE)*
+***ChinaNetCloud/nc-backup-py is licensed under the
+[Apache License 2.0](LICENSE)***

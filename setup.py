@@ -172,9 +172,10 @@ class Setup_nc_backup_py(install):
                 if "HOSTNAME" in line:
                     print line
         # Copy s3 backup as default config
-        copy_files(os.path.join(CONFIG_PATH, "Examples/conf.s3.json"),
-                   os.path.join(CONFIG_PATH, "conf.json"),
-                   uid=uid, gid=gid)
+        sample = os.path.join(CONFIG_PATH, "Examples/conf.s3.json")
+        default = os.path.join(CONFIG_PATH, "conf.json")
+        logging.info("Copy default config from %s to %s") % (sample, default)
+        copy_files(sample, default, uid=uid, gid=gid)
         sed(os.path.join(CONFIG_PATH, "conf.json"), r"srv-nc-template-host-config", hostname)
 
         # Copy src
