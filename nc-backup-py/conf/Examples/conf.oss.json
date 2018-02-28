@@ -1,22 +1,41 @@
 {
   "GENERAL": {
-    "HOSTNAME": "srv-nc-py27-vbox-vagrant-db1",
+    "HOSTNAME": "srv-nc-template-host-config",
     "WORK_FOLDER": "/opt/backup",
-    "LOCAL_BACKUP": "/opt/backup/local",
-    "HOME_FOLDER": "/vagrant",
-    "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log"
+    "HOME_FOLDER": "/var/lib/nc-backup-py/",
+    "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log",
+    "__READTHIS": "If you don't want backup reports sent remove the three lines below this.",
+    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.<Change this to your domain>.com/backup_service.php",
+    "MESSAGE_CONFIG_METHOD": "post",
+    "__Methods": "post|e-mail|sms|wechat,etc"
   },
-  "FILESET":{
+  "FILESET": {
     "ACTION": "execute",
-    "NAME": "filesbackup"
+    "NAME": "filesbackup",
+    "PARAMETERS": {
+      "__READTHIS": "Space delimited paths to backup (recursive)",
+      "FILESET_INCLUDE": "/etc /home/user",
+      "__READTHIS": "Space delimited paths to exclude (within FILESET_INCLUDE)",
+      "FILESET_EXCLUDE": ""
+    }
   },
   "COMPRESSION": {
     "ACTION": "execute",
-    "NAME": "compression"
+    "NAME": "compression",
+    "PARAMETERS": {
+      "TARGETS": "/opt/backup/files",
+      "DESTINATION":"/opt/backup/compressed",
+      "REMOVE_TARGETS": "True"
+    }
   },
   "ENCRYPTION": {
     "ACTION": "execute",
-    "NAME": "encryption"
+    "NAME": "encryption",
+    "PARAMETERS": {
+      "TARGETS": "/opt/backup/compressed",
+      "DESTINATION":"/opt/backup/encrypted",
+      "REMOVE_TARGETS": "True"
+    }
   },
   "SIZE":{
     "ACTION": "load",

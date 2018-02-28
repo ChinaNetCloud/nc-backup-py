@@ -1,3 +1,5 @@
+## This is a partial backup of old documentation when it was part of a wiki, instructions may have changed.
+
 In general nc-backup-py works similar to many backups systems but it's objetives are to achive could and linux servers backups. Let's get into it for you to start getting familiar with it.
 
 Notice: If you are interested on leaning about the structure of the project go ahead and read the rest of the introduction, but you do not really need this information to be able to install the software. In that case you can jump straight to Quick setup; manual install (Quick Start Procedure) or installation instructions and try to follow them.
@@ -289,34 +291,11 @@ Notice: The script does not work as 'root'
 git clone -b master https://gitlab.service.chinanetcloud.com/backup/nc-backup-py.git
 Call (cd) into the folder:
 cd nc-backup-py
+
 ### Configure JSON
 
 Follow the guide lines in the chapter called The JSON config file. The confign file is in conf/conf.json, but you can create your own with a custom name if wanted. The configuration can be anywhere, but out new standard is going to be inside /etc.
 
-### Configure credentails accordingly
-If MySQL Db server, create credentials file, create encription key, etc.
-You need to create a MySQL user that can perform the dump of the database.
-Connect to mysql:
-CREATE USER 'ncbackupdb'@'localhost' identified by 'PASSWORD';
-GRANT SELECT, RELOAD, SHOW DATABASES, LOCK TABLES, REPLICATION CLIENT, SHOW VIEW, EVENT ON *.* TO 'ncbackupdb'@'localhost';
-flush privileges;
-localhost host only apply for local backup -- if you need to connect to a remote database, you will need to adapt accordingly (replace 'localhost' by '%')
-Create MySQL login / pass file :
-`# vim /etc/nc-backup-py/mysql_backup.creds
-
-[mysqldump]
-user=ncbackupdb
-password=PASSWORD
-host=localhost
-socket=/var/lib/mysql/mysql.sock
-
-[mysql]
-user=ncbackupdb
-password=PASSWORD
-host=localhost
-socket=/var/lib/mysql/mysql.sock`
-
-Notice: For mysql backups to work on Unbuntu and maybe other distrobutions but CentOS6, 7 AMI Linux, etc. you need to make sure the MySQL is readable by ncbackup. The best way to do this is to add ncbackup to mysql group and then make sure the group has read access.
 
 ####Create log directory
 No need to create the file, but you need to specify the path to the file in the configs). This needs to be fixed. E.g.:
@@ -379,3 +358,13 @@ Create a cron job as follows:
 `00 03 * * * python /path/to/executable -r -c /path/to/conf.json`
 
 This will run the script with warning level and critical level logs stored only.
+
+* `PARAMETERS` - Optional paramter to specify parameters to pass to the script ot plugin.
+* `TAR_COMMAND` - Optimal parameters, to execute tar command on custom systems. the default calue is normally 'sudo /bin/tar czCf /' if not specified. this parameter can be specified in the following sections: FILESET, DBSBACKUP, COMPRESSION
+* `TARGETS` or `OBJECTIVES`- This parameter is to specify a group of targets to work with, is used by most scripts and plugins. We are in a discussion to probably will completely remove OBJECTIVES in the near futire, please do not use it for configurations anymore.
+* `DESTINATION` - Where to store the results. Used by most modules.
+* `REMOVE_TARGETS` / `REMOVE_OBJECTIVES` - If you want to remove the Target (OBJECTIVES) files or not. it accepts two possible values; True or False. The default value is True. REMOVE_OBJECTIVES will be deprecated in later versions in favor of REMOVE_TARGETS.
+* `True` - Yes
+* `False` - Not, No
+* `KEY_FILE` - parameter used by the encryption and decryption script as key. this parameter should contain the path to a key file, normally in /etc.
+* `FILE_SIZE` - Size of the encrypted files, always given in MB. The next versions might include other units if deamed required.

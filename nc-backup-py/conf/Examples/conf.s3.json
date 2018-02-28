@@ -2,10 +2,10 @@
   "GENERAL": {
     "HOSTNAME": "srv-nc-template-host-config",
     "WORK_FOLDER": "/opt/backup",
-    "LOCAL_BACKUP": "/opt/backup/local",
     "HOME_FOLDER": "/var/lib/nc-backup-py/",
     "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log",
-    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.service.chinanetcloud.com/backup_report_service/backup_service.php",
+    "__READTHIS": "If you don't want backup reports sent remove the three lines below this.",
+    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.<Change this to your domain>.com/backup_service.php",
     "MESSAGE_CONFIG_METHOD": "post",
     "__Methods": "post|e-mail|sms|wechat,etc"
   },
@@ -13,7 +13,9 @@
     "ACTION": "execute",
     "NAME": "filesbackup",
     "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc",
+      "__READTHIS": "Space delimited paths to backup (recursive)",
+      "FILESET_INCLUDE": "/etc /home/user",
+      "__READTHIS": "Space delimited paths to exclude (within FILESET_INCLUDE)",
       "FILESET_EXCLUDE": ""
     }
   },
@@ -51,42 +53,20 @@
       "DESTINATION":"s3",
       "ACTION": "upload",
       "OBJECTIVES": "/opt/backup/encrypted",
-      "ARGS_DICT": "{'BUCKET': 'ncbackup'}",
+      "ARGS_DICT": "{'BUCKET': 'yourbucket'}",
+      "__READTHIS": "Use awscli and configure s3 access keys.",
       "REMOVE_TARGETS": "False"
     }
   },
-  "STORAGE_OSS": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "DESTINATION":"oss",
-      "ACTION": "upload",
-      "OBJECTIVES": "/opt/backup/encrypted",
-      "ARGS_DICT": "{}",
-      "__READTHIS": "Use alicmd -c to configure oss access and bucket.",
-      "REMOVE_TARGETS": "False"
-    }
-  },
-  "STORAGE_CUSTOM": {
-    "ACTION": "execute",
-    "NAME": "storage",
-    "PARAMETERS":{
-      "DESTINATION":"custom_command",
-      "OBJECTIVES": "/opt/backup/encrypted",
-      "UPLOAD_COMMAND_TEMPLATE": "examplecmd cp %(OBJECTIVES)s/%(file)s s3://%(BUCKET)s/%(HOSTNAME)s/%(file)s",
-      "ARGS_DICT": "{'BUCKET': 'ncbackup'}",
-      "__READTHIS": "Use UPLOAD_COMMAND_TEMPLATE to create your custom command.",
-      "__READTHIS1": "ARGS_DICT to pass variables to your custom upload command",
-      "REMOVE_TARGETS": "False"
-    },
   "STORAGE_LOCAL": {
     "ACTION": "execute",
     "NAME": "storage",
     "PARAMETERS":{
       "DESTINATION": "local",
       "TARGETS": "/opt/backup/encrypted",
+      "__READTHIS": "The below path is where your local backups will be stored.",
       "ARGS_DICT": "{'LOCAL_BACKUP': '/opt/backup/local'}",
       "REMOVE_TARGETS": "True"
-    },
+    }
   }
 }

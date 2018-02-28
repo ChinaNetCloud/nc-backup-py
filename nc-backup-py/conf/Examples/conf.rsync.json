@@ -2,12 +2,12 @@
   "GENERAL": {
     "HOSTNAME": "srv-nc-template-host-config",
     "WORK_FOLDER": "/opt/backup",
-    "LOCAL_BACKUP": "/opt/backup/local",
     "HOME_FOLDER": "/var/lib/nc-backup-py/",
     "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log",
-    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.yourdomain.com/backup_report_service/backup_service.php",
+    "__READTHIS": "If you don't want backup reports sent remove the three lines below this.",
+    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.<Change this to your domain>.com/backup_service.php",
     "MESSAGE_CONFIG_METHOD": "post",
-    "__Methods": "silent|post|e-mail|sms|wechat,etc"
+    "__Methods": "post|e-mail|sms|wechat,etc"
   },
   "RSYNC": {
     "ACTION": "load",

@@ -8,20 +8,21 @@
   "GENERAL": {
     "HOSTNAME": "srv-nc-template-host-config",
     "WORK_FOLDER": "/opt/backup",
-    "LOCAL_BACKUP": "/opt/backup/local",
-    "HOME_FOLDER": "/var/lib/nc-backup-py",
+    "HOME_FOLDER": "/var/lib/nc-backup-py/",
     "LOG_FOLDER": "/var/log/nc-backup-py/nc-backup-py.log",
-    "CONFIG_COMMAND": "https://backupreporter.yourdomain.com/backup_report_service/backup_service.php"
+    "__READTHIS": "If you don't want backup reports sent remove the three lines below this.",
+    "MESSAGE_CONFIG_COMMAND": "https://backupreporter.<Change this to your domain>.com/backup_service.php",
+    "MESSAGE_CONFIG_METHOD": "post",
+    "__Methods": "post|e-mail|sms|wechat,etc"
   },
-  "FILESET":{
+  "FILESET": {
     "ACTION": "execute",
     "NAME": "filesbackup",
-    "EXECUTE_WITH": "python",
-    "EXECUTABLE": "",
     "PARAMETERS": {
-      "FILESET_INCLUDE": "/etc /vagrant",
-      "FILESET_EXCLUDE": "/etc/yum.repos.d",
-      "TAR_COMMAND": "sudo /bin/tar czCf /"
+      "__READTHIS": "Space delimited paths to backup (recursive)",
+      "FILESET_INCLUDE": "/etc /home/user",
+      "__READTHIS": "Space delimited paths to exclude (within FILESET_INCLUDE)",
+      "FILESET_EXCLUDE": ""
     }
   },
   "MYSQL": {

@@ -25,7 +25,7 @@ Multiple storage options can be configured into one.
 
 Add the below section to `/etc/nc-backup-py/conf.json` and
 
-See [Using Amazon S3](###Using-Amazon-S3) below for how to setup awscli.
+See [Using Amazon S3](#using-amazon-s3) below for how to setup the 3rd party tool awscli.
 ```json
   "STORAGE_OSS": {
     "ACTION": "execute",
@@ -46,7 +46,7 @@ This section is to store the backup, in this case s3. S3 is the only current bac
 
 Add the below section to `/etc/nc-backup-py/conf.json` and
 
-See [Using Aliyun Object Storage Services](###Using-Aliyun-Object-Storage-Services) for how to setup alicmd.
+See [Using Aliyun Object Storage Services](#using-aliyun-object-storage-services) below for how to setup the 3rd party tool alicmd.
 
 ```json
   "STORAGE_OSS": {
@@ -175,58 +175,76 @@ Instructions on how to setup 3rd party clients are given below.
 ### Using Aliyun Object Storage Services
 
   * To upload backups to Aliyun OSS install aliyun-oss-tools.
-  aliyun-oss-tools
 
-  `# yum install aliyun-oss-tools`
+  * You may have to add CNC repo first:
+    ```bash
+    [root@localhost ~]# cat /etc/yum.repos.d/CNC.repo
+    [cnc]
+    name=cnc
+    baseurl=http://repo.service.chinanetcloud.com/repo/el$releasever/base/$basearch/
+    gpgcheck=1
+    gpgkey=http://repo.service.chinanetcloud.com/repo/rpm-gpg/RPM-GPG-KEY-CNC
+
+
+    [cnc_devel]
+    name=cnc_devel
+    baseurl=http://repo.service.chinanetcloud.com/repo/el$releasever/devel/$basearch/
+    gpgcheck=1
+    enabled=0
+    gpgkey=http://repo.service.chinanetcloud.com/repo/rpm-gpg/RPM-GPG-KEY-CNC
+    ```
+
+  * Install aliyun-oss-tools.
+    `# yum install aliyun-oss-tools`
 
   * Add x privilege to command
 
-  `# chmod a+x /usr/bin/alicmd`
+    `# chmod a+x /usr/bin/alicmd`
 
   * Get help information
 
-  `# alicmd -h`
+    `# alicmd -h`
 
   * Check if this files exist (/etc/.alioss.conf), if does not exist, proceed with configure AliYun OSS, else (if exist), remove the old config file
 
-  `rm -rf /etc/.alioss.conf`
+    `rm -rf /etc/.alioss.conf`
 
   * Configure AliYun OSS
 
     Before you configure, please make sure you check if this server can access Aliyun OSS using private address. The difference is that if the server can access Aliyun using private address the traffic is considered internal therefore it's FREE. If you use public addresses the customer is charged for this traffic. this amount is changed as per daily backup, so it could be a lot if there is a lot of information to backup.
 
-  ```bash
-  # alicmd --config
-  You will see some contents like below
-  [INFO]: Start to config AliYun Open Storage Service.
-  [INFO]: Host 'storage.aliyun.com' selected automatically. You can also update file  /etc/alioss.conf manually. # Backup Host is determined automatically.
-  Please input your ACCESS_ID:       # FIND THE ID/KEY in our keepass file(search OSS).
-  Please input your ACCESS_KEY:
-  Please input your bucket:        #Our default bucket is "chinanetcloud"
-  Plase input CNC server name:
-  [INFO]: AliYum OSS is configured sucessfully !
-  [INFO]: Configuration file saved.`
-  ```
+    ```bash
+    # alicmd --config
+    You will see some contents like below
+    [INFO]: Start to config AliYun Open Storage Service.
+    [INFO]: Host 'storage.aliyun.com' selected automatically. You can also update file  /etc/alioss.conf manually. # Backup Host is determined automatically.
+    Please input your ACCESS_ID:       # FIND THE ID/KEY in our keepass file(search OSS).
+    Please input your ACCESS_KEY:
+    Please input your bucket:        # Check your bucket
+    Plase input CNC server name:
+    [INFO]: AliYum OSS is configured sucessfully !
+    [INFO]: Configuration file saved.
+    ```
 
   * Edit the alioss config file.
-  ```bash
-  vim /etc/.alioss.conf ;`
-  [options]
-  retry_times = 15
-  multi-upload = on # if the backup file size is more than 100MB
-  ```  
+    ```bash
+    vim /etc/.alioss.conf ;
+    [options]
+    retry_times = 15
+    multi-upload = on # if the backup file size is more than 100MB
+    ```  
 
   * Verify OSS Configuration file:
 
-  ```bash
-  # alicmd --show
-  XXcloud 2012-06-19T07:05:33.000Z  # Should list all buckets we have`
-  ```
+    ```bash
+    # alicmd --show
+    XXcloud 2012-06-19T07:05:33.000Z  # Should list all buckets we have`
+    ```
 
   * Check the backup files on Aliyun:
 
-  `# alicmd -l`
+    `# alicmd -l`
 
   * Check from the console.
-  URL: www.aliyun.com (username and password) Selete
-  用户中心 --> 管理控制台 --> 开放存储服务OSS --> OSS 管理 --> OSS体验站`
+    URL: www.aliyun.com (username and password) Select
+    用户中心 --> 管理控制台 --> 开放存储服务OSS --> OSS 管理 --> OSS体验站`
