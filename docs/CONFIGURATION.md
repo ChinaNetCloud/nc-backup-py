@@ -66,7 +66,7 @@ This is a working plugin that only calculates the size of the files to be backed
 
 see [General](GENERAL.md)
 
-# Files Backup
+#### Files Backup
 
 This section is used to add files to the backup.
 

@@ -20,11 +20,15 @@
     }
   },
   "MYSQL": {
-    "ACTION": "execute",
-    "NAME": "mysql_backup",
-    "EXECUTABLE": "mysql_dump.py",
-    "PARAMETERS": {
-      "EXCLUDE_DB": "brt"
+  "ACTION": "execute",
+  "NAME": "mysql_backup",
+  "EXECUTABLE": "mysql_dump.py",
+  "PARAMETERS": {
+    "CREDENTIAL_PATH": "/etc/nc-backup-py/mysql.credentials",
+    "EXCLUDE_DB": "mysql performance_schema",
+    "CONF_PATH": "/etc/my.cnf",
+    "EXCLUDE_TABLE": "",
+    "BINLOG_DAYS": "1"
     }
   },
   "COMPRESSION": {
