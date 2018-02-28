@@ -176,7 +176,7 @@ class Setup_nc_backup_py(install):
         default = os.path.join(CONFIG_PATH, "conf.json")
         print sample
         print default
-        logging.info("Copy default config from %s to %s") % (sample, default)
+        logging.info("Copy default config from %s to %s" % (sample, default))
         copy_files(sample, default, uid=uid, gid=gid)
         sed(os.path.join(CONFIG_PATH, "conf.json"), r"srv-nc-template-host-config", hostname)
 
