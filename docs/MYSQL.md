@@ -9,6 +9,7 @@ You can copy the above sample file or parts of the sample file and modify it to 
 
 Below is a sample mysql configuration section.
 
+* Add mysql section to configuration file.
 ```JSON
 "MYSQL": {
   "ACTION": "execute",
@@ -24,11 +25,11 @@ Below is a sample mysql configuration section.
 }
 ```
 
-### Configure credentails accordingly
-
 * Create a MySQL user that can perform the dump of the database.
 
-localhost host only apply for local backup -- if you need to connect to a remote database, you will need to adapt accordingly (replace 'localhost' by '%')
+localhost applies only for local backup -- if you need to connect to a remote database, you will need to adapt accordingly (replace 'localhost' by '%')
+
+*If we use localhost, mysql will allow the user to connect only via the unix socket. Hence we cannot use TCP (127.0.0.1) to connect, i.e 'user'@'127.0.0.1' is not the same as 'user'@'localhost'*
 
 ```sql
 CREATE USER 'ncbackupdb'@'localhost' identified by 'PASSWORD';
@@ -36,6 +37,12 @@ GRANT SELECT, RELOAD, SHOW DATABASES, LOCK TABLES, REPLICATION CLIENT, SHOW VIEW
 flush privileges;
 
 ```
+
+* Add `ncbackup` to group `mysql` (to backup binary logs)
+```bash
+$ sudo usermod -aG mysql
+```
+
 * Create MySQL credentials file
 
 ```bash

@@ -183,7 +183,6 @@ Instructions on how to setup 3rd party clients are given below.
     name=cnc
     baseurl=http://repo.service.chinanetcloud.com/repo/el$releasever/base/$basearch/
     gpgcheck=1
-    #gpgkey=http://61.129.13.40/repo/rpm-gpg/RPM-GPG-KEY-CNC
     gpgkey=http://repo.service.chinanetcloud.com/repo/rpm-gpg/RPM-GPG-KEY-CNC
 
 
