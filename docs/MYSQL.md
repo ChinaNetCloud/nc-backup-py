@@ -23,7 +23,7 @@ Below is a sample mysql configuration section.
       "BINLOG_DAYS": "1"
     }
   },
-  "COMPRESSION": {
+  "COMPRESSION": {  
     "ACTION": "execute",
     "NAME": "compression",
     "PARAMETERS": {
