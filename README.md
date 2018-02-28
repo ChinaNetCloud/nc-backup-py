@@ -74,7 +74,6 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
 
 * Run setup
   ```bash
-  $ cd nc-backup-py
   $ sudo pip install --upgrade .
   ```
 
@@ -98,27 +97,29 @@ See [CONFIGURATION](docs/CONFIGURATION_FILE.md) to view and configure all availa
 
   You can also define a customized storage location. See [STORAGE](docs/STORAGE.md#customized-storage)
 
-  1. Change the AWS S3 bucket name under the `STORAGE_S3` section.
-    ```json
-    "ARGS_DICT": "{'BUCKET': 'yourbucket'}",
-    ```
+  **Location: `/etc/nc-backup-py/conf.json`**
 
-  2. Optionally send backup reports via HTTP POST. Or you can remove it.
+  1. Optionally send backup reports via HTTP POST. Or you can remove it.
     ```json
     "MESSAGE_CONFIG_COMMAND": "https://backupreporter.service.<yourdomain>.com/backup_report_service/backup_service.php",
     "MESSAGE_CONFIG_METHOD": "post",
     ```
 
-  3. Include the files you want, it will be backed up recursively. You can exclude files within this directory by using `FILESET_EXCLUDE`
+  2. Include the files you want at `FILESET_INCLUDE`, it will be backed up recursively. You can exclude files within this directory by using `FILESET_EXCLUDE`
     ```json
-    "FILESET": {
-      "ACTION": "execute",
-      "NAME": "filesbackup",
-      "PARAMETERS": {
-        "FILESET_INCLUDE": "/etc",
-        "FILESET_EXCLUDE": ""
+      "FILESET": {
+        "ACTION": "execute",
+        "NAME": "filesbackup",
+        "PARAMETERS": {
+          "FILESET_INCLUDE": "/etc",
+          "FILESET_EXCLUDE": ""
+        }
       }
-    }
+    ```
+
+  3. Change the AWS S3 bucket name under the `STORAGE_S3` section.
+    ```json
+        "ARGS_DICT": "{'BUCKET': 'yourbucket'}",
     ```
 
   4. Configure storage for AWS CLI or AWS roles.
