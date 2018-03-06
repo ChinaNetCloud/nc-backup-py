@@ -9,6 +9,8 @@ You can copy the above sample file or parts of the sample file and modify it to 
 
 Below is a sample mysql configuration section.
 
+**Include MySQL section before compression to add the dump to your backup archive**
+
 * Add mysql section to configuration file and add `/opt/backup/mydump` to `COMPRESSION.TARGETS`
 ```JSON
   "MYSQL": {
