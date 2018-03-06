@@ -52,10 +52,11 @@ flush privileges;
 $ sudo usermod -aG mysql
 ```
 
-* Create MySQL credentials file
+* Create / Copy MySQL credentials file
 
 ```bash
-$ cat /etc/nc-backup-py/mysql_backup.creds
+$ cp /etc/nc-backup-py/mysql.credentials.dist /etc/nc-backup-py/mysql.credentials
+$ cat /etc/nc-backup-py/mysql.credentials
 
 [mysqldump]
 user=ncbackupdb

@@ -1,6 +1,26 @@
-from subprocess import check_output
-from subprocess import CalledProcessError
 from Queue import Queue, Empty
+
+try:
+    from subprocess import check_output, CalledProcessError
+except ImportError:
+    logger.warning("Unable to import subprocess.check_output, are you using python 2.6?")
+    logger.warning("Using self defined check_output.")
+
+    def check_output(*popenargs, **kwargs):
+        import subprocess
+        if 'stdout' in kwargs:
+            raise ValueError('stdout argument not allowed, it will be overridden.')
+        process = subprocess.Popen(stdout=subprocess.PIPE, *popenargs, **kwargs)
+        output, unused_err = process.communicate()
+        retcode = process.poll()
+        if retcode:
+            cmd = kwargs.get("args")
+            if cmd is None:
+                cmd = popenargs[0]
+            raise subprocess.CalledProcessError(retcode, cmd)
+        return output
+
+
 
 
 class SubprocessExecution:
@@ -24,22 +44,10 @@ class SubprocessExecution:
         except CalledProcessError as e:
             return_code = e.returncode
             stderr = e.output
-        # Debug return codes
-
-        # print("".center(79, '-'))
-        # print("stdout: %s " % stdout)
-        # print("type(stdout: %s " % type(stdout))
-        # print("stderr: %s " % stderr)
-        # print("type(stderr: %s " % type(stderr))
-        # print("return_code: %s " % return_code )
-        # print("type(return_code: %s " % type(return_code))
-        # print("".center(79, '-'))
 
         return return_code, stdout, 'stderr: ' + stderr
 
     def print_output(self, communicates_message):
         for message in communicates_message:
-             if message != '':
-                 print message
-
-
+            if message != '':
+                print message
