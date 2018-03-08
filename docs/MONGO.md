@@ -4,7 +4,9 @@
 
 We can execute mongoDB by adding the following configuration. It executes the external mongodump commnd.
 
-* Add mogo section to configuration file and add `/opt/backup/mongodump` to `COMPRESSION.TARGETS`
+**Include Mongo section before compression to add the dump to your backup archive**
+
+* Add mongo section to configuration file and add `/opt/backup/mongodump` to `COMPRESSION.TARGETS`
 
 ```json
   "MONGODB":{

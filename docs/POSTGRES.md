@@ -26,6 +26,8 @@ Setup ownership and privilge like the following:
 
 Be careful, `600` permisions is a must when the backup will be restored, before you do anything, you must create all the user and database related to the backup, or the restore will fail
 
+**Include POSTGRES section before compression to add the dump to your backup archive**
+
 ## Sample Configuration snippet
 ```json
      "POSTGRES":{
