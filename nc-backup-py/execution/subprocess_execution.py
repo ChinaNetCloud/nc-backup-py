@@ -6,7 +6,7 @@ except ImportError:
     print "Unable to import subprocess.check_output, are you using python 2.6?"
     print "Using self defined check_output."
 
-    import subprocess_patch
+    from subprocess_patch import check_output, CalledProcessError
 
 class SubprocessExecution:
     __io_q = Queue()
@@ -16,6 +16,7 @@ class SubprocessExecution:
         """
         :rtype: stdout, stderr
         """
+
         log_string = 'Executing system the system external command: ' + shell_command
         if logger is not None:
             logger.info(log_string)
