@@ -3,7 +3,7 @@ from Queue import Queue, Empty
 try:
     from subprocess import check_output, CalledProcessError
 except ImportError:
-    print "Unable to import subprocess.check_output, are you using python 2.6?")
+    print "Unable to import subprocess.check_output, are you using python 2.6?"
     print "Using self defined check_output."
 
     def check_output(*popenargs, **kwargs):
