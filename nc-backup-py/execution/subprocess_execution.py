@@ -6,22 +6,7 @@ except ImportError:
     print "Unable to import subprocess.check_output, are you using python 2.6?"
     print "Using self defined check_output."
 
-    def check_output(*popenargs, **kwargs):
-        import subprocess
-        if 'stdout' in kwargs:
-            raise ValueError('stdout argument not allowed, it will be overridden.')
-        process = subprocess.Popen(stdout=subprocess.PIPE, *popenargs, **kwargs)
-        output, unused_err = process.communicate()
-        retcode = process.poll()
-        if retcode:
-            cmd = kwargs.get("args")
-            if cmd is None:
-                cmd = popenargs[0]
-            raise subprocess.CalledProcessError(retcode, cmd)
-        return output
-
-
-
+    import subprocess_patch
 
 class SubprocessExecution:
     __io_q = Queue()
