@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 """Create BackupReport and send it."""
 
-from time import time
+import time
 from communications.communications import Communications
 
 class BackupReporter:
