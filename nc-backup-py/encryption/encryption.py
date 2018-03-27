@@ -132,7 +132,7 @@ class EncryptionWorks:
 
     @staticmethod
     def cat_files (path_to_file):
-        command_cat = 'cat ' + path_to_file + '* > ' + path_to_file
+        command_cat = 'cat ' + path_to_file + '* > ' + path_to_file + 'concat'
         print command_cat
         cat_execution = SubprocessExecution.main_execution_function(SubprocessExecution(), command_cat)
         return cat_execution

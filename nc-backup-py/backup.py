@@ -1,6 +1,7 @@
 import logging
 import time
 import sys
+import os
 
 
 # My own Includes.
@@ -164,7 +165,7 @@ log = json_dict['GENERAL']['LOG_FOLDER']
 log1 = json_dict['GENERAL']['LOG_FOLDER'] + '1'
 log2 = json_dict['GENERAL']['LOG_FOLDER'] + '2'
 
-if os.file.exists(log1):
+if os.path.exists(log1):
     command_rotatelogs = 'mv ' + log1 + ' ' + log2
     execution_rotation_result = SubprocessExecution.main_execution_function(SubprocessExecution(), command_rotatelogs, True)
 

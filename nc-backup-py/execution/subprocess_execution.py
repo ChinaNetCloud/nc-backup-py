@@ -3,25 +3,10 @@ from Queue import Queue, Empty
 try:
     from subprocess import check_output, CalledProcessError
 except ImportError:
-    print "Unable to import subprocess.check_output, are you using python 2.6?")
+    print "Unable to import subprocess.check_output, are you using python 2.6?"
     print "Using self defined check_output."
 
-    def check_output(*popenargs, **kwargs):
-        import subprocess
-        if 'stdout' in kwargs:
-            raise ValueError('stdout argument not allowed, it will be overridden.')
-        process = subprocess.Popen(stdout=subprocess.PIPE, *popenargs, **kwargs)
-        output, unused_err = process.communicate()
-        retcode = process.poll()
-        if retcode:
-            cmd = kwargs.get("args")
-            if cmd is None:
-                cmd = popenargs[0]
-            raise subprocess.CalledProcessError(retcode, cmd)
-        return output
-
-
-
+    from subprocess_patch import check_output, CalledProcessError
 
 class SubprocessExecution:
     __io_q = Queue()
@@ -31,6 +16,7 @@ class SubprocessExecution:
         """
         :rtype: stdout, stderr
         """
+
         log_string = 'Executing system the system external command: ' + shell_command
         if logger is not None:
             logger.info(log_string)
