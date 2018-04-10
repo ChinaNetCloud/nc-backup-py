@@ -101,8 +101,8 @@ class EncryptionWorks:
                     finished = True
                 out_file.write(chunk)
             return out_file.name
-        elif if python_version == '2.6':
-            command_decrypt = 'cat ' + password + ' ' \
+        elif python_version == '2.6':
+            command_decrypt = 'echo ' + password + ' ' \
                               '| gpg-agent --no-tty --quiet  --daemon gpg2 --batch --yes -d --passphrase-fd 0 -o ' \
                               + out_file.name + ' ' \
                               + in_file.name
@@ -142,7 +142,7 @@ class EncryptionWorks:
 
     @staticmethod
     def cat_files (path_to_file):
-        command_cat = 'cat ' + path_to_file + '* > ' + path_to_file + 'concat'
+        command_cat = 'cat ' + path_to_file + '* > ' + 'concat' + path_to_file
         print command_cat
         cat_execution = SubprocessExecution.main_execution_function(SubprocessExecution(), command_cat)
         return cat_execution
@@ -246,7 +246,7 @@ if __name__ == "__main__":
                         FilesystemHandling.remove_files(out_file_str)
                     elif encryption_command.FILE_SIZE is not None and \
                                     int(encryption_command.FILE_SIZE) >= 1 and python_version == '2.6':
-                        EncryptionWorks.split_file(EncryptionWorks(), file_encrypted, encryption_command.FILE_SIZE)
+                        EncryptionWorks.split_binary_file(EncryptionWorks(), file_encrypted, encryption_command.FILE_SIZE)
                         FilesystemHandling.remove_files(out_file_str)
 
         remove_objectives(encryption_command.OBJECTIVES,
