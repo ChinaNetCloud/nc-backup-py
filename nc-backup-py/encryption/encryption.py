@@ -78,28 +78,38 @@ class EncryptionWorks:
                 return out_file.name
 
     def decrypt(self, in_file, out_file, password, key_length=32, home_folder=''):
-        bs = AES.block_size
-        salt = in_file.read(bs)[len('Salted__'):]
-        key, iv = self.__derive_key_and_iv(password, salt, key_length, bs)
-        cipher = AES.new(key, AES.MODE_CBC, iv)
-        next_chunk = ''
-        finished = False
-        print out_file
-        # print in_file
-        while not finished:
-            chunk, next_chunk = next_chunk, cipher.decrypt(in_file.read(1024 * bs))
-            if len(next_chunk) == 0:
-                padding_length = ord(chunk[-1])
-                if padding_length < 1 or padding_length > bs:
-                   raise ValueError("bad decrypt pad (%d)" % padding_length)
-                # all the pad-bytes must be the same
-                if chunk[-padding_length:] != (padding_length * chr(padding_length)):
-                   # this is similar to the bad decrypt:evp_enc.c from openssl program
-                   raise ValueError("bad decrypt")
-                chunk = chunk[:-padding_length]
-                finished = True
-            out_file.write(chunk)
-        return out_file.name
+        if python_version == '2.7':
+            bs = AES.block_size
+            salt = in_file.read(bs)[len('Salted__'):]
+            key, iv = self.__derive_key_and_iv(password, salt, key_length, bs)
+            cipher = AES.new(key, AES.MODE_CBC, iv)
+            next_chunk = ''
+            finished = False
+            print out_file
+            # print in_file
+            while not finished:
+                chunk, next_chunk = next_chunk, cipher.decrypt(in_file.read(1024 * bs))
+                if len(next_chunk) == 0:
+                    padding_length = ord(chunk[-1])
+                    if padding_length < 1 or padding_length > bs:
+                       raise ValueError("bad decrypt pad (%d)" % padding_length)
+                    # all the pad-bytes must be the same
+                    if chunk[-padding_length:] != (padding_length * chr(padding_length)):
+                       # this is similar to the bad decrypt:evp_enc.c from openssl program
+                       raise ValueError("bad decrypt")
+                    chunk = chunk[:-padding_length]
+                    finished = True
+                out_file.write(chunk)
+            return out_file.name
+        elif if python_version == '2.6':
+            command_decrypt = 'cat ' + password + ' ' \
+                              '| gpg-agent --no-tty --quiet  --daemon gpg2 --batch --yes -d --passphrase-fd 0 -o ' \
+                              + out_file.name + ' ' \
+                              + in_file.name
+            execution_decrytion = SubprocessExecution.main_execution_function(SubprocessExecution(), command_decrypt, True)
+            # print execution_encrytion
+            if execution_encrytion[0] == 0:
+                return out_file.name
 
     def split_file(self,path_to_file, chunk_size):
         # To be deprecated in favor of split_binary_file
