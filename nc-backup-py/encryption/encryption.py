@@ -72,34 +72,43 @@ class EncryptionWorks:
             command_encrypt = 'cat ' + password + ' ' + in_file.name + \
                               ' | /usr/bin/gpg-agent --daemon gpg2  --cipher-algo AES-128 --batch --yes --no-tty ' \
                               '--quiet -c --passphrase-fd 0 > ' + out_file.name
-            execution_encrytion = SubprocessExecution.main_execution_function(SubprocessExecution(), command_encrypt, True)
+            execution_encryption = SubprocessExecution.main_execution_function(SubprocessExecution(), command_encrypt, True)
             # print execution_encrytion
-            if execution_encrytion[0] == 0:
+            if execution_encryption[0] == 0:
                 return out_file.name
 
     def decrypt(self, in_file, out_file, password, key_length=32, home_folder=''):
-        bs = AES.block_size
-        salt = in_file.read(bs)[len('Salted__'):]
-        key, iv = self.__derive_key_and_iv(password, salt, key_length, bs)
-        cipher = AES.new(key, AES.MODE_CBC, iv)
-        next_chunk = ''
-        finished = False
-        print out_file
-        # print in_file
-        while not finished:
-            chunk, next_chunk = next_chunk, cipher.decrypt(in_file.read(1024 * bs))
-            if len(next_chunk) == 0:
-                padding_length = ord(chunk[-1])
-                if padding_length < 1 or padding_length > bs:
-                   raise ValueError("bad decrypt pad (%d)" % padding_length)
-                # all the pad-bytes must be the same
-                if chunk[-padding_length:] != (padding_length * chr(padding_length)):
-                   # this is similar to the bad decrypt:evp_enc.c from openssl program
-                   raise ValueError("bad decrypt")
-                chunk = chunk[:-padding_length]
-                finished = True
-            out_file.write(chunk)
-        return out_file.name
+        if python_version == '2.7':
+            bs = AES.block_size
+            salt = in_file.read(bs)[len('Salted__'):]
+            key, iv = self.__derive_key_and_iv(password, salt, key_length, bs)
+            cipher = AES.new(key, AES.MODE_CBC, iv)
+            next_chunk = ''
+            finished = False
+            print out_file
+            # print in_file
+            while not finished:
+                chunk, next_chunk = next_chunk, cipher.decrypt(in_file.read(1024 * bs))
+                if len(next_chunk) == 0:
+                    padding_length = ord(chunk[-1])
+                    if padding_length < 1 or padding_length > bs:
+                       raise ValueError("bad decrypt pad (%d)" % padding_length)
+                    # all the pad-bytes must be the same
+                    if chunk[-padding_length:] != (padding_length * chr(padding_length)):
+                       # this is similar to the bad decrypt:evp_enc.c from openssl program
+                       raise ValueError("bad decrypt")
+                    chunk = chunk[:-padding_length]
+                    finished = True
+                out_file.write(chunk)
+            return out_file.name
+        elif python_version == '2.6':
+            command_decrypt = 'echo ' + password + ' ' \
+                              '| gpg-agent --quiet  --daemon gpg2 --batch --yes -d --passphrase-fd 0 -o ' \
+                              + out_file.name + ' ' \
+                              + in_file.name
+            execution_decryption = SubprocessExecution.main_execution_function(SubprocessExecution(), command_decrypt, True)
+            if execution_decryption[0] == 0:
+                return out_file.name
 
     def split_file(self,path_to_file, chunk_size):
         # To be deprecated in favor of split_binary_file
@@ -132,7 +141,7 @@ class EncryptionWorks:
 
     @staticmethod
     def cat_files (path_to_file):
-        command_cat = 'cat ' + path_to_file + '* > ' + path_to_file + 'concat'
+        command_cat = 'cat ' + path_to_file + '.* > ' + path_to_file
         print command_cat
         cat_execution = SubprocessExecution.main_execution_function(SubprocessExecution(), command_cat)
         return cat_execution
@@ -236,7 +245,7 @@ if __name__ == "__main__":
                         FilesystemHandling.remove_files(out_file_str)
                     elif encryption_command.FILE_SIZE is not None and \
                                     int(encryption_command.FILE_SIZE) >= 1 and python_version == '2.6':
-                        EncryptionWorks.split_file(EncryptionWorks(), file_encrypted, encryption_command.FILE_SIZE)
+                        EncryptionWorks.split_binary_file(EncryptionWorks(), file_encrypted, encryption_command.FILE_SIZE)
                         FilesystemHandling.remove_files(out_file_str)
 
         remove_objectives(encryption_command.OBJECTIVES,
