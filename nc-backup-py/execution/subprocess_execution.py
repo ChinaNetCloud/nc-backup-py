@@ -31,7 +31,7 @@ class SubprocessExecution:
             return_code = e.returncode
             stderr = e.output
 
-        return return_code, stdout, 'stderr: ' + stderr
+        return return_code, stdout, 'stderr: ' + str(stderr)
 
     def print_output(self, communicates_message):
         for message in communicates_message:
