@@ -68,7 +68,7 @@ class mydump:
         parser_object.add_argument('--DATA_DIR', type=str, help='Data dir path', required=False,action="store")
         parser_object.add_argument('--MY_INSTANCES', type=str, help='Instance port', required=False, action="store")
         parser_object.add_argument('--BINLOG_PATH', type=str, help='Bin Log folder', required=False, action="store")
-        parser_object.add_argument('--BINLOG_DAYS', type=str, help='Bin Log folder', required=False)
+        parser_object.add_argument('--BINLOG_DAYS', type=str, help='Bin Log folder', required=False, default=0)
         parser_object.add_argument('--BINLOG_FILE_PREFIX', type=str, help='Bin Log file prefix',
                                    required=False, action='store')
         parser_object.add_argument('--MYSQL_DUMP_BINARY',type=str, help='MySQL Dump Binarey',  required=False)
@@ -94,7 +94,7 @@ class mydump:
             credential_file=self.args_list.CREDENTIAL_PATH.split()[0]
             MYSQL_DATA_DIR=self.args_list.DATA_DIR.split()[1]
             print "---- MySQL Instance Data Dir: "+MYSQL_DATA_DIR+" ----"
-            mysql_dump_and_credentials = self.mysql_dump_binary + " --defaults-extra-file="+credential_file
+            mysql_dump_and_credentials = self.log + " --defaults-extra-file="+credential_file
             mysql_and_credentials = self.MYSQL + " --defaults-extra-file=" + credential_file
         return MYSQL_DATA_DIR,mysql_dump_and_credentials, mysql_and_credentials
 
@@ -243,12 +243,13 @@ def main():
         if backup_stderr:
             print 'There was an error running the dump of the DBs'
             exit(1)
-        logbak_stdout,logbak_stderr=mydump_object.backup_logs(MYSQL_DATA_DIR,mydump_object.DESTINATION,
-                                                              mydump_object.script_prefix,
-                                                              MY_INSTANCE_NAME,
-                                                              mydump_object.args_list.BINLOG_PATH,
-                                                              mydump_object.args_list.BINLOG_FILE_PREFIX,
-                                                              mydump_object.args_list.BINLOG_DAYS)
+        if int(mydump_object.args_list.BINLOG_DAYS) > 0:
+            logbak_stdout,logbak_stderr=mydump_object.backup_logs(MYSQL_DATA_DIR,mydump_object.DESTINATION,
+                                                                  mydump_object.script_prefix,
+                                                                  MY_INSTANCE_NAME,
+                                                                  mydump_object.args_list.BINLOG_PATH,
+                                                                  mydump_object.args_list.BINLOG_FILE_PREFIX,
+                                                                  mydump_object.args_list.BINLOG_DAYS)
         print logbak_stdout
         print logbak_stderr
 
