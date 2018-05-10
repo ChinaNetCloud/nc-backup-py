@@ -250,8 +250,8 @@ def main():
                                                                   mydump_object.args_list.BINLOG_PATH,
                                                                   mydump_object.args_list.BINLOG_FILE_PREFIX,
                                                                   mydump_object.args_list.BINLOG_DAYS)
-        print logbak_stdout
-        print logbak_stderr
+            print logbak_stdout
+            print logbak_stderr
 
 
 if __name__ == "__main__":
