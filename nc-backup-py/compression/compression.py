@@ -61,7 +61,7 @@ class CompressionWorks:
 if __name__ == "__main__":
     command_compression = CompressionWorks.compression_commands(CompressionWorks())
     if not CompressionWorks.check_exists(CompressionWorks(),command_compression.TAR_COMMAND):
-        command_compression.TAR_COMMAND = 'sudo /bin/tar czCf /'
+        command_compression.TAR_COMMAND = '/bin/tar czCf /'
     if not CompressionWorks.check_exists(CompressionWorks(),command_compression.DESTINATION):
         command_compression.DESTINATION = '/opt/backup/compressed'
     if not CompressionWorks.check_exists(CompressionWorks(),command_compression.REMOVE_OBJECTIVES):
