@@ -44,7 +44,7 @@ class mydump:
         if not ConfigParser.check_exists(ConfigParser(), self.args_list.DESTINATION):
             self.args_list.DESTINATION = '/opt/backup'
         self.DESTINATION = self.args_list.DESTINATION + '/'+self.script_prefix
-        self.PREFIX_BACKUP = time.strftime('%Y%m%d',time.localtime(time.time())) + "_"+self.args_list.HOSTNAME
+        self.PREFIX_BACKUP = time.strftime('%Y%m%d_%H%M%S',time.localtime(time.time())) + "_"+self.args_list.HOSTNAME
         if self.DESTINATION:
             sys.path.append(self.args_list.HOME_FOLDER)
             # from compression.zip_compression import ZipCompression
