@@ -1,2 +1,12 @@
-# sudo permissions for ncbackup user
-%ncbackup ALL=(ALL) NOPASSWD: ALL
+# Permissions for nc-backup-py
+
+Cmnd_Alias NCBACKUP = /bin/tar czCf / [A-z_/ ]* , /usr/bin/find, /bin/mkdir -p /mnt/snapshot
+ncbackup ALL=(ALL) NOPASSWD: NCBACKUP
+Cmnd_Alias NCBACKUP_LVM = /sbin/lvcreate, /sbin/lvremove, /sbin/vgdisplay, /sbin/lvdisplay, /sbin/lvs, /bin/mount, /bin/umount
+ncbackup ALL=(ALL) NOPASSWD: NCBACKUP_LVM
+Cmnd_Alias NCBACKUP_USR_LVM = /usr/sbin/lvcreate, /usr/sbin/lvremove, /usr/sbin/vgdisplay, /usr/sbin/lvdisplay, /usr/sbin/lvs
+ncbackup ALL=(ALL) NOPASSWD: NCBACKUP_USR_LVM
+Cmnd_Alias NCBACKUP_CHOWN = /bin/chown ncbackup\:ncbackup /opt/backup/*
+ncbackup ALL=(ALL) NOPASSWD: NCBACKUP_CHOWN
+
+Defaults:ncbackup !requiretty
